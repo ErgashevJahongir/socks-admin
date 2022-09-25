@@ -554,6 +554,18 @@ export const DataProvider = ({ children }) => {
             ),
         },
     ];
+    const editUsersData = [
+        {
+            name: "fio",
+            label: "Ishchi FIO",
+            input: <Input />,
+        },
+        {
+            name: "phoneNumber",
+            label: "Ishchi nomeri",
+            input: <Input />,
+        },
+    ];
 
     // const indebtFormData = [
     //     {
@@ -905,7 +917,7 @@ export const DataProvider = ({ children }) => {
         case "/users": {
             formData = {
                 formData: usersData,
-                editFormData: usersData,
+                editFormData: editUsersData,
                 branchData: true,
                 timeFilterInfo: false,
                 deleteInfo: true,

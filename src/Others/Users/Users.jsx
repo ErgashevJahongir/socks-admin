@@ -33,31 +33,21 @@ const Users = () => {
             title: "Foydalanuvchi nomi",
             dataIndex: "fio",
             key: "fio",
-            width: "20%",
+            width: "25%",
             search: true,
         },
         {
             title: "Foydalanuvchi nomeri",
             dataIndex: "phoneNumber",
             key: "phoneNumber",
-            width: "20%",
+            width: "25%",
             search: false,
-        },
-        {
-            title: "O'chirilgan",
-            dataIndex: "deleted",
-            key: "deleted",
-            width: "20%",
-            search: false,
-            render: (record) => {
-                return record ? "Ha" : "Yo'q";
-            },
         },
         {
             title: "Role",
             dataIndex: "roleId",
             key: "roleId",
-            width: "20%",
+            width: "25%",
             search: false,
             render: (initialValue = null) => {
                 const role = roleData?.filter(
@@ -70,7 +60,7 @@ const Users = () => {
             title: "Bloklangan",
             dataIndex: "block",
             key: "block",
-            width: "20%",
+            width: "25%",
             search: false,
             render: (record) => {
                 return record ? "Ha" : "Yo'q";
@@ -100,9 +90,8 @@ const Users = () => {
     const onEdit = (values, initial) => {
         setLoading(true);
         instance
-            .put(`api/socks/factory/user`, {
+            .put(`api/socks/factory/user/editForUsers${initial.id}`, {
                 ...values,
-                deleted: false,
             })
             .then((res) => {
                 message.success("Foydalanuvchi muvaffaqiyatli taxrirlandi");
