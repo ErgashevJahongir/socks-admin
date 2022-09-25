@@ -2,6 +2,7 @@ import { useState } from "react";
 import instance from "../../Api/Axios";
 import { message } from "antd";
 import CustomTable from "../../Module/Table/Table";
+import { useData } from "../../Hook/UseData";
 
 const Users = () => {
     const [workers, setWorkers] = useState([]);
@@ -9,16 +10,16 @@ const Users = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
+    const { roleData } = useData();
 
-    const getWorkers = (current, pageSize) => {
+    const getWorkers = (values) => {
         setLoading(true);
         instance
-            .get(
-                `api/dry/fruit/api/dry/fruit/user/all-pageable?page=${current}&size=${pageSize}`
-            )
+            .get(`api/socks/factory/user`, { ...values })
             .then((data) => {
-                setWorkers(data.data.data.fuelReports);
-                setTotalItems(data.data.data.totalItems);
+                setWorkers(data.data.data);
+                console.log(data);
+                // setTotalItems(data.data.data.totalItems);
             })
             .catch((error) => {
                 console.error(error);
@@ -43,11 +44,14 @@ const Users = () => {
             search: false,
         },
         {
-            title: "Ishlash filiali",
-            dataIndex: "branchId",
-            key: "branchId",
+            title: "O'chirilgan",
+            dataIndex: "deleted",
+            key: "deleted",
             width: "20%",
             search: false,
+            render: (record) => {
+                return record ? "Ha" : "Yo'q";
+            },
         },
         {
             title: "Role",
@@ -55,6 +59,12 @@ const Users = () => {
             key: "roleId",
             width: "20%",
             search: false,
+            render: (initialValue = null) => {
+                const role = roleData?.filter(
+                    (item) => item.id === initialValue
+                );
+                return role[0]?.roleName;
+            },
         },
         {
             title: "Bloklangan",
@@ -71,9 +81,8 @@ const Users = () => {
     const onCreate = (values) => {
         setLoading(true);
         instance
-            .post("api/dry/fruit/api/dry/fruit/user/post", {
+            .post("api/socks/factory/user", {
                 ...values,
-                deleted: false,
             })
             .then(function (response) {
                 message.success("Foydalanuvchi muvaffaqiyatli qo'shildi");
@@ -81,7 +90,7 @@ const Users = () => {
             })
             .catch(function (error) {
                 console.error(error);
-                message.error("Foydalanuvchini qo'shishda muammo bo'ldi");
+                message.error(error.response?.data?.message);
             })
             .finally(() => {
                 setLoading(false);
@@ -91,7 +100,7 @@ const Users = () => {
     const onEdit = (values, initial) => {
         setLoading(true);
         instance
-            .put(`api/dry/fruit/api/dry/fruit/user/update${initial.id}`, {
+            .put(`api/socks/factory/user`, {
                 ...values,
                 deleted: false,
             })
@@ -112,7 +121,7 @@ const Users = () => {
         setLoading(true);
         arr.map((item) => {
             instance
-                .delete(`api/dry/fruit/api/dry/fruit/user/delete${item}`)
+                .delete(`api/socks/factory/user/${item}`)
                 .then((data) => {
                     getWorkers(current - 1, pageSize);
                     message.success("Foydalanuvchi muvaffaqiyatli o'chirildi");
@@ -149,4 +158,3 @@ const Users = () => {
 };
 
 export default Users;
-

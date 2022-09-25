@@ -12,15 +12,13 @@ const Clients = () => {
     const [totalItems, setTotalItems] = useState(0);
     const navigate = useNavigate();
 
-    const getClients = (current, pageSize) => {
+    const getClients = (values) => {
         setLoading(true);
         instance
-            .get(
-                `api/socks/factory/client/getAllPageable?page=${current}&size=${pageSize}`
-            )
+            .get(`api/socks/factory/client/getAll`, { ...values })
             .then((data) => {
-                setClients(data.data.data.fuelReports);
-                setTotalItems(data.data.data.totalItems);
+                setClients(data.data.data);
+                // setTotalItems(data.data.data.totalItems);
             })
             .catch((error) => {
                 console.error(error);
@@ -66,9 +64,7 @@ const Clients = () => {
     const onCreate = (values) => {
         setLoading(true);
         instance
-            .post(
-                `api/socks/factory/client?fio=${values.fio}&phoneNumber=${values.phoneNumber}&address=${values.address}`
-            )
+            .post(`api/socks/factory/client/add`, { ...values })
             .then(function (response) {
                 message.success("Klient muvaffaqiyatli qo'shildi");
                 getClients(current - 1, pageSize);
@@ -87,9 +83,7 @@ const Clients = () => {
         console.log(initial.id);
         setLoading(true);
         instance
-            .put(
-                `api/socks/factory/client?id=${initial.id}&fio=${values.fio}&phoneNumber=${values.phoneNumber}&address=${values.address}&deleted=false`
-            )
+            .put(`api/socks/factory/client/update${initial.id}`, { ...values })
             .then((res) => {
                 message.success("Klient muvaffaqiyatli taxrirlandi");
                 getClients(current - 1, pageSize);
@@ -108,7 +102,7 @@ const Clients = () => {
         setLoading(true);
         arr.map((item) => {
             instance
-                .delete(`api/socks/factory/client/${item}`)
+                .delete(`api/socks/factory/client/delete${item}`)
                 .then((data) => {
                     getClients(current - 1, pageSize);
                     message.success("Klient muvaffaqiyatli o'chirildi");

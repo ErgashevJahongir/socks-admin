@@ -22,12 +22,11 @@ const CategoryVsMeasurement = () => {
     const getCategory = (current, pageSize) => {
         setLoadingCategory(true);
         instance
-            .get(
-                `/api/dry/fruit/category/page?page=${current}&size=${pageSize}`
-            )
+            .get(`api/socks/factory/category/getAll`)
             .then((data) => {
-                setCategory(data.data.data.categories);
-                setTotalItemsCategory(data.data.data.totalItems);
+                setCategory(data.data.data);
+                // setTotalItemsCategory(data.data.data.totalItems);
+                // console.log(data);
             })
             .catch((error) => {
                 console.error(error);
@@ -40,7 +39,7 @@ const CategoryVsMeasurement = () => {
     const onCreateCategory = (values) => {
         setLoadingCategory(true);
         instance
-            .post(`api/dry/fruit/category?name=${values.name}`)
+            .post(`api/socks/factory/category/add?name=${values.name}`)
             .then(function (response) {
                 getCategory(currentCategory - 1, pageSizeCategory);
                 getCategoryData();
@@ -59,7 +58,9 @@ const CategoryVsMeasurement = () => {
     const onEditCategory = (values, initial) => {
         setLoadingCategory(true);
         instance
-            .put(`api/dry/fruit/category?id=${initial.id}&name=${values.name}`)
+            .put(
+                `api/socks/factory/category/update${initial.id}?name=${values.name}`
+            )
             .then(function (response) {
                 getCategory(currentCategory - 1, pageSizeCategory);
                 getCategoryData();
@@ -80,7 +81,7 @@ const CategoryVsMeasurement = () => {
         setLoadingCategory(true);
         arr.map((item) => {
             instance
-                .delete(`api/dry/fruit/category?id=${item}`)
+                .delete(`api/socks/factory/category/delete${item}`)
                 .then((data) => {
                     getCategoryData();
                     getCategory(currentCategory - 1, pageSizeCategory);

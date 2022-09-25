@@ -8,7 +8,6 @@ import CustomSelect from "../Module/Select/Select";
 
 export const DataContext = createContext();
 
-
 export const DataProvider = ({ children }) => {
     const [valueDebt, setValueDebt] = useState(null);
     const [user, setUser] = useState({});
@@ -47,7 +46,6 @@ export const DataProvider = ({ children }) => {
             return { ...cat, name: name };
         });
     };
-
     const newDryFruitWerehouseData = DryFruitWerehouseDataFunc();
 
     const newDryFruitData = DryFruitDataFunc();
@@ -357,13 +355,13 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
-    // const othersData = [
-    //     {
-    //         name: "name",
-    //         label: "Nomi",
-    //         input: <Input />,
-    //     },
-    // ];
+    const othersData = [
+        {
+            name: "name",
+            label: "Nomi",
+            input: <Input />,
+        },
+    ];
 
     // const othersBranchData = [
     //     {
@@ -533,24 +531,15 @@ export const DataProvider = ({ children }) => {
             input: <Input />,
         },
         {
-            name: "branchId",
-            label: "Filial",
-            input: (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Filialni tanlang"}
-                    selectData={branchData}
-                />
-            ),
-        },
-        {
             name: "roleId",
             label: "roleId",
             input: (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Quruq mevani tanlang"}
-                    selectData={roleData}
+                    placeholder={"Roleni tanlang"}
+                    selectData={roleData.map((item) => {
+                        return { ...item, name: item.roleName };
+                    })}
                 />
             ),
         },
@@ -754,7 +743,7 @@ export const DataProvider = ({ children }) => {
 
     const getDryfruitWarehouseData = () => {
         instance
-            .get("api/socks/factory/warehouseSocks/getAll")
+            .get("api/socks/factory/user")
             .then((data) => {
                 setDryfruitWarehouseData(data.data.data);
             })
@@ -770,14 +759,14 @@ export const DataProvider = ({ children }) => {
     //         .catch((err) => console.error(err));
     // };
 
-    // const getRoleData = () => {
-    //     instance
-    //         .get("api/dry/fruit/role/getAll")
-    //         .then((data) => {
-    //             setRoleData(data.data.data);
-    //         })
-    //         .catch((err) => console.error(err));
-    // };
+    const getRoleData = () => {
+        instance
+            .get("api/socks/factory/role")
+            .then((data) => {
+                setRoleData(data.data.data);
+            })
+            .catch((err) => console.error(err));
+    };
 
     useEffect(() => {
         // getWorkerData();
@@ -786,28 +775,28 @@ export const DataProvider = ({ children }) => {
         // getBranchData();
         // getDryfruitData();
         getDryfruitWarehouseData();
-        // getRoleData();
+        getRoleData();
         getClientData();
     }, []);
 
     let formData = {};
 
     switch (location.pathname) {
-        // case "/others": {
-        //     formData = {
-        //         formData: othersData,
-        //         editFormData: othersData,
-        //         branchData: false,
-        //         timeFilterInfo: false,
-        //         deleteInfo: true,
-        //         createInfo: true,
-        //         editInfo: true,
-        //         timelyInfo: false,
-        //         editModalTitle: "O'zgartirish",
-        //         modalTitle: "Yangi qo'shish",
-        //     };
-        //     break;
-        // }
+        case "/others": {
+            formData = {
+                formData: othersData,
+                editFormData: othersData,
+                branchData: false,
+                timeFilterInfo: false,
+                deleteInfo: true,
+                createInfo: true,
+                editInfo: true,
+                timelyInfo: false,
+                editModalTitle: "O'zgartirish",
+                modalTitle: "Yangi qo'shish",
+            };
+            break;
+        }
         // case "/branchs": {
         //     formData = {
         //         formData: othersBranchData,
@@ -917,7 +906,7 @@ export const DataProvider = ({ children }) => {
             formData = {
                 formData: usersData,
                 editFormData: usersData,
-                branchData: false,
+                branchData: true,
                 timeFilterInfo: false,
                 deleteInfo: true,
                 createInfo: true,
