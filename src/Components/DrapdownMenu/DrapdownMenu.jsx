@@ -58,20 +58,22 @@ function DrapdownMenu({ onClose, isVisible }) {
                         ),
                     },
                     {
-                        label: "Quruq mevalar",
-                        key: "/socks",
+                        label: "Material",
+                        key: "/material",
                         icon: (
-                            <Link to="/socks">
-                                <ProfileOutlined style={{ fontSize: "18px" }} />
+                            <Link to="/material">
+                                <ProfileOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
                             </Link>
                         ),
                     },
                     {
-                        label: "Sklad",
-                        key: "/warehouse-socks",
+                        label: "Naskilar",
+                        key: "/socks",
                         icon: (
-                            <Link to="/warehouse-socks">
-                                <CloudOutlined style={{ fontSize: "18px" }} />
+                            <Link to="/socks">
+                                <ProfileOutlined style={{ fontSize: "18px" }} />
                             </Link>
                         ),
                     },
@@ -98,48 +100,15 @@ function DrapdownMenu({ onClose, isVisible }) {
                         ),
                     },
                     {
-                        label: "Qarzlar",
-                        key: "/debts",
+                        label: "Tashqi qarzlar",
+                        key: "/outdebts",
                         icon: (
-                            <DollarCircleOutlined
-                                style={{ fontSize: "18px" }}
-                            />
+                            <Link to="/outdebts">
+                                <DollarCircleOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
+                            </Link>
                         ),
-                        children: [
-                            {
-                                label: "Ichki qarzlar",
-                                key: "/indebts",
-                                icon: (
-                                    <Link to="/indebts">
-                                        <DollarCircleOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
-                                ),
-                            },
-                            {
-                                label: "Tashqi qarzlar",
-                                key: "/outdebts",
-                                icon: (
-                                    <Link to="/outdebts">
-                                        <DollarCircleOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
-                                ),
-                            },
-                            {
-                                label: "Ishchilar qarzlar",
-                                key: "/worker-debts",
-                                icon: (
-                                    <Link to="/worker-debts">
-                                        <DollarCircleOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
-                                ),
-                            },
-                        ],
                     },
                     {
                         label: "Qo'shimchalar",
@@ -159,17 +128,17 @@ function DrapdownMenu({ onClose, isVisible }) {
                                     </Link>
                                 ),
                             },
-                            {
-                                label: "Ishchilar",
-                                key: "/worker",
-                                icon: (
-                                    <Link to="/worker">
-                                        <TeamOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
-                                ),
-                            },
+                            // {
+                            //     label: "Ishchilar",
+                            //     key: "/worker",
+                            //     icon: (
+                            //         <Link to="/worker">
+                            //             <TeamOutlined
+                            //                 style={{ fontSize: "18px" }}
+                            //             />
+                            //         </Link>
+                            //     ),
+                            // },
                             {
                                 label: "Foydalanuvchilar",
                                 key: "/users",
@@ -181,17 +150,17 @@ function DrapdownMenu({ onClose, isVisible }) {
                                     </Link>
                                 ),
                             },
-                            {
-                                label: "Filiallar",
-                                key: "/branchs",
-                                icon: (
-                                    <Link to="/branchs">
-                                        <BranchesOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
-                                ),
-                            },
+                            // {
+                            //     label: "Filiallar",
+                            //     key: "/branchs",
+                            //     icon: (
+                            //         <Link to="/branchs">
+                            //             <BranchesOutlined
+                            //                 style={{ fontSize: "18px" }}
+                            //             />
+                            //         </Link>
+                            //     ),
+                            // },
                             {
                                 label: "Boshqalar",
                                 key: "/others",

@@ -17,7 +17,7 @@ const Login = () => {
 
     const getUser = (token) => {
         instance
-            .get("api/dry/fruit/api/dry/fruit/user", {
+            .get("api/socks/factory/user", {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((data) => {
@@ -36,9 +36,9 @@ const Login = () => {
         setLoading(true);
         console.log(values);
         instance
-            .post("api/dry/fruit/auth/login", {
+            .post("api/socks/factory/auth/login", {
+                username: values.phoneNumber,
                 password: values.password,
-                phoneNumber: values.phoneNumber,
             })
             .then((data) => {
                 getUser(data.data.data);
@@ -64,9 +64,9 @@ const Login = () => {
     };
 
     useEffect(() => {
-        // if (token) {
+        if (token) {
             navigate("/");
-        // }
+        }
     }, []);
 
     if (loading) {

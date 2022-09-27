@@ -9,24 +9,18 @@ import "./CategoryVsMeasurment.css";
 const CategoryVsMeasurement = () => {
     const [category, setCategory] = useState([]);
     const [measurement, setMeasurment] = useState([]);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
     const [loadingCategory, setLoadingCategory] = useState(true);
     const [loading, setLoading] = useState(true);
-    const [currentCategory, setCurrentCategory] = useState(1);
-    const [pageSizeCategory, setPageSizeCategory] = useState(10);
-    const [totalItemsCategory, setTotalItemsCategory] = useState(0);
+
     const { getCategoryData, getMeasurementData } = useData();
     const navigate = useNavigate();
 
-    const getCategory = (current, pageSize) => {
+    const getCategory = () => {
         setLoadingCategory(true);
         instance
             .get(`api/socks/factory/category/getAll`)
             .then((data) => {
                 setCategory(data.data.data);
-                // setTotalItemsCategory(data.data.data.totalItems);
-                // console.log(data);
             })
             .catch((error) => {
                 console.error(error);
@@ -41,7 +35,7 @@ const CategoryVsMeasurement = () => {
         instance
             .post(`api/socks/factory/category/add?name=${values.name}`)
             .then(function (response) {
-                getCategory(currentCategory - 1, pageSizeCategory);
+                getCategory();
                 getCategoryData();
                 message.success("Kategoriya muvaffaqiyatli qo'shildi");
             })
@@ -62,7 +56,7 @@ const CategoryVsMeasurement = () => {
                 `api/socks/factory/category/update${initial.id}?name=${values.name}`
             )
             .then(function (response) {
-                getCategory(currentCategory - 1, pageSizeCategory);
+                getCategory();
                 getCategoryData();
                 message.success("Kategoriya muvaffaqiyatli qo'shildi");
             })
@@ -84,7 +78,7 @@ const CategoryVsMeasurement = () => {
                 .delete(`api/socks/factory/category/delete${item}`)
                 .then((data) => {
                     getCategoryData();
-                    getCategory(currentCategory - 1, pageSizeCategory);
+                    getCategory();
                     message.success("Kategoriya muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
@@ -111,7 +105,7 @@ const CategoryVsMeasurement = () => {
     const getMeasurment = () => {
         setLoading(true);
         instance
-            .get("api/dry/fruit/measurement/all")
+            .get("api/socks/factory/measurement/getAll")
             .then((data) => {
                 setMeasurment(data.data.data);
             })
@@ -125,10 +119,9 @@ const CategoryVsMeasurement = () => {
 
     const onCreate = (values) => {
         setLoading(true);
+        console.log(values.name);
         instance
-            .post("api/dry/fruit/measurement/post", {
-                ...values,
-            })
+            .post(`api/socks/factory/measurement/add?name=${values.name}`)
             .then(function (response) {
                 getMeasurment();
                 getMeasurementData();
@@ -146,13 +139,12 @@ const CategoryVsMeasurement = () => {
 
     const onEdit = (values, initial) => {
         setLoading(true);
-        console.log(values, initial);
         instance
-            .put(`api/dry/fruit/measurement/update${initial.id}`, { values })
+            .post(`api/socks/factory/measurement/update${initial.id}?name=${ values.name }`)
             .then(function (response) {
                 getMeasurment();
                 getMeasurementData();
-                message.success("O'lchov birligi muvofaqiyatli taxrirlandi");
+                message.success("O'lchov birligi muvaffaqiyatli taxrirlandi");
             })
             .catch(function (error) {
                 console.error(error);
@@ -165,15 +157,14 @@ const CategoryVsMeasurement = () => {
     };
 
     const handleDelete = (arr) => {
-        console.log(arr);
         setLoading(true);
         arr.map((item) => {
             instance
-                .delete(`api/dry/fruit/measurement/delete${item}`)
+                .delete(`api/socks/factory/measurement/delete${item}`)
                 .then((data) => {
                     getMeasurment();
                     getMeasurementData();
-                    message.success("O'lchov birligi muvofaqiyatli o'chirildi");
+                    message.success("O'lchov birligi muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
                     console.error(error);
@@ -210,23 +201,13 @@ const CategoryVsMeasurement = () => {
                         onDelete={handleDeleteCategory}
                         columns={columnsCategory}
                         tableData={category}
-                        current={currentCategory}
-                        pageSize={pageSizeCategory}
-                        totalItems={totalItemsCategory}
                         loading={loadingCategory}
                         setLoading={setLoadingCategory}
-                        setCurrent={setCurrentCategory}
-                        setPageSize={setPageSizeCategory}
-                        pageSizeOptions={[10, 20]}
                     />
                 </div>
                 <div>
                     <h3>O'lchov birligi</h3>
                     <CustomTable
-                        setCurrent={setCurrent}
-                        current={current}
-                        setPageSize={setPageSize}
-                        pageSize={pageSize}
                         onEdit={onEdit}
                         onCreate={onCreate}
                         getData={getMeasurment}
@@ -235,7 +216,6 @@ const CategoryVsMeasurement = () => {
                         tableData={measurement}
                         loading={loading}
                         setLoading={setLoading}
-                        pageSizeOptions={[10, 20]}
                     />
                 </div>
             </div>
