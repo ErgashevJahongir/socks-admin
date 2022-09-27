@@ -19,24 +19,26 @@ import OutDebt from "./Debt/OutDebt";
 import Notification from "./Components/Notification/Notification";
 import Socks from "./Socks/Socks";
 import WarehouseSocks from "./WarehouseSocks/WarehouseSocks";
-import IncomeSocks from "./OutcomeSocks/OutcomeSocks";
+import IncomeSocks from "./IncomeSocks/IncomeSocks";
 import OutcomeSocks from "./OutcomeSocks/OutcomeSocks";
+import Material from "./Material/Material";
 
 function App() {
-    // const { token } = useToken();
-    // const navigate = useNavigate();
-    // const { user } = useData();
+    const { token } = useToken();
+    const navigate = useNavigate();
+    const { user } = useData();
 
-    // useEffect(() => {
-    //     if (!token) {
-    //         return navigate("/login", { replace: true });
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (!token) {
+            return navigate("/login", { replace: true });
+        }
+    }, []);
     return (
         <Routes>
             <Route element={<LayoutMenu />}>
                 <Route index element={<Dashboard />} />
                 <Route path="home" element={<Dashboard />} />
+                <Route path="material" element={<Material />} />
                 <Route path="socks" element={<Socks />} />
                 <Route
                     path="warehouse-socks"
@@ -61,18 +63,5 @@ function App() {
         </Routes>
     );
 }
-// "@ant-design/icons": "^4.7.0",
-// "@testing-library/jest-dom": "^5.14.1",
-// "@testing-library/react": "^13.0.0",
-// "@testing-library/user-event": "^13.2.1",
-// "antd": "^4.23.0",
-// "axios": "^0.27.2",
-// "moment": "^2.29.4",
-// "react": "^18.2.0",
-// "react-dom": "^18.2.0",
-// "react-highlight-words": "^0.18.0",
-// "react-router-dom": "^6.3.0",
-// "react-scripts": "5.0.1",
-// "web-vitals": "^2.1.0"
 
 export default App;

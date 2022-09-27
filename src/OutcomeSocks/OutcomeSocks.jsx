@@ -15,9 +15,8 @@ const OutcomeSocks = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
     const {
-        newDryFruitData,
+        socksData,
         measurementData,
-        dryfruitWarehouseData,
         clientData,
     } = useData();
     const navigate = useNavigate();
@@ -29,15 +28,15 @@ const OutcomeSocks = () => {
                 `api/socks/factory/outcome/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                const fuelsData = {
-                    totalSumma: data.data.data.dryFruits.totalSumma,
-                    totalCash: data.data.data.dryFruits.totalCash,
-                    totalPlastic: data.data.data.dryFruits.totalPlastic,
-                    totalDollar: data.data.data.dryFruits.totalDollar,
-                };
-                setTotalFruit(fuelsData);
+                // const fuelsData = {
+                //     totalSumma: data.data.data.dryFruits.totalSumma,
+                //     totalCash: data.data.data.dryFruits.totalCash,
+                //     totalPlastic: data.data.data.dryFruits.totalPlastic,
+                //     totalDollar: data.data.data.dryFruits.totalDollar,
+                // };
+                // setTotalFruit(fuelsData);
                 const fuel =
-                    data.data.data.dryFruits.outcomeDryFruitGetDtoList.map(
+                    data.data.data.outcomeSocks.map(
                         (item) => {
                             return {
                                 ...item,
@@ -52,112 +51,100 @@ const OutcomeSocks = () => {
                 console.error(error);
                 if (error.response.status === 500) navigate("/server-error");
                 message.error(
-                    "Sotilgan quruq mevalarni yuklashda muammo bo'ldi"
+                    "Sotilgan naskilarni yuklashda muammo bo'ldi"
                 );
             })
             .finally(() => setLoading(false));
     };
 
-    const getOutcomeFruitTimely = (value, current, pageSize) => {
-        instance
-            .get(
-                `api/socks/factory/outcome/pageable?page=${current}&size=${pageSize}`
-            )
-            .then((data) => {
-                const fuelsData = {
-                    totalSumma: data.data.data.dryFruits.totalSumma,
-                    totalCash: data.data.data.dryFruits.totalCash,
-                    totalPlastic: data.data.data.dryFruits.totalPlastic,
-                    totalDollar: data.data.data.dryFruits.totalDollar,
-                };
-                setTotalFruit(fuelsData);
-                const fuel =
-                    data.data.data.dryFruits.outcomeDryFruitGetDtoList.map(
-                        (item) => {
-                            return {
-                                ...item,
-                                date: moment(item.date).format("DD-MM-YYYY"),
-                            };
-                        }
-                    );
-                setOutcomeFuel(fuel);
-                setTotalItems(data.data.data.totalItems);
-            })
-            .catch((error) => {
-                console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
-                message.error(
-                    "Sotilgan quruq mevalarni yuklashda muammo bo'ldi"
-                );
-            })
-            .finally(() => setLoading(false));
-    };
+    // const getOutcomeFruitTimely = (value, current, pageSize) => {
+    //     instance
+    //         .get(
+    //             `api/socks/factory/outcome/pageable?page=${current}&size=${pageSize}`
+    //         )
+    //         .then((data) => {
+    //             const fuelsData = {
+    //                 totalSumma: data.data.data.dryFruits.totalSumma,
+    //                 totalCash: data.data.data.dryFruits.totalCash,
+    //                 totalPlastic: data.data.data.dryFruits.totalPlastic,
+    //                 totalDollar: data.data.data.dryFruits.totalDollar,
+    //             };
+    //             setTotalFruit(fuelsData);
+    //             const fuel =
+    //                 data.data.data.dryFruits.outcomeSocks.map(
+    //                     (item) => {
+    //                         return {
+    //                             ...item,
+    //                             date: moment(item.date).format("DD-MM-YYYY"),
+    //                         };
+    //                     }
+    //                 );
+    //             setOutcomeFuel(fuel);
+    //             setTotalItems(data.data.data.totalItems);
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //             if (error.response.status === 500) navigate("/server-error");
+    //             message.error(
+    //                 "Sotilgan quruq mevalarni yuklashda muammo bo'ldi"
+    //             );
+    //         })
+    //         .finally(() => setLoading(false));
+    // };
 
-    const dateFilter = (date, current, pageSize) => {
-        setLoading(true);
-        instance
-            .get(
-                `api/socks/factory/outcome/pageable/between?page=${current}&size=${pageSize}&startDate=${date[0]}&endDate=${date[1]}`
-            )
-            .then((data) => {
-                const fuelsData = {
-                    totalSumma: data.data.data.dryFruits.totalSumma,
-                    totalCash: data.data.data.dryFruits.totalCash,
-                    totalPlastic: data.data.data.dryFruits.totalPlastic,
-                    totalDollar: data.data.data.dryFruits.totalDollar,
-                };
-                setTotalFruit(fuelsData);
-                const fuel =
-                    data.data.data.fuelReports.outcomeDryFruitGetDtoList.map(
-                        (item) => {
-                            return {
-                                ...item,
-                                date: moment(item.date).format("DD-MM-YYYY"),
-                            };
-                        }
-                    );
-                setOutcomeFuel(fuel);
-                setTotalItems(data.data.data.totalItems);
-            })
-            .catch((err) => {
-                console.error(err);
-                message.error("Sotilgan quruq mevalarni yuklashda muammo bo'ldi");
-            })
-            .finally(() => setLoading(false));
-    };
+    // const dateFilter = (date, current, pageSize) => {
+    //     setLoading(true);
+    //     instance
+    //         .get(
+    //             `api/socks/factory/outcome/pageable/between?page=${current}&size=${pageSize}&startDate=${date[0]}&endDate=${date[1]}`
+    //         )
+    //         .then((data) => {
+    //             const fuelsData = {
+    //                 totalSumma: data.data.data.dryFruits.totalSumma,
+    //                 totalCash: data.data.data.dryFruits.totalCash,
+    //                 totalPlastic: data.data.data.dryFruits.totalPlastic,
+    //                 totalDollar: data.data.data.dryFruits.totalDollar,
+    //             };
+    //             setTotalFruit(fuelsData);
+    //             const fuel =
+    //                 data.data.data.fuelReports.outcomeDryFruitGetDtoList.map(
+    //                     (item) => {
+    //                         return {
+    //                             ...item,
+    //                             date: moment(item.date).format("DD-MM-YYYY"),
+    //                         };
+    //                     }
+    //                 );
+    //             setOutcomeFuel(fuel);
+    //             setTotalItems(data.data.data.totalItems);
+    //         })
+    //         .catch((err) => {
+    //             console.error(err);
+    //             message.error("Sotilgan quruq mevalarni yuklashda muammo bo'ldi");
+    //         })
+    //         .finally(() => setLoading(false));
+    // };
 
     const columns = [
         {
-            title: "Quruq meva nomi",
-            dataIndex: "dryFruitId",
-            key: "dryFruitId",
+            title: "Naski turi",
+            dataIndex: "socksId",
+            key: "socksId",
             width: "15%",
-            render: (record) => {
-                const data = newDryFruitData.filter(
-                    (item) => item.id === record
-                );
-                return data[0]?.name;
-            },
             search: false,
         },
         {
             title: "Klient ismi",
             dataIndex: "clientId",
             key: "clientId",
-            width: "25%",
+            width: "20%",
             search: false,
         },
         {
             title: "O'lchovi",
             dataIndex: "measurementId",
             key: "measurementId",
-            width: "10%",
-            render: (record) => {
-                const data = measurementData.filter(
-                    (item) => item.id === record
-                );
-                return data[0]?.name;
-            },
+            width: "15%",
             search: false,
         },
         {
@@ -177,33 +164,23 @@ const OutcomeSocks = () => {
             search: false,
         },
         {
-            title: "Sotilgan vaqti",
-            dataIndex: "date",
-            key: "date",
-            width: "10%",
+            title: "Sotilish narxi",
+            dataIndex: "price",
+            key: "price",
+            width: "15%",
             search: false,
         },
         {
-            title: "Sotilgan narxi",
-            dataIndex: "price",
-            key: "price",
-            width: "10%",
+            title: "Sotilish vaqti",
+            dataIndex: "date",
+            key: "date",
+            width: "15%",
             search: false,
         },
         {
             title: "Qarzdorlik",
             dataIndex: "debt",
             key: "debt",
-            width: "10%",
-            search: false,
-            render: (record) => {
-                return record ? "Bor" : "Yo'q";
-            },
-        },
-        {
-            title: "Naqd pul",
-            dataIndex: "cash",
-            key: "cash",
             width: "10%",
             search: false,
             render: (record) => {
@@ -219,16 +196,17 @@ const OutcomeSocks = () => {
             date: values.date.toISOString(),
             debt: values.debt.target.value,
         };
+        console.log(value);
         instance
             .post("api/socks/factory/outcome", { ...value })
             .then(function (response) {
-                message.success("Sotilgan quruq meva muvaffaqiyatli qo'shildi");
                 getOutcomeDryFruits(current - 1, pageSize);
+                message.success("Sotilgan naski muvaffaqiyatli qo'shildi");
             })
             .catch(function (error) {
                 console.error(error);
                 if (error.response.status === 500) navigate("/server-error");
-                message.error("Sotilgan quruq mevani qo'shishda muammo bo'ldi");
+                message.error("Sotilgan naskini qo'shishda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -238,18 +216,18 @@ const OutcomeSocks = () => {
     const onEdit = (values, initial) => {
         setLoading(true);
         const time = moment(values.date, "DD-MM-YYYY").toISOString();
-        const datas = {
+        const data = {
             ...values,
             date: time,
             debt: values.debt.target.value,
         };
         instance
-            .put(`api/socks/factory/outcome/${initial.id}`, {
-                ...datas,
+            .put(`api/socks/factory/outcome?id=${initial.id}`, {
+                ...data,
             })
             .then((res) => {
                 message.success(
-                    "Sotilgan quruq meva muvaffaqiyatli taxrirlandi"
+                    "Sotilgan naski muvaffaqiyatli taxrirlandi"
                 );
                 getOutcomeDryFruits(current - 1, pageSize);
             })
@@ -257,7 +235,7 @@ const OutcomeSocks = () => {
                 console.error("Error in edit: ", error);
                 if (error.response.status === 500) navigate("/server-error");
                 message.error(
-                    "Sotilgan quruq mevani taxrirlashda muammo bo'ldi"
+                    "Sotilgan naskini taxrirlashda muammo bo'ldi"
                 );
             })
             .finally(() => {
@@ -269,7 +247,7 @@ const OutcomeSocks = () => {
         setLoading(true);
         arr.map((item) => {
             instance
-                .delete(`api/socks/factory/outcome/${item}`)
+                .delete(`api/socks/factory/outcome?id=${item}`)
                 .then((data) => {
                     getOutcomeDryFruits(current - 1, pageSize);
                     message.success(
@@ -289,16 +267,16 @@ const OutcomeSocks = () => {
         setLoading(false);
     };
 
-    const timelySelect = [
-        { title: "Kunlik", value: "daily" },
-        { title: "Haftalik", value: "weekly" },
-        { title: "Oylik", value: "monthly" },
-        { title: "Yillik", value: "annually" },
-    ];
+    // const timelySelect = [
+    //     { title: "Kunlik", value: "daily" },
+    //     { title: "Haftalik", value: "weekly" },
+    //     { title: "Oylik", value: "monthly" },
+    //     { title: "Yillik", value: "annually" },
+    // ];
 
     return (
         <>
-            <div className="site-statistic-demo-card">
+            {/* <div className="site-statistic-demo-card">
                 <Row gutter={16} className="statistic" style={{marginBottom: '20px'}}>
                     <Col span={6}>
                         <Card>
@@ -353,14 +331,14 @@ const OutcomeSocks = () => {
                         </Card>
                     </Col>
                 </Row>
-            </div>
+            </div> */}
             <CustomTable
-                dateFilter={dateFilter}
+                // dateFilter={dateFilter}
                 onEdit={onEdit}
                 onCreate={onCreate}
                 onDelete={handleDelete}
                 getData={getOutcomeDryFruits}
-                getDataTimely={getOutcomeFruitTimely}
+                // getDataTimely={getOutcomeFruitTimely}
                 columns={columns}
                 tableData={outcomeFuel}
                 current={current}
@@ -371,7 +349,7 @@ const OutcomeSocks = () => {
                 setCurrent={setCurrent}
                 setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
-                timelySelect={timelySelect}
+                // timelySelect={timelySelect}
             />
         </>
     );

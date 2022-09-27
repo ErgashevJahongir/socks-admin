@@ -20,6 +20,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useData } from "../../Hook/UseData";
 import useToken from "../../Hook/UseToken";
 import DrapdownMenu from "../DrapdownMenu/DrapdownMenu";
+import socks2 from "./socks2.png";
 
 const { Header } = Layout;
 
@@ -115,21 +116,14 @@ function Navbar() {
                 <div className="logo" style={{ marginRight: "5%" }}>
                     <Link
                         to="/"
-                        style={{ marginTop: "10px", display: "block" }}
+                        style={{ marginTop: "3px", display: "block" }}
                     >
-                        <h1
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                color: "#ff5722",
-                            }}
-                        >
-                            Dry Fruits
-                            <i
-                                className="bx bxs-gas-pump"
-                                style={{ marginLeft: "10px", fontSize: "26px" }}
-                            />
-                        </h1>
+                        <img
+                            src={socks2}
+                            alt="img-logo"
+                            width={70}
+                            height={40}
+                        />
                     </Link>
                 </div>
                 <Menu
@@ -151,7 +145,18 @@ function Navbar() {
                             ),
                         },
                         {
-                            label: "Quruq mevalar",
+                            label: "Material",
+                            key: "/material",
+                            icon: (
+                                <Link to="/material">
+                                    <ProfileOutlined
+                                        style={{ fontSize: "18px" }}
+                                    />
+                                </Link>
+                            ),
+                        },
+                        {
+                            label: "Naskilar",
                             key: "/socks",
                             icon: (
                                 <Link to="/socks">
@@ -162,22 +167,11 @@ function Navbar() {
                             ),
                         },
                         {
-                            label: "Sklad",
-                            key: "/warehouse-socks",
-                            icon: (
-                                <Link to="/warehouse-socks">
-                                    <CloudOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
-                                </Link>
-                            ),
-                        },
-                        {
                             label: "Kelgan Mahsulotlar",
                             key: "/income-socks",
                             icon: (
                                 <Link to="/income-socks">
-                                    <CloudDownloadOutlined  
+                                    <CloudDownloadOutlined
                                         style={{ fontSize: "18px" }}
                                     />
                                 </Link>
@@ -195,50 +189,15 @@ function Navbar() {
                             ),
                         },
                         {
-                            label: "Qarzlar",
-                            key: "/debts",
+                            label: "Tashqi qarzlar",
+                            key: "/outdebts",
                             icon: (
-                                <Link to="/debts">
+                                <Link to="/outdebts">
                                     <DollarCircleOutlined
                                         style={{ fontSize: "18px" }}
                                     />
                                 </Link>
                             ),
-                            children: [
-                                {
-                                    label: "Ichki qarzlar",
-                                    key: "/indebts",
-                                    icon: (
-                                        <Link to="/indebts">
-                                            <DollarCircleOutlined
-                                                style={{ fontSize: "18px" }}
-                                            />
-                                        </Link>
-                                    ),
-                                },
-                                {
-                                    label: "Tashqi qarzlar",
-                                    key: "/outdebts",
-                                    icon: (
-                                        <Link to="/outdebts">
-                                            <DollarCircleOutlined
-                                                style={{ fontSize: "18px" }}
-                                            />
-                                        </Link>
-                                    ),
-                                },
-                                {
-                                    label: "Ishchilar qarzlar",
-                                    key: "/worker-debts",
-                                    icon: (
-                                        <Link to="/worker-debts">
-                                            <DollarCircleOutlined
-                                                style={{ fontSize: "18px" }}
-                                            />
-                                        </Link>
-                                    ),
-                                },
-                            ],
                         },
                         {
                             label: "Qo'shimchalar",
@@ -261,33 +220,11 @@ function Navbar() {
                                     ),
                                 },
                                 {
-                                    label: "Ishchilar",
-                                    key: "/worker",
-                                    icon: (
-                                        <Link to="/worker">
-                                            <TeamOutlined
-                                                style={{ fontSize: "18px" }}
-                                            />
-                                        </Link>
-                                    ),
-                                },
-                                {
                                     label: "Foydalanuvchilar",
                                     key: "/users",
                                     icon: (
                                         <Link to="/users">
                                             <UserOutlined
-                                                style={{ fontSize: "18px" }}
-                                            />
-                                        </Link>
-                                    ),
-                                },
-                                {
-                                    label: "Filiallar",
-                                    key: "/branchs",
-                                    icon: (
-                                        <Link to="/branchs">
-                                            <BranchesOutlined
                                                 style={{ fontSize: "18px" }}
                                             />
                                         </Link>

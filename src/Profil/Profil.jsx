@@ -59,7 +59,7 @@ const Profil = () => {
     const onUpdate = (values) => {
         delete values.passwordRetry;
         instance
-            .put(`api/socks/factory/user/update${1}`, { ...values })
+            .put(`api/socks/factory/user`, { ...values })
             .then(function (response) {
                 // getUserData();
                 message.success("Foydalanuvchi muvaffaqiyatli taxrirlandi");
