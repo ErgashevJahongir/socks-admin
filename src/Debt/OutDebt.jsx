@@ -3,7 +3,7 @@ import instance from "../Api/Axios";
 import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import moment from "moment/moment";
-import { useData } from "../Hook/UseData";
+// import { useData } from "../Hook/UseData";
 
 const OutDebt = () => {
     const [debts, setDebts] = useState([]);
@@ -11,24 +11,20 @@ const OutDebt = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { supplier, usersData } = useData();
+    // const { supplier, usersData } = useData();
 
     const getDebts = (current, pageSize) => {
         setLoading(true);
         instance
             .get(
-                `api/dry/fruit/debt/get-outcome?page=${current}&size=${pageSize}`
+                `api/socks/factory/debt/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                let value = data.data.data.debt?.map((df) => {
-                    const givenTime = moment(df.givenTime).format("DD-MM-YYYY");
-                    const returnTime = moment(df.returnTime).format(
-                        "DD-MM-YYYY"
-                    );
+                let value = data.data.data.branches?.map((df) => {
+                    const deadline = moment(df.deadline).format("DD-MM-YYYY");
                     return {
                         ...df,
-                        returnTime: returnTime,
-                        givenTime: givenTime,
+                        deadline,
                     };
                 });
                 setDebts(value);
@@ -43,10 +39,15 @@ const OutDebt = () => {
 
     const onCreate = (values) => {
         setLoading(true);
+        const deadline = values.deadline.toISOString();
+        const value = {
+            ...values,
+            deadline,
+        };
         instance
-            .post("api/dry/fruit/debt/post", { ...values, borrower: null })
+            .post("api/socks/factory/debt", { ...value })
             .then(function (response) {
-                message.success("Tashqi qarz muvofaqiyatli qo'shildi");
+                message.success("Tashqi qarz muvaffaqiyatli qo'shildi");
                 getDebts(current - 1, pageSize);
             })
             .catch(function (error) {
@@ -60,25 +61,22 @@ const OutDebt = () => {
 
     const onEdit = (values, initial) => {
         setLoading(true);
-        const givenTime = moment(values.givenTime, "DD-MM-YYYY").toISOString();
-        const returnTime = moment(
-            values.returnTime,
-            "DD-MM-YYYY"
-        ).toISOString();
+        const deadline = moment(values.deadline, "DD-MM-YYYY").toISOString();
+        const value = {
+            ...values,
+            deadline, 
+                       id: initial.id,
+        };
+            console.log(value);
         instance
-            .put(`api/dry/fruit/debt/update${initial.id}`, {
-                ...values,
-                givenTime: givenTime,
-                returnTime: returnTime,
-                borrower: null,
-            })
+            .put("api/socks/factory/debt", { ...value })
             .then(function (response) {
-                message.success("Tashqi qarz muvofaqiyatli qo'shildi");
+                message.success("Tashqi qarz muvaffaqiyatli taxrirlandi");
                 getDebts(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
-                message.error("Tashqi qarzni qo'shishda muammo bo'ldi");
+                message.error("Tashqi qarzni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -89,9 +87,10 @@ const OutDebt = () => {
         setLoading(true);
         arr.map((item) => {
             instance
-                .delete(`api/oil/station/debt/delete${item}`)
+                .delete(`api/socks/factory/debt/${item}`)
                 .then((data) => {
-                    message.success("Tashqi qarz muvofaqiyatli o'chirildi");
+                    message.success("Tashqi qarz muvaffaqiyatli o'chirildi");
+                    getDebts(current - 1, pageSize);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -99,72 +98,37 @@ const OutDebt = () => {
                 });
             return null;
         });
-        getDebts(current - 1, pageSize);
         setLoading(false);
     };
 
     const columns = [
         {
-            title: "Qarz miqdori",
-            dataIndex: "amount",
-            key: "amount",
-            width: "10%",
+            title: "Klient ismi",
+            dataIndex: "clientId",
+            key: "clientId",
+            width: "25%",
             search: false,
         },
         {
-            title: "Qarz oluvchi odam",
-            dataIndex: "lenderOrBorrowerId",
-            key: "lenderOrBorrowerId",
-            width: "20%",
-            search: false,
-            render: (record) => {
-                const name = usersData?.filter((item) => item.id === record);
-                return name[0]?.fio;
-            },
-        },
-        {
-            title: "Qarz beruvchi",
-            dataIndex: "lenderId",
-            key: "lenderId",
-            width: "20%",
-            search: false,
-            render: (record) => {
-                const suppl = supplier.filter((item) => item.id === record);
-                return suppl[0]?.name;
-            },
-        },
-        {
-            title: "Berilgan vaqt",
-            dataIndex: "givenTime",
-            key: "givenTime",
-            width: "20%",
+            title: "Sotilgan mahsulot",
+            dataIndex: "outcomeSocksId",
+            key: "outcomeSocksId",
+            width: "25%",
             search: false,
         },
         {
-            title: "Qarz qaytarilish vaqti",
-            dataIndex: "returnTime",
-            key: "returnTime",
-            width: "20%",
+            title: "Sotilish narxi",
+            dataIndex: "price",
+            key: "price",
+            width: "25%",
             search: false,
         },
         {
-            title: "To'liq uzilganmi",
-            dataIndex: "given",
-            key: "given",
-            width: "10%",
+            title: "Topshirish muddati",
+            dataIndex: "deadline",
+            key: "deadline",
+            width: "25%",
             search: false,
-            sorter: (a, b) => {
-                if (a.given < b.given) {
-                    return -1;
-                }
-                if (a.given > b.given) {
-                    return 1;
-                }
-                return 0;
-            },
-            render: (record) => {
-                return record ? "Ha" : "Yo'q";
-            },
         },
     ];
 

@@ -5,23 +5,23 @@ import CustomTable from "../Module/Table/Table";
 import { useData } from "../Hook/UseData";
 import { useNavigate } from "react-router-dom";
 
-const Socks = () => {
+const Material = () => {
     const [incomeDryFruits, setIncomeDryFruits] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { categoryData } = useData();
+    const { measurementData } = useData();
     const navigate = useNavigate();
 
     const getIncomeDryFruits = (current, pageSize) => {
         setLoading(true);
         instance
             .get(
-                `api/socks/factory/socks/pageable?page=${current}&size=${pageSize}`
+                `api/socks/factory/api/socks/factory/material/getAllPageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                setIncomeDryFruits(data.data.data.branches);
+                setIncomeDryFruits(data.data.data.materials);
                 setTotalItems(data.data.data.totalItems);
             })
             .catch((error) => {
@@ -37,32 +37,25 @@ const Socks = () => {
             title: "Naski nomi",
             dataIndex: "name",
             key: "name",
-            width: "25%",
+            width: "33%",
             search: false,
         },
         {
             title: "Naski sorti",
-            dataIndex: "categoryId",
-            key: "categoryId",
-            width: "25%",
+            dataIndex: "measurementId",
+            key: "measurementId",
+            width: "33%",
             render: (id) => {
-                const data = categoryData.filter((item) => item.id === id);
+                const data = measurementData.filter((item) => item.id === id);
                 return data[0]?.name;
             },
-            search: false,
-        },
-        {
-            title: "Narxi",
-            dataIndex: "price",
-            key: "price",
-            width: "25%",
             search: false,
         },
         {
             title: "Miqdori",
             dataIndex: "amount",
             key: "amount",
-            width: "25%",
+            width: "33%",
             sorter: (a, b) => {
                 if (a.amount < b.amount) {
                     return -1;
@@ -79,7 +72,7 @@ const Socks = () => {
     const onCreate = (values) => {
         setLoading(true);
         instance
-            .post("api/socks/factory/socks/add", { ...values })
+            .post("api/socks/factory/api/socks/factory/material/add", { ...values })
             .then(function (response) {
                 message.success("Kelgan naski muvaffaqiyatli qo'shildi");
                 getIncomeDryFruits(current - 1, pageSize);
@@ -97,7 +90,7 @@ const Socks = () => {
     const onEdit = (values, initial) => {
         setLoading(true);
         instance
-            .put(`api/socks/factory/socks/update?socksId=${initial.id}`, { ...values })
+            .put(`api/socks/factory/api/socks/factory/material/update${initial.id}`, { ...values })
             .then((res) => {
                 message.success("Kelgan naski muvaffaqiyatli taxrirlandi");
                 getIncomeDryFruits(current - 1, pageSize);
@@ -116,7 +109,7 @@ const Socks = () => {
         setLoading(true);
         arr.map((item) => {
             instance
-                .delete(`api/socks/factory/socks/delete?socksId=${item}`)
+                .delete(`api/socks/factory/api/socks/factory/material/delete${item}`)
                 .then((data) => {
                     getIncomeDryFruits(current - 1, pageSize);
                     message.success(
@@ -158,4 +151,4 @@ const Socks = () => {
     );
 };
 
-export default Socks;
+export default Material;

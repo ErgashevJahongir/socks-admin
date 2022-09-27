@@ -2,11 +2,11 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const token1 = JSON.parse(sessionStorage.getItem("dry-fruit"));
-const token2 = JSON.parse(localStorage.getItem("dry-fruit"));
+const token1 = JSON.parse(sessionStorage.getItem("socks"));
+const token2 = JSON.parse(localStorage.getItem("socks"));
 
 const instance = axios.create({
-    baseURL: "https://socks-java-app.herokuapp.com/",
+    baseURL: "https://app-socks-warehouse.herokuapp.com/",
     headers: {
         "Content-Type": "application/json",
         "Accept-Language": "uz",

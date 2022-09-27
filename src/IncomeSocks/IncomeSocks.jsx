@@ -1,81 +1,126 @@
 import { useState } from "react";
 import instance from "../Api/Axios";
 import moment from "moment";
-import { message } from "antd";
+import { Card, Col, message, Row, Statistic } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../Hook/UseData";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 
 const IncomeSocks = () => {
-    const [incomeFuel, setIncomeFuel] = useState([]);
+    const [outcomeFuel, setOutcomeFuel] = useState([]);
     const [loading, setLoading] = useState(true);
+    // const [totalFruit, setTotalFruit] = useState({});
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const {
-        newDryFruitData,
-        measurementData,
-        newDryFruitWerehouseData,
-        qarzValue,
-    } = useData();
+    const { measurementData } = useData();
     const navigate = useNavigate();
 
-    const getIncomeDryFruits = (current, pageSize) => {
+    const getOutcomeDryFruits = (current, pageSize) => {
         setLoading(true);
         instance
             .get(
                 `api/socks/factory/incomeMaterial/getAllPageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
+                // const fuelsData = {
+                //     totalSumma: data.data.data.dryFruits.totalSumma,
+                //     totalCash: data.data.data.dryFruits.totalCash,
+                //     totalPlastic: data.data.data.dryFruits.totalPlastic,
+                //     totalDollar: data.data.data.dryFruits.totalDollar,
+                // };
+                // setTotalFruit(fuelsData);
                 const fuel = data.data.data.dryFruit.map((item) => {
                     return {
                         ...item,
                         date: moment(item.date).format("DD-MM-YYYY"),
                     };
                 });
-                setIncomeFuel(fuel);
+                setOutcomeFuel(fuel);
                 setTotalItems(data.data.data.totalItems);
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response.status === 500) navigate("/server-error");
-                message.error("Kelgan quruq mevalarni yuklashda muammo bo'ldi");
+                message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
+            })
+            .finally(() => setLoading(false));
+    };
+
+    const getOutcomeFruitTimely = (value, current, pageSize) => {
+        instance
+            .get(
+                `api/socks/factory/incomeMaterial/getAllPageable?page=${current}&size=${pageSize}`
+            )
+            .then((data) => {
+                // const fuelsData = {
+                //     totalSumma: data.data.data.dryFruits.totalSumma,
+                //     totalCash: data.data.data.dryFruits.totalCash,
+                //     totalPlastic: data.data.data.dryFruits.totalPlastic,
+                //     totalDollar: data.data.data.dryFruits.totalDollar,
+                // };
+                // setTotalFruit(fuelsData);
+                const fuel = data.data.data.dryFruits.map((item) => {
+                    return {
+                        ...item,
+                        date: moment(item.date).format("DD-MM-YYYY"),
+                    };
+                });
+                setOutcomeFuel(fuel);
+                setTotalItems(data.data.data.totalItems);
+            })
+            .catch((error) => {
+                console.error(error);
+                if (error.response.status === 500) navigate("/server-error");
+                message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
+            })
+            .finally(() => setLoading(false));
+    };
+
+    const dateFilter = (date, current, pageSize) => {
+        setLoading(true);
+        instance
+            .get(
+                `api/socks/factory/incomeMaterial/getAllPageable/dates?page=${current}&size=${pageSize}&startDate=${date[0]}&endDate=${date[1]}`
+            )
+            .then((data) => {
+                // const fuelsData = {
+                //     totalSumma: data.data.data.dryFruits.totalSumma,
+                //     totalCash: data.data.data.dryFruits.totalCash,
+                //     totalPlastic: data.data.data.dryFruits.totalPlastic,
+                //     totalDollar: data.data.data.dryFruits.totalDollar,
+                // };
+                // setTotalFruit(fuelsData);
+                const fuel = data.data.data.dryFruit.map((item) => {
+                    return {
+                        ...item,
+                        date: moment(item.date).format("DD-MM-YYYY"),
+                    };
+                });
+                setOutcomeFuel(fuel);
+                setTotalItems(data.data.data.totalItems);
+            })
+            .catch((err) => {
+                console.error(err);
+                message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
 
     const columns = [
         {
-            title: "Ombordagi quruq meva",
-            dataIndex: "dryFruitWarehouseId",
-            key: "dryFruitWarehouseId",
+            title: "Material",
+            dataIndex: "materialId",
+            key: "materialId",
             width: "20%",
-            render: (record) => {
-                const data = newDryFruitWerehouseData.filter(
-                    (item) => item.id === record
-                );
-                return data[0]?.name;
-            },
-            search: false,
-        },
-        {
-            title: "Quruq meva turi",
-            dataIndex: "dryFruitId",
-            key: "dryFruitId",
-            width: "15%",
-            render: (record) => {
-                const data = newDryFruitData.filter(
-                    (item) => item.id === record
-                );
-                return data[0]?.name;
-            },
             search: false,
         },
         {
             title: "O'lchovi",
             dataIndex: "measurementId",
             key: "measurementId",
-            width: "15%",
+            width: "20%",
             render: (record) => {
                 const data = measurementData.filter(
                     (item) => item.id === record
@@ -88,7 +133,7 @@ const IncomeSocks = () => {
             title: "Miqdori",
             dataIndex: "amount",
             key: "amount",
-            width: "10%",
+            width: "20%",
             sorter: (a, b) => {
                 if (a.amount < b.amount) {
                     return -1;
@@ -101,28 +146,18 @@ const IncomeSocks = () => {
             search: false,
         },
         {
-            title: "Kelish narxi",
-            dataIndex: "price",
-            key: "price",
-            width: "15%",
-            search: false,
-        },
-        {
-            title: "Kelish vaqti",
+            title: "Kelgan vaqti",
             dataIndex: "date",
             key: "date",
-            width: "15%",
+            width: "20%",
             search: false,
         },
         {
-            title: "Qarzdorlik",
-            dataIndex: "debt",
-            key: "debt",
-            width: "10%",
+            title: "Sotilgan narxi",
+            dataIndex: "price",
+            key: "price",
+            width: "20%",
             search: false,
-            render: (record) => {
-                return record ? "Bor" : "Yo'q";
-            },
         },
     ];
 
@@ -131,30 +166,17 @@ const IncomeSocks = () => {
         const value = {
             ...values,
             date: values.date.toISOString(),
-            debt: values.debt.target.value === "false" ? false : true,
         };
         instance
             .post("api/socks/factory/incomeMaterial/add", { ...value })
             .then(function (response) {
-                message.success("Kelgan quruq meva muvofaqiyatli qo'shildi");
-                instance
-                    .post("api/socks/factory/incomeMaterial/debt/post", {
-                        incomeDryFruitId: response.data.data,
-                        workerId: null,
-                        outcomeDryFruitId: null,
-                        given: false,
-                        borrowAmount: values.price * values.amount - qarzValue,
-                    })
-                    .then((res) => {
-                        console.log(res);
-                    })
-                    .catch((err) => console.error(err));
-                getIncomeDryFruits(current - 1, pageSize);
+                message.success("Kelgan naski muvaffaqiyatli qo'shildi");
+                getOutcomeDryFruits(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
                 if (error.response.status === 500) navigate("/server-error");
-                message.error("Kelgan quruq mevani qo'shishda muammo bo'ldi");
+                message.error("Kelgan naskini qo'shishda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -166,7 +188,6 @@ const IncomeSocks = () => {
         const time = moment(values.date, "DD-MM-YYYY").toISOString();
         const data = {
             ...values,
-            debt: values.debt.target.value,
             date: time,
         };
         instance
@@ -174,13 +195,13 @@ const IncomeSocks = () => {
                 ...data,
             })
             .then((res) => {
-                message.success("Kelgan quruq meva muvaffaqiyatli taxrirlandi");
-                getIncomeDryFruits(current - 1, pageSize);
+                message.success("Kelgan naski muvaffaqiyatli taxrirlandi");
+                getOutcomeDryFruits(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 if (error.response.status === 500) navigate("/server-error");
-                message.error("Kelgan quruq mevani taxrirlashda muammo bo'ldi");
+                message.error("Kelgan naskini taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -193,33 +214,94 @@ const IncomeSocks = () => {
             instance
                 .delete(`api/socks/factory/incomeMaterial/delete${item}`)
                 .then((data) => {
-                    getIncomeDryFruits(current - 1, pageSize);
-                    message.success(
-                        "Kelgan quruq meva muvaffaqiyatli o'chirildi"
-                    );
+                    getOutcomeDryFruits(current - 1, pageSize);
+                    message.success("Kelgan naski muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
                     console.error(error);
                     if (error.response.status === 500)
                         navigate("/server-error");
-                    message.error(
-                        "Kelgan quruq mevani o'chirishda muammo bo'ldi"
-                    );
+                    message.error("Kelgan naskini o'chirishda muammo bo'ldi");
                 });
             return null;
         });
         setLoading(false);
     };
 
+    const timelySelect = [
+        { title: "Kunlik", value: "daily" },
+        { title: "Haftalik", value: "weekly" },
+        { title: "Oylik", value: "monthly" },
+        { title: "Yillik", value: "annually" },
+    ];
+
     return (
         <>
+            {/* <div className="site-statistic-demo-card">
+                <Row gutter={16} className="statistic" style={{marginBottom: '20px'}}>
+                    <Col span={6}>
+                        <Card>
+                            <Statistic
+                                title="Umumiy summa"
+                                value={totalFruit.totalSumma}
+                                valueStyle={{
+                                    color: "#3f8600",
+                                }}
+                                prefix={<ArrowUpOutlined />}
+                                suffix="so'm"
+                            />
+                        </Card>
+                    </Col>
+                    <Col span={6}>
+                        <Card>
+                            <Statistic
+                                title="Jami naqd summa"
+                                value={totalFruit.totalCash}
+                                valueStyle={{
+                                    color: "#cf1322",
+                                }}
+                                prefix={<ArrowDownOutlined />}
+                                suffix="so'm"
+                            />
+                        </Card>
+                    </Col>
+                    <Col span={6}>
+                        <Card>
+                            <Statistic
+                                title="Jami plastik summa"
+                                value={totalFruit.totalPlastic}
+                                valueStyle={{
+                                    color: "#3f8600",
+                                }}
+                                prefix={<ArrowUpOutlined />}
+                                suffix="so'm"
+                            />
+                        </Card>
+                    </Col>
+                    <Col span={6}>
+                        <Card>
+                            <Statistic
+                                title="Jami dollar"
+                                value={totalFruit.totalDollar}
+                                valueStyle={{
+                                    color: "#3f8600",
+                                }}
+                                prefix={<ArrowUpOutlined />}
+                                suffix="dollar"
+                            />
+                        </Card>
+                    </Col>
+                </Row>
+            </div> */}
             <CustomTable
+                dateFilter={dateFilter}
                 onEdit={onEdit}
                 onCreate={onCreate}
                 onDelete={handleDelete}
-                getData={getIncomeDryFruits}
+                getData={getOutcomeDryFruits}
+                getDataTimely={getOutcomeFruitTimely}
                 columns={columns}
-                tableData={incomeFuel}
+                tableData={outcomeFuel}
                 current={current}
                 pageSize={pageSize}
                 totalItems={totalItems}
@@ -228,6 +310,7 @@ const IncomeSocks = () => {
                 setCurrent={setCurrent}
                 setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
+                timelySelect={timelySelect}
             />
         </>
     );
