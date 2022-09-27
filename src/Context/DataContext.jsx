@@ -28,28 +28,6 @@ export const DataProvider = ({ children }) => {
         setValueDebt(e.target.value);
     };
 
-    // const DryFruitDataFunc = () => {
-    //     return socksData?.map((cat) => {
-    //         const data = categoryData.filter(
-    //             (item) => item.id === cat.categoryId
-    //         );
-    //         const name = data[0]?.name;
-    //         return { ...cat, name: name };
-    //     });
-    // };
-
-    // const DryFruitWerehouseDataFunc = () => {
-    //     return dryfruitWarehouseData?.map((cat) => {
-    //         const data = branchData.filter((item) => item.id === cat.branchId);
-    //         const name = data[0]?.name;
-    //         return { ...cat, name: name };
-    //     });
-    // };
-
-    // const newDryFruitWerehouseData = DryFruitWerehouseDataFunc();
-
-    // const newDryFruitData = DryFruitDataFunc();
-
     const incomeSocksData = [
         {
             name: "materialId",
@@ -299,6 +277,7 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
+
     const createSocksData = [
         {
             name: "name",
@@ -374,17 +353,6 @@ export const DataProvider = ({ children }) => {
             input: <Input />,
         },
     ];
-    //     {
-    //         name: "fio",
-    //         label: "Ishchi FIO",
-    //         input: <Input />,
-    //     },
-    //     {
-    //         name: "phoneNumber",
-    //         label: "Ishchi nomeri",
-    //         input: <Input />,
-    //     },
-    // ];
 
     const usersData = [
         {
@@ -408,8 +376,10 @@ export const DataProvider = ({ children }) => {
             input: (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Quruq mevani tanlang"}
-                    selectData={roleData}
+                    placeholder={"Roleni tanlang"}
+                    selectData={roleData.map((item) => {
+                        return { ...item, name: item.roleName };
+                    })}
                 />
             ),
         },
@@ -422,6 +392,18 @@ export const DataProvider = ({ children }) => {
                     <Radio value="true"> Ha </Radio>
                 </Radio.Group>
             ),
+        },
+    ];
+    const editUsersData = [
+        {
+            name: "fio",
+            label: "Ishchi FIO",
+            input: <Input />,
+        },
+        {
+            name: "phoneNumber",
+            label: "Ishchi nomeri",
+            input: <Input />,
         },
     ];
 
@@ -613,31 +595,6 @@ export const DataProvider = ({ children }) => {
             })
             .catch((err) => console.error(err));
     };
-    //     instance
-    //         .get("api/socks/factory/warehouseSocks/getAll")
-    //         .then((data) => {
-    //             setDryfruitWarehouseData(data.data.data);
-    //         })
-    //         .catch((err) => console.error(err));
-    // };
-
-    // const getBranchData = () => {
-    //     instance
-    //         .get("api/dry/fruit/api/dry/fruit/branch")
-    //         .then((data) => {
-    //             setBranchData(data.data.data);
-    //         })
-    //         .catch((err) => console.error(err));
-    // };
-
-    // const getRoleData = () => {
-    //     instance
-    //         .get("api/dry/fruit/role/getAll")
-    //         .then((data) => {
-    //             setRoleData(data.data.data);
-    //         })
-    //         .catch((err) => console.error(err));
-    // };
 
     useEffect(() => {
         getMaterialData();
@@ -653,6 +610,21 @@ export const DataProvider = ({ children }) => {
 
     switch (location.pathname) {
         case "/others": {
+            formData = {
+                formData: othersData,
+                editFormData: othersData,
+                branchData: false,
+                timeFilterInfo: false,
+                deleteInfo: true,
+                createInfo: true,
+                editInfo: true,
+                timelyInfo: false,
+                editModalTitle: "O'zgartirish",
+                modalTitle: "Yangi qo'shish",
+            };
+            break;
+        }
+        case "/income-dryfruit": {
             formData = {
                 formData: othersData,
                 editFormData: othersData,
@@ -745,8 +717,8 @@ export const DataProvider = ({ children }) => {
         case "/users": {
             formData = {
                 formData: usersData,
-                editFormData: usersData,
-                branchData: false,
+                editFormData: editUsersData,
+                branchData: true,
                 timeFilterInfo: false,
                 deleteInfo: true,
                 createInfo: true,
