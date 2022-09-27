@@ -22,6 +22,7 @@ const InDebt = () => {
             .then((data) => {
                 setDebts(data.data.data.debts);
                 setTotalItems(data.data.data.totalItems);
+                console.log(data.data.data.totalItems, data.data.data.debts);
             })
             .catch((error) => {
                 console.error(error);
@@ -29,9 +30,6 @@ const InDebt = () => {
             })
             .finally(() => setLoading(false));
     };
-
-    console.log("salom");
-
     const onCreate = (values) => {
         setLoading(true);
         instance
