@@ -64,10 +64,10 @@ const OutDebt = () => {
         const deadline = moment(values.deadline, "DD-MM-YYYY").toISOString();
         const value = {
             ...values,
-            deadline, 
-                       id: initial.id,
+            deadline,
+            id: initial.id,
         };
-            console.log(value);
+        console.log(value);
         instance
             .put("api/socks/factory/debt", { ...value })
             .then(function (response) {
