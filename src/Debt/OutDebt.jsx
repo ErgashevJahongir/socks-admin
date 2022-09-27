@@ -17,10 +17,10 @@ const OutDebt = () => {
         setLoading(true);
         instance
             .get(
-                `api/dry/fruit/debt/get-outcome?page=${current}&size=${pageSize}`
+                `api/socks/factory/debt/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                let value = data.data.data.debt?.map((df) => {
+                let value = data.data.data.branches?.map((df) => {
                     const givenTime = moment(df.givenTime).format("DD-MM-YYYY");
                     const returnTime = moment(df.returnTime).format(
                         "DD-MM-YYYY"
@@ -31,6 +31,7 @@ const OutDebt = () => {
                         givenTime: givenTime,
                     };
                 });
+                console.log(value);
                 setDebts(value);
                 setTotalItems(data.data.data.totalItems);
             })
