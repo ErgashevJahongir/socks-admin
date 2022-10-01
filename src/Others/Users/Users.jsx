@@ -11,7 +11,7 @@ const Users = () => {
     const [pageSize, setPageSize] = useState(10);
     const { roleData } = useData();
 
-    const getWorkers = (current, pageSize) => {
+    const getWorkers = (values) => {
         setLoading(true);
         instance
             .get(
@@ -19,6 +19,7 @@ const Users = () => {
             )
             .then((data) => {
                 setWorkers(data.data.data);
+                console.log(data);
             })
             .catch((error) => {
                 console.error(error);
@@ -50,8 +51,7 @@ const Users = () => {
             search: false,
             render: (initealValue) => {
                 const role = roleData?.filter(
-                    (item) => item?.id === initealValue
-                );
+                    (item) => item?.id === initealValue)
                 return role[0]?.roleName;
             },
         },
@@ -72,7 +72,6 @@ const Users = () => {
         instance
             .post("api/socks/factory/user", {
                 ...values,
-                deleted: false,
             })
             .then(function (response) {
                 message.success("Foydalanuvchi muvaffaqiyatli qo'shildi");
@@ -80,7 +79,7 @@ const Users = () => {
             })
             .catch(function (error) {
                 console.error(error);
-                message.error("Foydalanuvchini qo'shishda muammo bo'ldi");
+                message.error(error.response?.data?.message);
             })
             .finally(() => {
                 setLoading(false);
@@ -148,4 +147,3 @@ const Users = () => {
 };
 
 export default Users;
-

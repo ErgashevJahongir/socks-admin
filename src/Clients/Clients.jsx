@@ -12,12 +12,10 @@ const Clients = () => {
     const [totalItems, setTotalItems] = useState(0);
     const navigate = useNavigate();
 
-    const getClients = (current, pageSize) => {
+    const getClients = (values) => {
         setLoading(true);
         instance
-            .get(
-                `api/socks/factory/client/getAllPageable?page=${current}&size=${pageSize}`
-            )
+            .get(`api/socks/factory/client/getAll`, { ...values })
             .then((data) => {
                 setClients(data.data.data.clients);
                 setTotalItems(data.data.data.totalItems);

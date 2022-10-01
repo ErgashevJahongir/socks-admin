@@ -24,7 +24,7 @@ function App() {
 
     useEffect(() => {
         if (!token) {
-            return navigate("/login", { replace: true });
+            return navigate("/Login", { replace: true });
         }
     }, []);
     return (

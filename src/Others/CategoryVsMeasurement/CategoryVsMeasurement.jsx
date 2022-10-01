@@ -18,7 +18,7 @@ const CategoryVsMeasurement = () => {
     const getCategory = () => {
         setLoadingCategory(true);
         instance
-            .get("api/socks/factory/category/getAll")
+            .get(`api/socks/factory/category/getAll`)
             .then((data) => {
                 setCategory(data.data.data);
             })

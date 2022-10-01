@@ -66,7 +66,7 @@ const OutDebt = () => {
             ...values,
             deadline,
             id: initial.id,
-        };
+        }
         instance
             .put("api/socks/factory/debt", { ...value })
             .then(function (response) {

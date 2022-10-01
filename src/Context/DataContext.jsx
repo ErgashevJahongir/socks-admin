@@ -299,6 +299,7 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
+
     const createSocksData = [
         {
             name: "name",
@@ -418,6 +419,19 @@ export const DataProvider = ({ children }) => {
                       />
                   ),
               },
+        {
+            name: "roleId",
+            label: "roleId",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Roleni tanlang"}
+                    selectData={roleData.map((item) => {
+                        return { ...item, name: item.roleName };
+                    })}
+                />
+            ),
+        },
         {
             name: "block",
             label: "block",
@@ -728,6 +742,21 @@ export const DataProvider = ({ children }) => {
 
     switch (location.pathname) {
         case "/others": {
+            formData = {
+                formData: othersData,
+                editFormData: othersData,
+                branchData: false,
+                timeFilterInfo: false,
+                deleteInfo: true,
+                createInfo: true,
+                editInfo: true,
+                timelyInfo: false,
+                editModalTitle: "O'zgartirish",
+                modalTitle: "Yangi qo'shish",
+            };
+            break;
+        }
+        case "/income-dryfruit": {
             formData = {
                 formData: othersData,
                 editFormData: othersData,
