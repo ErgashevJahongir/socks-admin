@@ -17,8 +17,8 @@ const Clients = () => {
         instance
             .get(`api/socks/factory/client/getAll`, { ...values })
             .then((data) => {
-                setClients(data.data.data);
-                // setTotalItems(data.data.data.totalItems);
+                setClients(data.data.data.clients);
+                setTotalItems(data.data.data.totalItems);
             })
             .catch((error) => {
                 console.error(error);
@@ -66,8 +66,8 @@ const Clients = () => {
         instance
             .post(`api/socks/factory/client/add`, { ...values })
             .then(function (response) {
-                message.success("Klient muvaffaqiyatli qo'shildi");
                 getClients(current - 1, pageSize);
+                message.success("Klient muvaffaqiyatli qo'shildi");
             })
             .catch(function (error) {
                 console.error(error);
@@ -85,8 +85,8 @@ const Clients = () => {
         instance
             .put(`api/socks/factory/client/update${initial.id}`, { ...values })
             .then((res) => {
-                message.success("Klient muvaffaqiyatli taxrirlandi");
                 getClients(current - 1, pageSize);
+                message.success("Klient muvaffaqiyatli taxrirlandi");
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);

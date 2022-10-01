@@ -12,7 +12,7 @@ import { FrownOutlined } from "@ant-design/icons";
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const { token, setToken } = useToken();
-    const { setUser } = useData();
+    const { setUserData } = useData();
     let navigate = useNavigate();
 
     const getUser = (token) => {
@@ -21,7 +21,7 @@ const Login = () => {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((data) => {
-                setUser(data.data.data);
+                setUserData(data.data.data);
                 navigate("/", { replace: true });
                 window.location.href = "/";
             })

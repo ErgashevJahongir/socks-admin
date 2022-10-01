@@ -13,20 +13,22 @@ import {
     AppstoreAddOutlined,
     TeamOutlined,
     AppstoreOutlined,
-    BranchesOutlined,
     BellOutlined,
+    CloudServerOutlined,
+    CloudSyncOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useData } from "../../Hook/UseData";
 import useToken from "../../Hook/UseToken";
 import DrapdownMenu from "../DrapdownMenu/DrapdownMenu";
 import socks2 from "./socks2.png";
+import Notification from "../Notification/Notification";
 
 const { Header } = Layout;
 
 function Navbar() {
     const [isVisible, setIsVisible] = useState(false);
-    const { user } = useData();
+    // const { user } = useData();
     const { token } = useToken();
     const navigate = useNavigate();
     const location = useLocation();
@@ -58,21 +60,6 @@ function Navbar() {
                             style={{ width: "100px", display: "inline-block" }}
                         >
                             Profil
-                        </Link>
-                    ),
-                },
-                {
-                    key: "/notification",
-                    icon: <BellOutlined />,
-                    label: (
-                        <Link
-                            to="/notification"
-                            style={{
-                                width: "100px",
-                                display: "inline-block",
-                            }}
-                        >
-                            Eslatmalar
                         </Link>
                     ),
                 },
@@ -114,10 +101,7 @@ function Navbar() {
                 }}
             >
                 <div className="logo" style={{ marginRight: "5%" }}>
-                    <Link
-                        to="/"
-                        style={{ marginTop: "3px", display: "block" }}
-                    >
+                    <Link to="/" style={{ marginTop: "3px", display: "block" }}>
                         <img
                             src={socks2}
                             alt="img-logo"
@@ -125,6 +109,9 @@ function Navbar() {
                             height={40}
                         />
                     </Link>
+                </div>
+                <div className="notification">
+                    <Notification />
                 </div>
                 <Menu
                     style={{ width: "75%" }}
@@ -149,7 +136,7 @@ function Navbar() {
                             key: "/material",
                             icon: (
                                 <Link to="/material">
-                                    <ProfileOutlined
+                                    <CloudSyncOutlined
                                         style={{ fontSize: "18px" }}
                                     />
                                 </Link>
@@ -160,9 +147,7 @@ function Navbar() {
                             key: "/socks",
                             icon: (
                                 <Link to="/socks">
-                                    <ProfileOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
+                                    <CloudServerOutlined style={{ fontSize: "18px" }} />
                                 </Link>
                             ),
                         },
@@ -189,10 +174,10 @@ function Navbar() {
                             ),
                         },
                         {
-                            label: "Tashqi qarzlar",
-                            key: "/outdebts",
+                            label: "Qarzlar",
+                            key: "/debts",
                             icon: (
-                                <Link to="/outdebts">
+                                <Link to="/debts">
                                     <DollarCircleOutlined
                                         style={{ fontSize: "18px" }}
                                     />
@@ -247,19 +232,25 @@ function Navbar() {
                 />
                 <span
                     className="user inline-navber"
-                    style={{ marginLeft: "auto" }}
+                    style={{
+                        marginLeft: "auto",
+                        display: "flex",
+                        alignItems: "center",
+                    }}
                 >
+                    <Notification />
                     <Dropdown overlay={menu} placement="bottomRight" arrow>
                         <Avatar
-                            size="large"
+                            size="middle"
+                            icon={<UserOutlined />}
                             style={{
                                 color: "#f56a00",
                                 backgroundColor: "#fde3cf",
                             }}
-                        >
-                            {/* {user.username?.charAt(0)} */}
-                            Ali
-                        </Avatar>
+                        />
+                        {/* {user.username?.charAt(0)} */}
+                        {/* Ali
+                        </Avatar> */}
                     </Dropdown>
                 </span>
                 <div className="burger-menu">

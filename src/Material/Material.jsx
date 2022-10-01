@@ -41,7 +41,7 @@ const Material = () => {
             search: false,
         },
         {
-            title: "Naski sorti",
+            title: "O'lchov birlig",
             dataIndex: "measurementId",
             key: "measurementId",
             width: "33%",
