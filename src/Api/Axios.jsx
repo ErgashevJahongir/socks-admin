@@ -6,7 +6,7 @@ const token1 = JSON.parse(sessionStorage.getItem("socks"));
 const token2 = JSON.parse(localStorage.getItem("socks"));
 
 const instance = axios.create({
-    baseURL: "https://app-socks-warehouse.herokuapp.com/",
+    baseURL: "https://socks-java-app.herokuapp.com/",
     headers: {
         "Content-Type": "application/json",
         "Accept-Language": "uz",

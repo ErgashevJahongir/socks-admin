@@ -9,17 +9,17 @@ const Users = () => {
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
     const { roleData } = useData();
 
     const getWorkers = (values) => {
         setLoading(true);
         instance
-            .get(`api/socks/factory/user`, { ...values })
+            .get(
+                `api/socks/factory/user`
+            )
             .then((data) => {
                 setWorkers(data.data.data);
                 console.log(data);
-                // setTotalItems(data.data.data.totalItems);
             })
             .catch((error) => {
                 console.error(error);
@@ -49,10 +49,9 @@ const Users = () => {
             key: "roleId",
             width: "25%",
             search: false,
-            render: (initialValue = null) => {
+            render: (initealValue) => {
                 const role = roleData?.filter(
-                    (item) => item.id === initialValue
-                );
+                    (item) => item?.id === initealValue)
                 return role[0]?.roleName;
             },
         },
@@ -92,6 +91,8 @@ const Users = () => {
         instance
             .put(`api/socks/factory/user/editForUsers${initial.id}`, {
                 ...values,
+                // id: initial.id,
+                deleted: false,
             })
             .then((res) => {
                 message.success("Foydalanuvchi muvaffaqiyatli taxrirlandi");
@@ -135,7 +136,6 @@ const Users = () => {
                 tableData={workers}
                 current={current}
                 pageSize={pageSize}
-                totalItems={totalItems}
                 loading={loading}
                 setLoading={setLoading}
                 setCurrent={setCurrent}

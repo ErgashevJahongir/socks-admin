@@ -1,8 +1,8 @@
 import { Button, Col, Form, Input, message, Row, Space } from "antd";
 import { useEffect, useState } from "react";
-import CustomSelect from "../Module/Select/Select";
+// import CustomSelect from "../Module/Select/Select";
 import Loading from "../Components/Loading";
-import { useData } from "../Hook/UseData";
+// import { useData } from "../Hook/UseData";
 import instance from "../Api/Axios";
 
 const Profil = () => {
@@ -18,14 +18,14 @@ const Profil = () => {
         form.resetFields();
     };
 
-    const onFill = (user) => {
+    // const onFill = (user) => {
         // form.setFieldsValue({
         //     fio: user.fio,
         //     username: user.username,
         //     phoneNumber: user.phoneNumber,
         //     branchId: user.branchGetDTO?.name,
         // });
-    };
+    // };
 
     const onOk = () => {
         form.validateFields()
