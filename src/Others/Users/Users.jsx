@@ -2,23 +2,23 @@ import { useState } from "react";
 import instance from "../../Api/Axios";
 import { message } from "antd";
 import CustomTable from "../../Module/Table/Table";
+import { useData } from "../../Hook/UseData";
 
 const Users = () => {
     const [workers, setWorkers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
+    const { roleData } = useData();
 
     const getWorkers = (current, pageSize) => {
         setLoading(true);
         instance
             .get(
-                `api/dry/fruit/api/dry/fruit/user/all-pageable?page=${current}&size=${pageSize}`
+                `api/socks/factory/user`
             )
             .then((data) => {
-                setWorkers(data.data.data.fuelReports);
-                setTotalItems(data.data.data.totalItems);
+                setWorkers(data.data.data);
             })
             .catch((error) => {
                 console.error(error);
@@ -32,35 +32,34 @@ const Users = () => {
             title: "Foydalanuvchi nomi",
             dataIndex: "fio",
             key: "fio",
-            width: "20%",
+            width: "25%",
             search: true,
         },
         {
             title: "Foydalanuvchi nomeri",
             dataIndex: "phoneNumber",
             key: "phoneNumber",
-            width: "20%",
-            search: false,
-        },
-        {
-            title: "Ishlash filiali",
-            dataIndex: "branchId",
-            key: "branchId",
-            width: "20%",
+            width: "25%",
             search: false,
         },
         {
             title: "Role",
             dataIndex: "roleId",
             key: "roleId",
-            width: "20%",
+            width: "25%",
             search: false,
+            render: (initealValue) => {
+                const role = roleData?.filter(
+                    (item) => item?.id === initealValue
+                );
+                return role[0]?.roleName;
+            },
         },
         {
             title: "Bloklangan",
             dataIndex: "block",
             key: "block",
-            width: "20%",
+            width: "25%",
             search: false,
             render: (record) => {
                 return record ? "Ha" : "Yo'q";
@@ -71,7 +70,7 @@ const Users = () => {
     const onCreate = (values) => {
         setLoading(true);
         instance
-            .post("api/dry/fruit/api/dry/fruit/user/post", {
+            .post("api/socks/factory/user", {
                 ...values,
                 deleted: false,
             })
@@ -91,8 +90,9 @@ const Users = () => {
     const onEdit = (values, initial) => {
         setLoading(true);
         instance
-            .put(`api/dry/fruit/api/dry/fruit/user/update${initial.id}`, {
+            .put(`api/socks/factory/user/editForUsers${initial.id}`, {
                 ...values,
+                // id: initial.id,
                 deleted: false,
             })
             .then((res) => {
@@ -112,7 +112,7 @@ const Users = () => {
         setLoading(true);
         arr.map((item) => {
             instance
-                .delete(`api/dry/fruit/api/dry/fruit/user/delete${item}`)
+                .delete(`api/socks/factory/user/${item}`)
                 .then((data) => {
                     getWorkers(current - 1, pageSize);
                     message.success("Foydalanuvchi muvaffaqiyatli o'chirildi");
@@ -137,7 +137,6 @@ const Users = () => {
                 tableData={workers}
                 current={current}
                 pageSize={pageSize}
-                totalItems={totalItems}
                 loading={loading}
                 setLoading={setLoading}
                 setCurrent={setCurrent}

@@ -19,7 +19,7 @@ const Clients = () => {
                 `api/socks/factory/client/getAllPageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                setClients(data.data.data.fuelReports);
+                setClients(data.data.data.clients);
                 setTotalItems(data.data.data.totalItems);
             })
             .catch((error) => {
@@ -66,12 +66,10 @@ const Clients = () => {
     const onCreate = (values) => {
         setLoading(true);
         instance
-            .post(
-                `api/socks/factory/client?fio=${values.fio}&phoneNumber=${values.phoneNumber}&address=${values.address}`
-            )
+            .post(`api/socks/factory/client/add`, { ...values })
             .then(function (response) {
-                message.success("Klient muvaffaqiyatli qo'shildi");
                 getClients(current - 1, pageSize);
+                message.success("Klient muvaffaqiyatli qo'shildi");
             })
             .catch(function (error) {
                 console.error(error);
@@ -87,12 +85,10 @@ const Clients = () => {
         console.log(initial.id);
         setLoading(true);
         instance
-            .put(
-                `api/socks/factory/client?id=${initial.id}&fio=${values.fio}&phoneNumber=${values.phoneNumber}&address=${values.address}&deleted=false`
-            )
+            .put(`api/socks/factory/client/update${initial.id}`, { ...values })
             .then((res) => {
-                message.success("Klient muvaffaqiyatli taxrirlandi");
                 getClients(current - 1, pageSize);
+                message.success("Klient muvaffaqiyatli taxrirlandi");
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -108,7 +104,7 @@ const Clients = () => {
         setLoading(true);
         arr.map((item) => {
             instance
-                .delete(`api/socks/factory/client/${item}`)
+                .delete(`api/socks/factory/client/delete${item}`)
                 .then((data) => {
                     getClients(current - 1, pageSize);
                     message.success("Klient muvaffaqiyatli o'chirildi");

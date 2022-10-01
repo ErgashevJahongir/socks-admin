@@ -2,8 +2,8 @@ import { useState } from "react";
 
 export default function useToken() {
     const getToken = () => {
-        const tokenStringSes = sessionStorage.getItem("dry-fruit");
-        const tokenStringLoc = localStorage.getItem("dry-fruit");
+        const tokenStringSes = sessionStorage.getItem("socks-token");
+        const tokenStringLoc = localStorage.getItem("socks-token");
         const userToken = JSON.parse(tokenStringSes || tokenStringLoc);
         return userToken;
     };
@@ -12,8 +12,8 @@ export default function useToken() {
 
     const saveToken = (userToken, save) => {
         save
-            ? localStorage.setItem("dry-fruit", JSON.stringify(userToken))
-            : sessionStorage.setItem("dry-fruit", JSON.stringify(userToken));
+            ? localStorage.setItem("socks-token", JSON.stringify(userToken))
+            : sessionStorage.setItem("socks-token", JSON.stringify(userToken));
         setToken(userToken);
     };
 
