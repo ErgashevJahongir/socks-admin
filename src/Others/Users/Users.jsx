@@ -1,8 +1,9 @@
 import { useState } from "react";
 import instance from "../../Api/Axios";
-import { message } from "antd";
+import { message, notification } from "antd";
 import CustomTable from "../../Module/Table/Table";
 import { useData } from "../../Hook/UseData";
+import { FrownOutlined } from "@ant-design/icons";
 
 const Users = () => {
     const [workers, setWorkers] = useState([]);
@@ -88,10 +89,11 @@ const Users = () => {
 
     const onEdit = (values, initial) => {
         setLoading(true);
+        console.log(values);
         instance
-            .put(`api/socks/factory/user/editForUsers${initial.id}`, {
+            .put(`api/socks/factory/user`, {
                 ...values,
-                // id: initial.id,
+                id: initial.id,
                 deleted: false,
             })
             .then((res) => {
@@ -101,6 +103,13 @@ const Users = () => {
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 message.error("Foydalanuvchini taxrirlashda muammo bo'ldi");
+                if (error.response?.status === 405)
+                notification["error"]({
+                    message: "Ruxsat berilmagan usul",
+                    // description: message,
+                    // duration: 5,
+                    icon: <FrownOutlined style={{ color: "#f00" }} />,
+                });
             })
             .finally(() => {
                 setLoading(false);
