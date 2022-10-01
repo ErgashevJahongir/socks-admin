@@ -17,12 +17,13 @@ export const DataProvider = ({ children }) => {
     const [socksData, setSocksData] = useState([]);
     const [createMaterialData, setMaterialData] = useState([]);
     const [otcomeSocksData, setOutcomeSocksData] = useState([]);
+    const [otcomeSocksFilterData, setOutcomeSocksFilterData] = useState([]);
     const [roleData, setRoleData] = useState([]);
     const [clientData, setClientData] = useState([]);
     const { token } = useToken();
     let navigate = useNavigate();
     let location = useLocation();
-
+    // console.log(otcomeSocksFilterData);
     const onChangeDebt = (e) => {
         setValueDebt(e.target.value);
     };
@@ -298,7 +299,6 @@ export const DataProvider = ({ children }) => {
             input: <Input />,
         },
     ];
-
 
     const createSocksData = [
         {
@@ -709,6 +709,21 @@ export const DataProvider = ({ children }) => {
             .catch((err) => console.error(err));
     };
 
+    const getOutcomeSocksFilterData = () => {
+        instance
+            .get("api/socks/factory/socks/list")
+            .then((data) => {
+                const filtered = otcomeSocksData.map((itm) => {
+                   data.data.data.filter((item) => {
+                        return item.id === itm.socksId
+                    });
+                });
+                console.log(filtered);
+                setOutcomeSocksFilterData(filtered);
+            })
+            .catch((err) => console.error(err));
+    };
+
     const getSocksData = () => {
         instance
             .get("api/socks/factory/socks/list")
@@ -736,6 +751,7 @@ export const DataProvider = ({ children }) => {
         getRoleData();
         getClientData();
         getUserData();
+        getOutcomeSocksFilterData();
     }, []);
 
     let formData = {};

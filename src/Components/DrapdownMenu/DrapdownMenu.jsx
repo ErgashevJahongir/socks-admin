@@ -39,11 +39,10 @@ function DrapdownMenu({ onClose, isVisible }) {
             onClose={onClose}
             visible={isVisible}
         >
-              <h2 style={{color: '#FddFF'}}>Socks</h2>
             <Menu
                 style={{
                     height: "98%",
-                    // paddingTop: '50px',
+                    paddingTop: '80px',
                 }}
                 defaultSelectedKeys={[location.pathname]}
                 defaultOpenKeys={["others"]}

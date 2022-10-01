@@ -183,6 +183,7 @@ const Notification = () => {
                                                     padding: "10px !important",
                                                     // bgcolor: item ? item.color : 0,
                                                 }}
+                                                key={item.id}
                                             >
                                                 <ListItemAvatar>
                                                     <Avatar
@@ -202,7 +203,6 @@ const Notification = () => {
                                                             {item && item.socksName} 
                                                         </Typography>
                                                     }
-                                                    secondary="2 min ago"
                                                 />
                                             </ListItemButton>
                                        )}

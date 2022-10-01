@@ -4,8 +4,6 @@ import ReactApexChart from 'react-apexcharts';
 // @mui
 import { useTheme, styled } from '@mui/material/styles';
 import { Card, CardHeader } from '@mui/material';
-// utils
-// components
 import { fNumber } from '../Utils/formatNumber';
 import BaseOptionChart from '../Components/chart/BaseOptionChart';
 

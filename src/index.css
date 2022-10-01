@@ -185,11 +185,11 @@ li {
 
 .grid-container {
     display: flex !important;
-    align-items: center !important;
 }
 
 .MuiPaper-root  {
     border-radius: 15px !important;
+    padding-top: auto !important;
 }
 
 @media screen and (max-width: 1440px) {
