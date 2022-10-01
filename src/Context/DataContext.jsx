@@ -392,33 +392,6 @@ export const DataProvider = ({ children }) => {
             label: "Ishchi nomeri",
             input: <Input />,
         },
-        user?.roleId === 1
-            ? {
-                  name: "roleId",
-                  label: "Role",
-                  input: (
-                      <CustomSelect
-                          backValue={"id"}
-                          placeholder={"Roleni tanlang"}
-                          selectData={roleData?.filter(
-                              (item) => item?.roleName !== "ROLE_ADMIN"
-                          )}
-                      />
-                  ),
-              }
-            : {
-                  name: "roleId",
-                  label: "Role",
-                  input: (
-                      <CustomSelect
-                          backValue={"id"}
-                          placeholder={"Roleni tanlang"}
-                          selectData={roleData?.filter(
-                              (item) => item?.roleName === "ROLE_EMPLOYEE"
-                          )}
-                      />
-                  ),
-              },
         {
             name: "roleId",
             label: "roleId",
@@ -451,64 +424,10 @@ export const DataProvider = ({ children }) => {
             input: <Input />,
         },
         {
-            name: "password",
-            label: "Ishchi passwordi",
-            input: <Input />,
-        },
-        {
             name: "phoneNumber",
             label: "Ishchi nomeri",
             input: <Input />,
         },
-        user?.roleId === 1
-            ? {
-                  name: "roleId",
-                  label: "Role",
-                  inputSelect: (initial) => (
-                      <CustomSelect
-                          backValue={"id"}
-                          placeholder={"Roleni tanlang"}
-                          selectData={roleData?.filter(
-                              (item) => item?.roleName !== "ROLE_ADMIN"
-                          )}
-                          DValue={initial}
-                      />
-                  ),
-              }
-            : {
-                  name: "roleId",
-                  label: "Role",
-                  inputSelect: (initial) => (
-                      <CustomSelect
-                          backValue={"id"}
-                          placeholder={"Roleni tanlang"}
-                          selectData={roleData}
-                          DValue={initial}
-                          disabled={true}
-                      />
-                  ),
-              },
-        user?.roleId === 1
-            ? {
-                  name: "block",
-                  label: "Bloklangan",
-                  input: (
-                      <Radio.Group>
-                          <Radio value="false"> Yo'q </Radio>
-                          <Radio value="true"> Ha </Radio>
-                      </Radio.Group>
-                  ),
-              }
-            : {
-                  name: "block",
-                  label: "Bloklangan",
-                  input: (
-                      <Radio.Group disabled>
-                          <Radio value="false"> Yo'q </Radio>
-                          <Radio value="true"> Ha </Radio>
-                      </Radio.Group>
-                  ),
-              },
     ];
 
     const materialData = [
