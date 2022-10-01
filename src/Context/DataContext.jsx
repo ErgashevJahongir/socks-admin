@@ -353,6 +353,60 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
+    const usersData = [
+        {
+            name: "fio",
+            label: "Ishchi FIO",
+            input: <Input />,
+        },
+        {
+            name: "password",
+            label: "Ishchi passwordi",
+            input: <Input />,
+        },
+        {
+            name: "phoneNumber",
+            label: "Ishchi nomeri",
+            input: <Input />,
+        },
+        {
+            name: "roleId",
+            label: "roleId",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Roleni tanlang"}
+                    selectData={roleData.map((item) => {
+                        return { ...item, name: item.roleName };
+                    })}
+                />
+            ),
+        },
+        {
+            name: "block",
+            label: "block",
+            input: (
+                <Radio.Group>
+                    <Radio value="false"> Yo'q </Radio>
+                    <Radio value="true"> Ha </Radio>
+                </Radio.Group>
+            ),
+        },
+    ];
+
+    const editUsersData = [
+        {
+            name: "fio",
+            label: "Ishchi FIO",
+            input: <Input />,
+        },
+        {
+            name: "phoneNumber",
+            label: "Ishchi nomeri",
+            input: <Input />,
+        },
+    ];
+
     const materialData = [
         {
             name: "name",
