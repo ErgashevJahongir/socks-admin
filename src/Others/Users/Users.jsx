@@ -1,25 +1,26 @@
 import { useState } from "react";
 import instance from "../../Api/Axios";
-import { message } from "antd";
+import { message, notification } from "antd";
 import CustomTable from "../../Module/Table/Table";
 import { useData } from "../../Hook/UseData";
+import { FrownOutlined } from "@ant-design/icons";
 
 const Users = () => {
     const [workers, setWorkers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
     const { roleData } = useData();
 
     const getWorkers = (values) => {
         setLoading(true);
         instance
-            .get(`api/socks/factory/user`, { ...values })
+            .get(
+                `api/socks/factory/user`
+            )
             .then((data) => {
                 setWorkers(data.data.data);
                 console.log(data);
-                // setTotalItems(data.data.data.totalItems);
             })
             .catch((error) => {
                 console.error(error);
@@ -49,10 +50,9 @@ const Users = () => {
             key: "roleId",
             width: "25%",
             search: false,
-            render: (initialValue = null) => {
+            render: (initealValue) => {
                 const role = roleData?.filter(
-                    (item) => item.id === initialValue
-                );
+                    (item) => item?.id === initealValue)
                 return role[0]?.roleName;
             },
         },
@@ -89,9 +89,12 @@ const Users = () => {
 
     const onEdit = (values, initial) => {
         setLoading(true);
+        console.log(values);
         instance
-            .put(`api/socks/factory/user/editForUsers${initial.id}`, {
+            .put(`api/socks/factory/user`, {
                 ...values,
+                id: initial.id,
+                deleted: false,
             })
             .then((res) => {
                 message.success("Foydalanuvchi muvaffaqiyatli taxrirlandi");
@@ -100,6 +103,13 @@ const Users = () => {
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 message.error("Foydalanuvchini taxrirlashda muammo bo'ldi");
+                if (error.response?.status === 405)
+                notification["error"]({
+                    message: "Ruxsat berilmagan usul",
+                    // description: message,
+                    // duration: 5,
+                    icon: <FrownOutlined style={{ color: "#f00" }} />,
+                });
             })
             .finally(() => {
                 setLoading(false);
@@ -135,7 +145,6 @@ const Users = () => {
                 tableData={workers}
                 current={current}
                 pageSize={pageSize}
-                totalItems={totalItems}
                 loading={loading}
                 setLoading={setLoading}
                 setCurrent={setCurrent}

@@ -11,7 +11,7 @@ export const DataContext = createContext();
 export const DataProvider = ({ children }) => {
     const [valueDebt, setValueDebt] = useState(null);
     const [qarzValue, setQarzValue] = useState("");
-    const [user, setUser] = useState({});
+    const [user, setUserData] = useState({});
     const [measurementData, setMeasurementData] = useState([]);
     const [categoryData, setCategoryData] = useState([]);
     const [socksData, setSocksData] = useState([]);
@@ -21,9 +21,7 @@ export const DataProvider = ({ children }) => {
     const [clientData, setClientData] = useState([]);
     const { token } = useToken();
     let navigate = useNavigate();
-
     let location = useLocation();
-
     const onChangeDebt = (e) => {
         setValueDebt(e.target.value);
     };
@@ -77,11 +75,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "materialId",
             label: "Material nomi",
-            input: (
+            inputSelect: (defaultId = null) => (
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"Materialni tanlang"}
                     selectData={createMaterialData}
+                    DValue={defaultId}
                 />
             ),
         },
@@ -133,7 +132,10 @@ export const DataProvider = ({ children }) => {
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"Klientni tanlang"}
-                    selectData={clientData}
+                    selectData={clientData?.map((item) => ({
+                        ...item,
+                        name: item.fio,
+                    }))}
                 />
             ),
         },
@@ -222,11 +224,15 @@ export const DataProvider = ({ children }) => {
         {
             name: "clientId",
             label: "Klient ismi",
-            input: (
+            inputSelect: (defaultId = null) => (
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"Klientni tanlang"}
-                    selectData={clientData}
+                    selectData={clientData?.map((item) => ({
+                        ...item,
+                        name: item.fio,
+                    }))}
+                    DValue={defaultId}
                 />
             ),
         },
@@ -243,14 +249,26 @@ export const DataProvider = ({ children }) => {
             ),
         },
         {
+            name: "price",
+            label: "Naski narxi",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
             name: "amount",
             label: "Naski miqdori",
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
-            name: "price",
-            label: "Naski narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            name: "measurementId",
+            label: "Naski o'lchovi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naski o'lchovi"}
+                    selectData={measurementData}
+                    DValue={defaultId}
+                />
+            ),
         },
         {
             name: "date",
@@ -260,12 +278,15 @@ export const DataProvider = ({ children }) => {
         {
             name: "debt",
             label: "Qarzdorlik",
-            input: (
-                <Radio.Group>
-                    <Radio value="false"> Yo'q </Radio>
-                    <Radio value="true"> Bor </Radio>
-                </Radio.Group>
-            ),
+            inputSelect: (defaultId = null) => {
+                const str = defaultId?.toString();
+                return (
+                    <Radio.Group defaultValue={str}>
+                        <Radio value="false"> Yo'q </Radio>
+                        <Radio value="true"> Ha </Radio>
+                    </Radio.Group>
+                );
+            },
         },
     ];
 
@@ -276,7 +297,6 @@ export const DataProvider = ({ children }) => {
             input: <Input />,
         },
     ];
-
 
     const createSocksData = [
         {
@@ -361,28 +381,42 @@ export const DataProvider = ({ children }) => {
             input: <Input />,
         },
         {
-            name: "password",
-            label: "Ishchi passwordi",
-            input: <Input />,
-        },
-        {
             name: "phoneNumber",
             label: "Ishchi nomeri",
             input: <Input />,
         },
         {
-            name: "roleId",
-            label: "roleId",
-            input: (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Roleni tanlang"}
-                    selectData={roleData.map((item) => {
-                        return { ...item, name: item.roleName };
-                    })}
-                />
-            ),
+            name: "password",
+            label: "Ishchi passwordi",
+            input: <Input />,
         },
+        user?.roleId === 1
+        ? {
+              name: "roleId",
+              label: "Role",
+              input: (
+                  <CustomSelect
+                      backValue={"id"}
+                      placeholder={"Roleni tanlang"}
+                      selectData={roleData?.filter(
+                          (item) => item?.roleName !== "ROLE_ADMIN"
+                      )}
+                  />
+              ),
+          }
+        : {
+              name: "roleId",
+              label: "Role",
+              input: (
+                  <CustomSelect
+                      backValue={"id"}
+                      placeholder={"Roleni tanlang"}
+                      selectData={roleData?.filter(
+                          (item) => item?.roleName === "ROLE_EMPLOYEE"
+                      )}
+                  />
+              ),
+          },
         {
             name: "block",
             label: "block",
@@ -394,6 +428,7 @@ export const DataProvider = ({ children }) => {
             ),
         },
     ];
+
     const editUsersData = [
         {
             name: "fio",
@@ -405,6 +440,64 @@ export const DataProvider = ({ children }) => {
             label: "Ishchi nomeri",
             input: <Input />,
         },
+        {
+            name: "password",
+            label: "Ishchi passwordi",
+            input: <Input />,
+        },
+        user?.roleId === 1
+        ? {
+              name: "roleId",
+              label: "Role",
+              inputSelect: (initial) => (
+                  <CustomSelect
+                      backValue={"id"}
+                      placeholder={"Roleni tanlang"}
+                      selectData={roleData?.filter(
+                          (item) => item?.roleName !== "ROLE_ADMIN"
+                      )}
+                      DValue={initial}
+                  />
+              ),
+          }
+        : {
+              name: "roleId",
+              label: "Role",
+              inputSelect: (initial) => (
+                  <CustomSelect
+                      backValue={"id"}
+                      placeholder={"Roleni tanlang"}
+                    //   selectData={roleData}
+                      DValue={initial}
+                      selectData={roleData?.map((item) => ({
+                        ...item,
+                        name: item.roleName,
+                    }))}
+                      disabled={true}
+                  />
+              ),
+          },
+          user?.roleId === 1
+          ? {
+                name: "block",
+                label: "Bloklanganligi",
+                input: (
+                    <Radio.Group>
+                        <Radio value="false"> Yo'q </Radio>
+                        <Radio value="true"> Ha </Radio>
+                    </Radio.Group>
+                ),
+            }
+          : {
+                name: "block",
+                label: "Bloklanganligi",
+                input: (
+                    <Radio.Group disabled>
+                        <Radio value="false"> Yo'q </Radio>
+                        <Radio value="true"> Ha </Radio>
+                    </Radio.Group>
+                ),
+            },
     ];
 
     const materialData = [
@@ -463,7 +556,10 @@ export const DataProvider = ({ children }) => {
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"Klientni tanlang"}
-                    selectData={clientData}
+                    selectData={clientData?.map((item) => ({
+                        ...item,
+                        name: item.fio,
+                    }))}
                 />
             ),
         },
@@ -499,11 +595,15 @@ export const DataProvider = ({ children }) => {
         {
             name: "clientId",
             label: "Klient ismi",
-            input: (
+            inputSelect: (defaultId = null) => (
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"Klientni tanlang"}
-                    selectData={clientData}
+                    selectData={clientData?.map((item) => ({
+                        ...item,
+                        name: item.fio,
+                    }))}
+                    DValue={defaultId}
                 />
             ),
         },
@@ -515,6 +615,17 @@ export const DataProvider = ({ children }) => {
                     backValue={"id"}
                     placeholder={"Sotilgan mahsulot tanlang"}
                     selectData={otcomeSocksData}
+                />
+            ),
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Sotilgan mahsulot tanlang"}
+                    selectData={otcomeSocksData?.map((item) => ({
+                        ...item,
+                        name: item.name,
+                    }))}
+                    DValue={defaultId}
                 />
             ),
         },
@@ -529,6 +640,15 @@ export const DataProvider = ({ children }) => {
             input: <Input />,
         },
     ];
+
+    const getUserData = () => {
+        instance
+            .get("api/socks/factory/user")
+            .then((data) => {
+                setUserData(data.data.data);
+            })
+            .catch((err) => console.error(err));
+    };
 
     const getRoleData = () => {
         instance
@@ -573,7 +693,7 @@ export const DataProvider = ({ children }) => {
                 const filtered = data.data.data.filter(
                     (item) => item.debt === true
                 );
-                setOutcomeSocksData(filtered)
+                setOutcomeSocksData(filtered);
             })
             .catch((err) => console.error(err));
     };
@@ -604,6 +724,7 @@ export const DataProvider = ({ children }) => {
         getSocksData();
         getRoleData();
         getClientData();
+        getUserData();
     }, []);
 
     let formData = {};
@@ -699,7 +820,7 @@ export const DataProvider = ({ children }) => {
             };
             break;
         }
-        case "/outdebts": {
+        case "/debts": {
             formData = {
                 formData: outdebtFormData,
                 editFormData: editOutdebtFormData,
@@ -718,7 +839,7 @@ export const DataProvider = ({ children }) => {
             formData = {
                 formData: usersData,
                 editFormData: editUsersData,
-                branchData: true,
+                branchData: false,
                 timeFilterInfo: false,
                 deleteInfo: true,
                 createInfo: true,
@@ -734,13 +855,13 @@ export const DataProvider = ({ children }) => {
                 formData: outcomeSocksData,
                 editFormData: editOutcomeSocksData,
                 branchData: false,
-                timeFilterInfo: false,
-                deleteInfo: true,
+                timeFilterInfo: true,
+                deleteInfo: false,
                 createInfo: true,
                 editInfo: true,
-                timelyInfo: false,
-                editModalTitle: "Sotilgan quruq mevani o'zgartirish",
-                modalTitle: "Sotilgan quruq mevani qo'shish",
+                timelyInfo: true,
+                editModalTitle: "Sotilgan naskini o'zgartirish",
+                modalTitle: "Sotilgan naskini qo'shish",
             };
             break;
         }
@@ -757,8 +878,12 @@ export const DataProvider = ({ children }) => {
         categoryData,
         user,
         roleData,
-        setUser,
+        setUserData,
         qarzValue,
+        createMaterialData,
+        socksData,
+        clientData,
+        otcomeSocksData,
     };
 
     return (

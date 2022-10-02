@@ -166,6 +166,32 @@ li {
     height: 100vh;
 }
 
+.notification {
+    display: none;
+}
+
+.MuiCardHeader-root {
+    padding: 15px !important;
+}
+
+.MuiCardHeader-action {
+    display: flex;
+    align-items: center;
+    height: 20px !important;
+}
+.content-container {
+    padding-top: 50px;
+}
+
+.grid-container {
+    display: flex !important;
+}
+
+.MuiPaper-root  {
+    border-radius: 15px !important;
+    padding-top: auto !important;
+}
+
 @media screen and (max-width: 1440px) {
     .container {
         width: 1020px;
@@ -180,13 +206,27 @@ li {
 }
 
 @media screen and (max-width: 767px) {
+    .ant-layout-header {
+        flex-direction: row-reverse !important;
+    }
+
     .container {
         width: 100%;
         padding: 0 5px;
+        flex-direction: row-reverse !important;
+    }
+
+    .logo {
+        margin-right: unset !important;
     }
 
     .burger-menu {
         display: block;
+    }
+
+    .notification {
+        display: block;
+        margin-left: auto;
     }
 
     .inline-navber {
@@ -232,7 +272,7 @@ li {
         font-size: 16px !important;
     }
 
-    .ant-table-tbody > tr > td {
+    .ant-table-tbody>tr>td {
         padding: 10px 5px;
     }
 

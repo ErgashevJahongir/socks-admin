@@ -5,20 +5,22 @@ import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
 
 const Clients = () => {
-    const [clients, setClients] = useState([]);
+    const [incomeDryFruits, setIncomeDryFruits] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
     const navigate = useNavigate();
 
-    const getClients = (values) => {
+    const getIncomeDryFruits = (current, pageSize) => {
         setLoading(true);
         instance
-            .get(`api/socks/factory/client/getAll`, { ...values })
+            .get(
+                `api/socks/factory/client/getAllPageable?page=${current}&size=${pageSize}`
+            )
             .then((data) => {
-                setClients(data.data.data);
-                // setTotalItems(data.data.data.totalItems);
+                setIncomeDryFruits(data.data.data.clients);
+                setTotalItems(data.data.data.totalItems);
             })
             .catch((error) => {
                 console.error(error);
@@ -30,11 +32,11 @@ const Clients = () => {
 
     const columns = [
         {
-            title: "Klient nomi",
+            title: "Klient ismi",
             dataIndex: "fio",
             key: "fio",
             width: "33%",
-            search: true,
+            search: false,
         },
         {
             title: "Klient nomeri",
@@ -44,7 +46,7 @@ const Clients = () => {
             search: false,
         },
         {
-            title: "Klient addressi",
+            title: "Klient manzili",
             dataIndex: "address",
             key: "address",
             width: "33%",
@@ -64,10 +66,10 @@ const Clients = () => {
     const onCreate = (values) => {
         setLoading(true);
         instance
-            .post(`api/socks/factory/client/add`, { ...values })
+            .post("api/socks/factory/client/add", { ...values })
             .then(function (response) {
                 message.success("Klient muvaffaqiyatli qo'shildi");
-                getClients(current - 1, pageSize);
+                getIncomeDryFruits(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -80,13 +82,12 @@ const Clients = () => {
     };
 
     const onEdit = (values, initial) => {
-        console.log(initial.id);
         setLoading(true);
         instance
             .put(`api/socks/factory/client/update${initial.id}`, { ...values })
             .then((res) => {
                 message.success("Klient muvaffaqiyatli taxrirlandi");
-                getClients(current - 1, pageSize);
+                getIncomeDryFruits(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -104,14 +105,18 @@ const Clients = () => {
             instance
                 .delete(`api/socks/factory/client/delete${item}`)
                 .then((data) => {
-                    getClients(current - 1, pageSize);
-                    message.success("Klient muvaffaqiyatli o'chirildi");
+                    getIncomeDryFruits(current - 1, pageSize);
+                    message.success(
+                        "Klient muvaffaqiyatli o'chirildi"
+                    );
                 })
                 .catch((error) => {
                     console.error(error);
                     if (error.response.status === 500)
                         navigate("/server-error");
-                    message.error("Klientni o'chirishda muammo bo'ldi");
+                    message.error(
+                        "Klientni o'chirishda muammo bo'ldi"
+                    );
                 });
             return null;
         });
@@ -124,9 +129,9 @@ const Clients = () => {
                 onEdit={onEdit}
                 onCreate={onCreate}
                 onDelete={handleDelete}
-                getData={getClients}
+                getData={getIncomeDryFruits}
                 columns={columns}
-                tableData={clients}
+                tableData={incomeDryFruits}
                 current={current}
                 pageSize={pageSize}
                 totalItems={totalItems}

@@ -3,7 +3,7 @@ import instance from "../Api/Axios";
 import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import moment from "moment/moment";
-// import { useData } from "../Hook/UseData";
+import { useData } from "../Hook/UseData";
 
 const OutDebt = () => {
     const [debts, setDebts] = useState([]);
@@ -11,7 +11,7 @@ const OutDebt = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    // const { supplier, usersData } = useData();
+    const { clientData, otcomeSocksData } = useData();
 
     const getDebts = (current, pageSize) => {
         setLoading(true);
@@ -66,8 +66,7 @@ const OutDebt = () => {
             ...values,
             deadline,
             id: initial.id,
-        };
-        console.log(value);
+        }
         instance
             .put("api/socks/factory/debt", { ...value })
             .then(function (response) {
@@ -108,6 +107,10 @@ const OutDebt = () => {
             key: "clientId",
             width: "25%",
             search: false,
+            render: (record) => {
+                const data = clientData?.filter((item) => item.id === record);
+                return data[0]?.fio;
+            },
         },
         {
             title: "Sotilgan mahsulot",
@@ -115,6 +118,10 @@ const OutDebt = () => {
             key: "outcomeSocksId",
             width: "25%",
             search: false,
+            render: (record) => {
+                const data = otcomeSocksData?.filter((item) => item.id === record);
+                return data[0]?.socksId;
+            },
         },
         {
             title: "Sotilish narxi",
@@ -134,7 +141,6 @@ const OutDebt = () => {
 
     return (
         <>
-            <h3>Tashqi qarzlar</h3>
             <CustomTable
                 onEdit={onEdit}
                 onCreate={onCreate}

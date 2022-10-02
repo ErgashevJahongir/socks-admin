@@ -14,7 +14,7 @@ const IncomeSocks = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { measurementData } = useData();
+    const { measurementData,createMaterialData } = useData();
     const navigate = useNavigate();
 
     const getOutcomeDryFruits = (current, pageSize) => {
@@ -51,17 +51,10 @@ const IncomeSocks = () => {
     const getOutcomeFruitTimely = (value, current, pageSize) => {
         instance
             .get(
-                `api/socks/factory/incomeMaterial/getAllPageable?page=${current}&size=${pageSize}`
+                `api/socks/factory/incomeMaterial/getAllPageable/${value}?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                // const fuelsData = {
-                //     totalSumma: data.data.data.dryFruits.totalSumma,
-                //     totalCash: data.data.data.dryFruits.totalCash,
-                //     totalPlastic: data.data.data.dryFruits.totalPlastic,
-                //     totalDollar: data.data.data.dryFruits.totalDollar,
-                // };
-                // setTotalFruit(fuelsData);
-                const fuel = data.data.data.dryFruits.map((item) => {
+                const fuel = data.data.data.dryFruit.map((item) => {
                     return {
                         ...item,
                         date: moment(item.date).format("DD-MM-YYYY"),
@@ -85,13 +78,6 @@ const IncomeSocks = () => {
                 `api/socks/factory/incomeMaterial/getAllPageable/dates?page=${current}&size=${pageSize}&startDate=${date[0]}&endDate=${date[1]}`
             )
             .then((data) => {
-                // const fuelsData = {
-                //     totalSumma: data.data.data.dryFruits.totalSumma,
-                //     totalCash: data.data.data.dryFruits.totalCash,
-                //     totalPlastic: data.data.data.dryFruits.totalPlastic,
-                //     totalDollar: data.data.data.dryFruits.totalDollar,
-                // };
-                // setTotalFruit(fuelsData);
                 const fuel = data.data.data.dryFruit.map((item) => {
                     return {
                         ...item,
@@ -115,6 +101,10 @@ const IncomeSocks = () => {
             key: "materialId",
             width: "20%",
             search: false,
+            render: (record) => {
+                const data = createMaterialData?.filter((item) => item.id === record);
+                return data[0]?.name;
+            },
         },
         {
             title: "O'lchovi",
@@ -146,16 +136,16 @@ const IncomeSocks = () => {
             search: false,
         },
         {
-            title: "Kelgan vaqti",
-            dataIndex: "date",
-            key: "date",
+            title: "Kelgan narxi",
+            dataIndex: "price",
+            key: "price",
             width: "20%",
             search: false,
         },
         {
-            title: "Sotilgan narxi",
-            dataIndex: "price",
-            key: "price",
+            title: "Kelgan vaqti",
+            dataIndex: "date",
+            key: "date",
             width: "20%",
             search: false,
         },
@@ -189,6 +179,7 @@ const IncomeSocks = () => {
         const data = {
             ...values,
             date: time,
+            deleted: false,
         };
         instance
             .put(`api/socks/factory/incomeMaterial/update${initial.id}`, {
@@ -232,67 +223,11 @@ const IncomeSocks = () => {
         { title: "Kunlik", value: "daily" },
         { title: "Haftalik", value: "weekly" },
         { title: "Oylik", value: "monthly" },
-        { title: "Yillik", value: "annually" },
+        { title: "Yillik", value: "yearly" },
     ];
 
     return (
         <>
-            {/* <div className="site-statistic-demo-card">
-                <Row gutter={16} className="statistic" style={{marginBottom: '20px'}}>
-                    <Col span={6}>
-                        <Card>
-                            <Statistic
-                                title="Umumiy summa"
-                                value={totalFruit.totalSumma}
-                                valueStyle={{
-                                    color: "#3f8600",
-                                }}
-                                prefix={<ArrowUpOutlined />}
-                                suffix="so'm"
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={6}>
-                        <Card>
-                            <Statistic
-                                title="Jami naqd summa"
-                                value={totalFruit.totalCash}
-                                valueStyle={{
-                                    color: "#cf1322",
-                                }}
-                                prefix={<ArrowDownOutlined />}
-                                suffix="so'm"
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={6}>
-                        <Card>
-                            <Statistic
-                                title="Jami plastik summa"
-                                value={totalFruit.totalPlastic}
-                                valueStyle={{
-                                    color: "#3f8600",
-                                }}
-                                prefix={<ArrowUpOutlined />}
-                                suffix="so'm"
-                            />
-                        </Card>
-                    </Col>
-                    <Col span={6}>
-                        <Card>
-                            <Statistic
-                                title="Jami dollar"
-                                value={totalFruit.totalDollar}
-                                valueStyle={{
-                                    color: "#3f8600",
-                                }}
-                                prefix={<ArrowUpOutlined />}
-                                suffix="dollar"
-                            />
-                        </Card>
-                    </Col>
-                </Row>
-            </div> */}
             <CustomTable
                 dateFilter={dateFilter}
                 onEdit={onEdit}

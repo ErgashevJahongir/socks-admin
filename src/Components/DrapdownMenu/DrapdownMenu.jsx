@@ -13,6 +13,8 @@ import {
     TeamOutlined,
     AppstoreOutlined,
     BranchesOutlined,
+    CloudSyncOutlined,
+    CloudServerOutlined,
 } from "@ant-design/icons";
 import useToken from "../../Hook/UseToken";
 // import { useData } from "../../Hook/UseData";
@@ -31,7 +33,7 @@ function DrapdownMenu({ onClose, isVisible }) {
     };
     return (
         <Drawer
-            placement="right"
+            placement="left"
             closable={false}
             size="200px"
             onClose={onClose}
@@ -39,7 +41,8 @@ function DrapdownMenu({ onClose, isVisible }) {
         >
             <Menu
                 style={{
-                    height: "100%",
+                    height: "98%",
+                    paddingTop: '80px',
                 }}
                 defaultSelectedKeys={[location.pathname]}
                 defaultOpenKeys={["others"]}
@@ -52,7 +55,7 @@ function DrapdownMenu({ onClose, isVisible }) {
                         icon: (
                             <Link to="/">
                                 <DashboardOutlined
-                                    style={{ fontSize: "18px" }}
+                                    style={{ fontSize: "20px" }}
                                 />
                             </Link>
                         ),
@@ -62,8 +65,8 @@ function DrapdownMenu({ onClose, isVisible }) {
                         key: "/material",
                         icon: (
                             <Link to="/material">
-                                <ProfileOutlined
-                                    style={{ fontSize: "18px" }}
+                                <CloudSyncOutlined
+                                    style={{ fontSize: "20px" }}
                                 />
                             </Link>
                         ),
@@ -73,7 +76,7 @@ function DrapdownMenu({ onClose, isVisible }) {
                         key: "/socks",
                         icon: (
                             <Link to="/socks">
-                                <ProfileOutlined style={{ fontSize: "18px" }} />
+                                <CloudServerOutlined style={{ fontSize: "20px" }} />
                             </Link>
                         ),
                     },
@@ -83,7 +86,7 @@ function DrapdownMenu({ onClose, isVisible }) {
                         icon: (
                             <Link to="/income-socks">
                                 <CloudDownloadOutlined 
-                                    style={{ fontSize: "18px" }}
+                                    style={{ fontSize: "20px" }}
                                 />
                             </Link>
                         ),
@@ -94,18 +97,18 @@ function DrapdownMenu({ onClose, isVisible }) {
                         icon: (
                             <Link to="/outcome-socks">
                                 <CloudUploadOutlined
-                                    style={{ fontSize: "18px" }}
+                                    style={{ fontSize: "20px" }}
                                 />
                             </Link>
                         ),
                     },
                     {
-                        label: "Tashqi qarzlar",
-                        key: "/outdebts",
+                        label: "Qarzlar",
+                        key: "/debts",
                         icon: (
-                            <Link to="/outdebts">
+                            <Link to="/debts">
                                 <DollarCircleOutlined
-                                    style={{ fontSize: "18px" }}
+                                    style={{ fontSize: "20px" }}
                                 />
                             </Link>
                         ),
@@ -114,7 +117,7 @@ function DrapdownMenu({ onClose, isVisible }) {
                         label: "Qo'shimchalar",
                         key: "others",
                         icon: (
-                            <AppstoreAddOutlined style={{ fontSize: "18px" }} />
+                            <AppstoreAddOutlined style={{ fontSize: "20px" }} />
                         ),
                         children: [
                             {
@@ -128,17 +131,6 @@ function DrapdownMenu({ onClose, isVisible }) {
                                     </Link>
                                 ),
                             },
-                            // {
-                            //     label: "Ishchilar",
-                            //     key: "/worker",
-                            //     icon: (
-                            //         <Link to="/worker">
-                            //             <TeamOutlined
-                            //                 style={{ fontSize: "18px" }}
-                            //             />
-                            //         </Link>
-                            //     ),
-                            // },
                             {
                                 label: "Foydalanuvchilar",
                                 key: "/users",
@@ -150,17 +142,6 @@ function DrapdownMenu({ onClose, isVisible }) {
                                     </Link>
                                 ),
                             },
-                            // {
-                            //     label: "Filiallar",
-                            //     key: "/branchs",
-                            //     icon: (
-                            //         <Link to="/branchs">
-                            //             <BranchesOutlined
-                            //                 style={{ fontSize: "18px" }}
-                            //             />
-                            //         </Link>
-                            //     ),
-                            // },
                             {
                                 label: "Boshqalar",
                                 key: "/others",
