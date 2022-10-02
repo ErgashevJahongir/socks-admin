@@ -51,10 +51,10 @@ const IncomeSocks = () => {
     const getOutcomeFruitTimely = (value, current, pageSize) => {
         instance
             .get(
-                `api/socks/factory/incomeMaterial/getAllPageable?page=${current}&size=${pageSize}`
+                `api/socks/factory/incomeMaterial/getAllPageable/${value}?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                const fuel = data.data.data.dryFruits.map((item) => {
+                const fuel = data.data.data.dryFruit.map((item) => {
                     return {
                         ...item,
                         date: moment(item.date).format("DD-MM-YYYY"),
@@ -223,7 +223,7 @@ const IncomeSocks = () => {
         { title: "Kunlik", value: "daily" },
         { title: "Haftalik", value: "weekly" },
         { title: "Oylik", value: "monthly" },
-        { title: "Yillik", value: "annually" },
+        { title: "Yillik", value: "yearly" },
     ];
 
     return (
