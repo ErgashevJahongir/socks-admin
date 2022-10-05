@@ -87,17 +87,17 @@ const OutcomeSocks = () => {
     };
 
     const columns = [
-        {
-            title: "Naski turi",
-            dataIndex: "socksId",
-            key: "socksId",
-            width: "15%",
-            search: false,
-            render: (record) => {
-                const data = socksData?.filter((item) => item.id === record);
-                return data[0]?.name;
-            },
-        },
+        // {
+        //     title: "Naski turi",
+        //     dataIndex: "socksId",
+        //     key: "socksId",
+        //     width: "15%",
+        //     search: false,
+        //     render: (record) => {
+        //         const data = socksData?.filter((item) => item.id === record);
+        //         return data[0]?.name;
+        //     },
+        // },
         {
             title: "Klient ismi",
             dataIndex: "clientId",

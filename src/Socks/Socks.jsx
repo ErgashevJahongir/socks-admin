@@ -52,13 +52,6 @@ const Socks = () => {
             search: false,
         },
         {
-            title: "Narxi",
-            dataIndex: "price",
-            key: "price",
-            width: "25%",
-            search: false,
-        },
-        {
             title: "Miqdori",
             dataIndex: "amount",
             key: "amount",
@@ -72,6 +65,13 @@ const Socks = () => {
                 }
                 return 0;
             },
+            search: false,
+        },
+        {
+            title: "Narxi",
+            dataIndex: "price",
+            key: "price",
+            width: "25%",
             search: false,
         },
     ];

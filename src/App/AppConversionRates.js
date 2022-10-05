@@ -6,6 +6,14 @@ import { Box, Card, CardHeader } from '@mui/material';
 // utils
 import BaseOptionChart from '../Components/chart/BaseOptionChart';
 import { fNumber } from '../Utils/formatNumber';
+import {
+  useEffect,
+  useState
+} from "react";
+import instance from "../Api/Axios";
+import {
+  useData
+} from '../Hook/UseData';
 // components
 
 // ----------------------------------------------------------------------
@@ -13,14 +21,41 @@ import { fNumber } from '../Utils/formatNumber';
 AppConversionRates.propTypes = {
   title: PropTypes.string,
   subheader: PropTypes.string,
-  chartData: PropTypes.array.isRequired,
+  // chartData: PropTypes.array.isRequired,
 };
 
-export default function AppConversionRates({ title, subheader, chartData, ...other }) {
-  const chartLabels = chartData.map((i) => i.label);
+export default function AppConversionRates({ title, subheader, ...other }) {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const {
+    socksData
+  } = useData();
+  const getNotification = () => {
+      setLoading(true);
+      instance
+          .get(`api/socks/factory/notification/statistics`)
+          .then((data) => {
+              setData(data.data.data);
+          })
+          .catch((err) => {
+              console.error(err);
+          })
+          .finally(() => setLoading(false));
+  };
 
-  const chartSeries = chartData.map((i) => i.value);
+  useEffect(() => {
+      getNotification();
+  }, []);
 
+  const chartLabels = data.map((item) => {
+    const socks = socksData.filter(
+        (data) => data.id === item.socksId
+    );
+    return socks[0]?.name || "tur o'chirilgan"
+})
+
+  const chartSeries = data.map((i) => i.amount);
+  const chartMeasurement = data.map((i) => i.measurementName);
   const chartOptions = merge(BaseOptionChart(), {
     tooltip: {
       marker: { show: false },

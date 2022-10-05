@@ -34,7 +34,6 @@ const Login = () => {
 
     const onFinish = (values) => {
         setLoading(true);
-        console.log(values);
         instance
             .post("api/socks/factory/auth/login", {
                 username: values.phoneNumber,

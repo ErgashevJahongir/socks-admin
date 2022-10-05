@@ -15,8 +15,9 @@ export const DataProvider = ({ children }) => {
     const [measurementData, setMeasurementData] = useState([]);
     const [categoryData, setCategoryData] = useState([]);
     const [socksData, setSocksData] = useState([]);
+    const [outcomeSocksIdData, setOutcomeSocksData] = useState([]);
+    const [outcomeSocksFilterData, setOutcomeSocksFilterData] = useState([]);
     const [createMaterialData, setMaterialData] = useState([]);
-    const [otcomeSocksData, setOutcomeSocksData] = useState([]);
     const [roleData, setRoleData] = useState([]);
     const [clientData, setClientData] = useState([]);
     const { token } = useToken();
@@ -391,32 +392,32 @@ export const DataProvider = ({ children }) => {
             input: <Input />,
         },
         user?.roleId === 1
-        ? {
-              name: "roleId",
-              label: "Role",
-              input: (
-                  <CustomSelect
-                      backValue={"id"}
-                      placeholder={"Roleni tanlang"}
-                      selectData={roleData?.filter(
-                          (item) => item?.roleName !== "ROLE_ADMIN"
-                      )}
-                  />
-              ),
-          }
-        : {
-              name: "roleId",
-              label: "Role",
-              input: (
-                  <CustomSelect
-                      backValue={"id"}
-                      placeholder={"Roleni tanlang"}
-                      selectData={roleData?.filter(
-                          (item) => item?.roleName === "ROLE_EMPLOYEE"
-                      )}
-                  />
-              ),
-          },
+            ? {
+                  name: "roleId",
+                  label: "Role",
+                  input: (
+                      <CustomSelect
+                          backValue={"id"}
+                          placeholder={"Roleni tanlang"}
+                          selectData={roleData?.filter(
+                              (item) => item?.roleName !== "ROLE_ADMIN"
+                          )}
+                      />
+                  ),
+              }
+            : {
+                  name: "roleId",
+                  label: "Role",
+                  input: (
+                      <CustomSelect
+                          backValue={"id"}
+                          placeholder={"Roleni tanlang"}
+                          selectData={roleData?.filter(
+                              (item) => item?.roleName === "ROLE_EMPLOYEE"
+                          )}
+                      />
+                  ),
+              },
         {
             name: "block",
             label: "block",
@@ -446,58 +447,58 @@ export const DataProvider = ({ children }) => {
             input: <Input />,
         },
         user?.roleId === 1
-        ? {
-              name: "roleId",
-              label: "Role",
-              inputSelect: (initial) => (
-                  <CustomSelect
-                      backValue={"id"}
-                      placeholder={"Roleni tanlang"}
-                      selectData={roleData?.filter(
-                          (item) => item?.roleName !== "ROLE_ADMIN"
-                      )}
-                      DValue={initial}
-                  />
-              ),
-          }
-        : {
-              name: "roleId",
-              label: "Role",
-              inputSelect: (initial) => (
-                  <CustomSelect
-                      backValue={"id"}
-                      placeholder={"Roleni tanlang"}
-                    //   selectData={roleData}
-                      DValue={initial}
-                      selectData={roleData?.map((item) => ({
-                        ...item,
-                        name: item.roleName,
-                    }))}
-                      disabled={true}
-                  />
-              ),
-          },
-          user?.roleId === 1
-          ? {
-                name: "block",
-                label: "Bloklanganligi",
-                input: (
-                    <Radio.Group>
-                        <Radio value="false"> Yo'q </Radio>
-                        <Radio value="true"> Ha </Radio>
-                    </Radio.Group>
-                ),
-            }
-          : {
-                name: "block",
-                label: "Bloklanganligi",
-                input: (
-                    <Radio.Group disabled>
-                        <Radio value="false"> Yo'q </Radio>
-                        <Radio value="true"> Ha </Radio>
-                    </Radio.Group>
-                ),
-            },
+            ? {
+                  name: "roleId",
+                  label: "Role",
+                  inputSelect: (initial) => (
+                      <CustomSelect
+                          backValue={"id"}
+                          placeholder={"Roleni tanlang"}
+                          selectData={roleData?.filter(
+                              (item) => item?.roleName !== "ROLE_ADMIN"
+                          )}
+                          DValue={initial}
+                      />
+                  ),
+              }
+            : {
+                  name: "roleId",
+                  label: "Role",
+                  inputSelect: (initial) => (
+                      <CustomSelect
+                          backValue={"id"}
+                          placeholder={"Roleni tanlang"}
+                          //   selectData={roleData}
+                          DValue={initial}
+                          selectData={roleData?.map((item) => ({
+                              ...item,
+                              name: item.roleName,
+                          }))}
+                          disabled={true}
+                      />
+                  ),
+              },
+        user?.roleId === 1
+            ? {
+                  name: "block",
+                  label: "Bloklanganligi",
+                  input: (
+                      <Radio.Group>
+                          <Radio value="false"> Yo'q </Radio>
+                          <Radio value="true"> Ha </Radio>
+                      </Radio.Group>
+                  ),
+              }
+            : {
+                  name: "block",
+                  label: "Bloklanganligi",
+                  input: (
+                      <Radio.Group disabled>
+                          <Radio value="false"> Yo'q </Radio>
+                          <Radio value="true"> Ha </Radio>
+                      </Radio.Group>
+                  ),
+              },
     ];
 
     const materialData = [
@@ -569,8 +570,8 @@ export const DataProvider = ({ children }) => {
             input: (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Quruq mevani tanlang"}
-                    selectData={otcomeSocksData}
+                    placeholder={"Mahsulkotni tanlang"}
+                    selectData={socksData}
                 />
             ),
         },
@@ -614,14 +615,14 @@ export const DataProvider = ({ children }) => {
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"Sotilgan mahsulot tanlang"}
-                    selectData={otcomeSocksData}
+                    selectData={socksData}
                 />
             ),
             inputSelect: (defaultId = null) => (
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"Sotilgan mahsulot tanlang"}
-                    selectData={otcomeSocksData?.map((item) => ({
+                    selectData={socksData?.map((item) => ({
                         ...item,
                         name: item.name,
                     }))}
@@ -686,18 +687,6 @@ export const DataProvider = ({ children }) => {
             .catch((err) => console.error(err));
     };
 
-    const getOutcomeSocksData = () => {
-        instance
-            .get("api/socks/factory/outcome/list")
-            .then((data) => {
-                const filtered = data.data.data.filter(
-                    (item) => item.debt === true
-                );
-                setOutcomeSocksData(filtered);
-            })
-            .catch((err) => console.error(err));
-    };
-
     const getSocksData = () => {
         instance
             .get("api/socks/factory/socks/list")
@@ -716,15 +705,29 @@ export const DataProvider = ({ children }) => {
             .catch((err) => console.error(err));
     };
 
+    const getOutcomeSocksData = () => {
+        instance
+            .get("api/socks/factory/outcome/list")
+            .then((data) => {
+                const filtered = data.data.data.filter((item) => {
+                    if (item.debt == true) {
+                        return item;
+                    }
+                });
+                setOutcomeSocksData(filtered);
+            })
+            .catch((err) => console.error(err));
+    };
+
     useEffect(() => {
         getMaterialData();
         getMeasurementData();
         getCategoryData();
-        getOutcomeSocksData();
         getSocksData();
         getRoleData();
         getClientData();
         getUserData();
+        getOutcomeSocksData();
     }, []);
 
     let formData = {};
@@ -883,7 +886,7 @@ export const DataProvider = ({ children }) => {
         createMaterialData,
         socksData,
         clientData,
-        otcomeSocksData,
+        outcomeSocksIdData,
     };
 
     return (

@@ -11,7 +11,7 @@ const OutDebt = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { clientData, otcomeSocksData } = useData();
+    const { clientData, outcomeSocksIdData } = useData();
 
     const getDebts = (current, pageSize) => {
         setLoading(true);
@@ -44,6 +44,7 @@ const OutDebt = () => {
             ...values,
             deadline,
         };
+        console.log(value);
         instance
             .post("api/socks/factory/debt", { ...value })
             .then(function (response) {
@@ -119,8 +120,8 @@ const OutDebt = () => {
             width: "25%",
             search: false,
             render: (record) => {
-                const data = otcomeSocksData?.filter((item) => item.id === record);
-                return data[0]?.socksId;
+                const data = outcomeSocksIdData?.filter((item) => item.id === record);
+                return data[0]?.id;
             },
         },
         {
