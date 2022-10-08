@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import instance from "../Api/Axios";
-import { Grid, Card, Container, useTheme } from "@mui/material";
+import { Card } from "@mui/material";
+import ReactApexChart from "react-apexcharts";
+import { Space } from "antd";
 import AppCurrencySummary from "../Components/AppCurrencySummary";
 import { useData } from "../Hook/UseData";
-import ReactApexChart from "react-apexcharts";
+import Loading from "../Components/Loading";
 
 const Dashboard = () => {
     const { socksData } = useData();
@@ -40,6 +42,10 @@ const Dashboard = () => {
         getNotification();
         getCurrency();
     }, []);
+
+    if (loading) {
+        return <Loading />;
+    }
 
     const ApexChart = () => {
         const [options, setOptions] = useState({
@@ -100,12 +106,12 @@ const Dashboard = () => {
                 },
             },
             title: {
-                text: "Custom DataLabels",
+                text: "Mahsulotlar soni",
                 align: "center",
                 floating: true,
             },
             subtitle: {
-                text: "Category Names as DataLabels inside bars",
+                text: "Mahsulotlar soni haqida malumot",
                 align: "center",
             },
             tooltip: {
@@ -144,26 +150,19 @@ const Dashboard = () => {
 
     return (
         <>
-            {data.map((item) => (
-                <Container className="content-container">
-                    <Grid className="grid-container" container spacing={3}>
-                        <Card
-                            xs={12}
-                            sm={6}
-                            md={3}
-                            key={item.id}
-                            sx={{ width: "30%" }}
-                        >
-                            <AppCurrencySummary
-                                title={currency.ccyNmUZ}
-                                currency={currency.rate}
-                                color="primary"
-                                icon={"ant-design:dollar-circle-filled"}
-                            />
-                        </Card>
-                    </Grid>
-                </Container>
-            ))}
+            <Space size={"large"} className="space-dashboard">
+                <Card xs={24} sm={24} md={12} lg={12} xl={12} key={"currency"}>
+                    <AppCurrencySummary
+                        title={currency?.ccyNmUZ}
+                        currency={currency?.rate}
+                        color="primary"
+                        icon={"ant-design:dollar-circle-filled"}
+                    />
+                </Card>
+                <Card xs={24} sm={24} md={12} lg={12} xl={12} key={"amount"}>
+                    <ApexChart />
+                </Card>
+            </Space>
         </>
     );
 };

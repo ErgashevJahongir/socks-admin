@@ -11,7 +11,10 @@ const CategoryVsMeasurement = () => {
     const [measurement, setMeasurment] = useState([]);
     const [loadingCategory, setLoadingCategory] = useState(true);
     const [loading, setLoading] = useState(true);
-
+    const [current, setCurrent] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [currentCategory, setCurrentCategory] = useState(1);
+    const [pageSizeCategory, setPageSizeCategory] = useState(10);
     const { getCategoryData, getMeasurementData } = useData();
     const navigate = useNavigate();
 
@@ -20,11 +23,12 @@ const CategoryVsMeasurement = () => {
         instance
             .get(`api/socks/factory/category/getAll`)
             .then((data) => {
-                setCategory(data.data.data);
+                getCategoryData();
+                setCategory(data.data?.data);
             })
             .catch((error) => {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kategoriyalarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoadingCategory(false));
@@ -36,12 +40,12 @@ const CategoryVsMeasurement = () => {
             .post(`api/socks/factory/category/add?name=${values.name}`)
             .then(function (response) {
                 getCategory();
-                getCategoryData();
+
                 message.success("Kategoriya muvaffaqiyatli qo'shildi");
             })
             .catch(function (error) {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kategoriyani qo'shishda muammo bo'ldi");
             })
             .finally(() => {
@@ -57,12 +61,12 @@ const CategoryVsMeasurement = () => {
             )
             .then(function (response) {
                 getCategory();
-                getCategoryData();
+
                 message.success("Kategoriya muvaffaqiyatli qo'shildi");
             })
             .catch(function (error) {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kategoriyani qo'shishda muammo bo'ldi");
             })
             .finally(() => {
@@ -71,19 +75,17 @@ const CategoryVsMeasurement = () => {
     };
 
     const handleDeleteCategory = (arr) => {
-        console.log(arr);
         setLoadingCategory(true);
         arr.map((item) => {
             instance
                 .delete(`api/socks/factory/category/delete${item}`)
                 .then((data) => {
-                    getCategoryData();
                     getCategory();
                     message.success("Kategoriya muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
                     console.error(error);
-                    if (error.response.status === 500)
+                    if (error.response?.status === 500)
                         navigate("/server-error");
                     message.error("Kategoriyani o'chirishda muammo bo'ldi");
                 });
@@ -98,7 +100,16 @@ const CategoryVsMeasurement = () => {
             dataIndex: "name",
             key: "name",
             width: "100%",
-            search: false,
+            search: true,
+            sorter: (a, b) => {
+                if (a.name < b.name) {
+                    return -1;
+                }
+                if (a.name > b.name) {
+                    return 1;
+                }
+                return 0;
+            },
         },
     ];
 
@@ -107,11 +118,12 @@ const CategoryVsMeasurement = () => {
         instance
             .get("api/socks/factory/measurement/getAll")
             .then((data) => {
-                setMeasurment(data.data.data);
+                getMeasurment();
+                setMeasurment(data.data?.data);
             })
             .catch((error) => {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("O'lchov birligilarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
@@ -119,17 +131,15 @@ const CategoryVsMeasurement = () => {
 
     const onCreate = (values) => {
         setLoading(true);
-        console.log(values.name);
         instance
             .post(`api/socks/factory/measurement/add?name=${values.name}`)
             .then(function (response) {
-                getMeasurment();
                 getMeasurementData();
                 message.success("O'lchov birligi muvaffaqiyatli qo'shildi");
             })
             .catch(function (error) {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("O'lchov birligini qo'shishda muammo bo'ldi");
             })
             .finally(() => {
@@ -140,9 +150,10 @@ const CategoryVsMeasurement = () => {
     const onEdit = (values, initial) => {
         setLoading(true);
         instance
-            .post(`api/socks/factory/measurement/update${initial.id}?name=${ values.name }`)
+            .post(
+                `api/socks/factory/measurement/update${initial.id}?name=${values.name}`
+            )
             .then(function (response) {
-                getMeasurment();
                 getMeasurementData();
                 message.success("O'lchov birligi muvaffaqiyatli taxrirlandi");
             })
@@ -162,13 +173,14 @@ const CategoryVsMeasurement = () => {
             instance
                 .delete(`api/socks/factory/measurement/delete${item}`)
                 .then((data) => {
-                    getMeasurment();
                     getMeasurementData();
-                    message.success("O'lchov birligi muvaffaqiyatli o'chirildi");
+                    message.success(
+                        "O'lchov birligi muvaffaqiyatli o'chirildi"
+                    );
                 })
                 .catch((error) => {
                     console.error(error);
-                    if (error.response.status === 500)
+                    if (error.response?.status === 500)
                         navigate("/server-error");
                     message.error(
                         "O'lchov birligini o'chirishda muammo bo'ldi"
@@ -185,7 +197,16 @@ const CategoryVsMeasurement = () => {
             dataIndex: "name",
             key: "name",
             width: "100%",
-            search: false,
+            search: true,
+            sorter: (a, b) => {
+                if (a.name < b.name) {
+                    return -1;
+                }
+                if (a.name > b.name) {
+                    return 1;
+                }
+                return 0;
+            },
         },
     ];
 
@@ -195,6 +216,11 @@ const CategoryVsMeasurement = () => {
                 <div>
                     <h3>Kategoriya</h3>
                     <CustomTable
+                        current={currentCategory}
+                        pageSize={pageSizeCategory}
+                        pageSizeOptions={[10, 20]}
+                        setCurrent={setCurrentCategory}
+                        setPageSize={setPageSizeCategory}
                         onEdit={onEditCategory}
                         onCreate={onCreateCategory}
                         getData={getCategory}
@@ -208,6 +234,11 @@ const CategoryVsMeasurement = () => {
                 <div>
                     <h3>O'lchov birligi</h3>
                     <CustomTable
+                        current={current}
+                        pageSize={pageSize}
+                        pageSizeOptions={[10, 20]}
+                        setCurrent={setCurrent}
+                        setPageSize={setPageSize}
                         onEdit={onEdit}
                         onCreate={onCreate}
                         getData={getMeasurment}

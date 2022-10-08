@@ -3,6 +3,7 @@ import instance from "../Api/Axios";
 import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
+import { useData } from "../Hook/UseData";
 
 const Clients = () => {
     const [incomeDryFruits, setIncomeDryFruits] = useState([]);
@@ -10,6 +11,7 @@ const Clients = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
+    const { getClientData } = useData();
     const navigate = useNavigate();
 
     const getIncomeDryFruits = (current, pageSize) => {
@@ -19,12 +21,13 @@ const Clients = () => {
                 `api/socks/factory/client/getAllPageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                setIncomeDryFruits(data.data.data.clients);
-                setTotalItems(data.data.data.totalItems);
+                getClientData();
+                setIncomeDryFruits(data.data?.data?.clients);
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Klientlarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
@@ -36,7 +39,16 @@ const Clients = () => {
             dataIndex: "fio",
             key: "fio",
             width: "33%",
-            search: false,
+            search: true,
+            sorter: (a, b) => {
+                if (a.fio < b.fio) {
+                    return -1;
+                }
+                if (a.fio > b.fio) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Klient nomeri",
@@ -44,13 +56,22 @@ const Clients = () => {
             key: "phoneNumber",
             width: "33%",
             search: false,
+            sorter: (a, b) => {
+                if (a.phoneNumber < b.phoneNumber) {
+                    return -1;
+                }
+                if (a.phoneNumber > b.phoneNumber) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Klient manzili",
             dataIndex: "address",
             key: "address",
             width: "33%",
-            search: false,
+            search: true,
             sorter: (a, b) => {
                 if (a.address < b.address) {
                     return -1;
@@ -73,7 +94,7 @@ const Clients = () => {
             })
             .catch(function (error) {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Klientni qo'shishda muammo bo'ldi");
             })
             .finally(() => {
@@ -91,7 +112,7 @@ const Clients = () => {
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Klientni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
@@ -106,21 +127,17 @@ const Clients = () => {
                 .delete(`api/socks/factory/client/delete${item}`)
                 .then((data) => {
                     getIncomeDryFruits(current - 1, pageSize);
-                    message.success(
-                        "Klient muvaffaqiyatli o'chirildi"
-                    );
+                    message.success("Klient muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
                     console.error(error);
-                    if (error.response.status === 500)
+                    if (error.response?.status === 500)
                         navigate("/server-error");
-                    message.error(
-                        "Klientni o'chirishda muammo bo'ldi"
-                    );
-                });
+                    message.error("Klientni o'chirishda muammo bo'ldi");
+                })
+                .finally(() => setLoading(false));
             return null;
         });
-        setLoading(false);
     };
 
     return (

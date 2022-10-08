@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
-const token1 = JSON.parse(sessionStorage.getItem("socks"));
-const token2 = JSON.parse(localStorage.getItem("socks"));
+const token1 = JSON.parse(sessionStorage.getItem("socks-token"));
+const token2 = JSON.parse(localStorage.getItem("socks-token"));
 
 const instance = axios.create({
     baseURL: "https://socks-java-app.herokuapp.com/",
@@ -16,48 +15,44 @@ const instance = axios.create({
 });
 
 const AxiosInterceptor = ({ children }) => {
-    const navigate = useNavigate();
-
     useEffect(() => {
         const reqInterceptor = (req) => {
             req.headers.Authorization = `Bearer ${token1 || token2}`;
             return req;
         };
         const reqErrInterceptor = (error) => {
-            console.log("reqErrInterceptor", error);
+            console.error("reqErrInterceptor", error);
             return Promise.reject(error);
         };
         const resInterceptor = (response) => {
             response.headers.Authorization = `Bearer ${token1 || token2}`;
             return response;
         };
-
         const resErrInterceptor = (error) => {
-            console.log("resErrInterceptor", error);
+            console.error("resErrInterceptor", error);
             if (error?.response?.status === 401) {
-                console.log(error);
-                navigate("/login");
+                if (sessionStorage.getItem("socks-token"))
+                    sessionStorage.removeItem("socks-token", token1);
+                if (localStorage.getItem("socks-token")) {
+                    localStorage.removeItem("socks-token", token2);
+                }
+                window.location.href = "/login";
             }
-
             return Promise.reject(error);
         };
-
         const reqinterceptor = instance.interceptors.request.use(
             reqInterceptor,
             reqErrInterceptor
         );
-
         const resinterceptor = instance.interceptors.response.use(
             resInterceptor,
             resErrInterceptor
         );
-
         return (
             () => instance.interceptors.request.eject(reqinterceptor),
             () => instance.interceptors.response.eject(resinterceptor)
         );
     }, []);
-
     return children;
 };
 

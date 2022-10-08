@@ -13,7 +13,8 @@ const OutcomeSocks = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { socksData, clientData } = useData();
+    const { socksData, clientData, measurementData, getOutcomeSocksData } =
+        useData();
     const navigate = useNavigate();
 
     const getOutcomeDryFruits = (current, pageSize) => {
@@ -23,18 +24,44 @@ const OutcomeSocks = () => {
                 `api/socks/factory/outcome/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                const fuel = data.data.data.outcomeSocks.map((item) => {
+                getOutcomeSocksData();
+                const fuel = data.data?.data?.outcomeSocks?.map((item) => {
                     return {
                         ...item,
-                        date: moment(item.date).format("DD-MM-YYYY"),
+                        date: moment(item?.date).format("DD-MM-YYYY"),
                     };
                 });
                 setOutcomeFuel(fuel);
-                setTotalItems(data.data.data.totalItems);
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
+                message.error("Sotilgan naskilarni yuklashda muammo bo'ldi");
+            })
+            .finally(() => setLoading(false));
+    };
+
+    const getOutcomeFruitTimely = (value, current, pageSize) => {
+        setLoading(true);
+        instance
+            .get(
+                `api/socks/factory/outcome/${value}?page=${current}&size=${pageSize}`
+            )
+            .then((data) => {
+                getOutcomeSocksData();
+                const fuel = data.data?.data?.outcomeSocks?.map((item) => {
+                    return {
+                        ...item,
+                        date: moment(item?.date).format("DD-MM-YYYY"),
+                    };
+                });
+                setOutcomeFuel(fuel);
+                setTotalItems(data.data?.data?.totalItems);
+            })
+            .catch((error) => {
+                console.error(error);
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Sotilgan naskilarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
@@ -44,21 +71,26 @@ const OutcomeSocks = () => {
         setLoading(true);
         instance
             .get(
-                `api/socks/factory/outcome/between?page=${current}&size=${pageSize}&startDate=${date[0]}&endDate=${date[1]}`
+                `api/socks/factory/outcome/between?page=${current}&size=${pageSize}&startDate=${moment(
+                    date[0]
+                ).format("YYYY-MM-DD HH:MM:SS")}&endDate=${moment(
+                    date[1]
+                ).format("YYYY-MM-DD HH:MM:SS")}`
             )
             .then((data) => {
-                const fuel = data.data.data.dryFruit.map((item) => {
+                getOutcomeSocksData();
+                const fuel = data.data?.data?.outcomeSocks?.map((item) => {
                     return {
                         ...item,
-                        date: moment(item.date).format("DD-MM-YYYY"),
+                        date: moment(item?.date).format("DD-MM-YYYY"),
                     };
                 });
                 setOutcomeFuel(fuel);
-                setTotalItems(data.data.data.totalItems);
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((err) => {
                 console.error(err);
-                message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
+                message.error("Sotilgan naskilarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
@@ -74,6 +106,15 @@ const OutcomeSocks = () => {
                 const data = socksData?.filter((item) => item.id === record);
                 return data[0]?.name;
             },
+            sorter: (a, b) => {
+                if (a.socksId < b.socksId) {
+                    return -1;
+                }
+                if (a.socksId > b.socksId) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Klient ismi",
@@ -85,6 +126,15 @@ const OutcomeSocks = () => {
                 const data = clientData?.filter((item) => item.id === record);
                 return data[0]?.fio;
             },
+            sorter: (a, b) => {
+                if (a.clientId < b.clientId) {
+                    return -1;
+                }
+                if (a.clientId > b.clientId) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "O'lchovi",
@@ -92,6 +142,21 @@ const OutcomeSocks = () => {
             key: "measurementId",
             width: "15%",
             search: false,
+            render: (record) => {
+                const data = measurementData?.filter(
+                    (item) => item.id === record
+                );
+                return data[0]?.name;
+            },
+            sorter: (a, b) => {
+                if (a.measurementId < b.measurementId) {
+                    return -1;
+                }
+                if (a.measurementId > b.measurementId) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Miqdori",
@@ -115,6 +180,15 @@ const OutcomeSocks = () => {
             key: "price",
             width: "15%",
             search: false,
+            sorter: (a, b) => {
+                if (a.price < b.price) {
+                    return -1;
+                }
+                if (a.price > b.price) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Sotilish vaqti",
@@ -122,6 +196,15 @@ const OutcomeSocks = () => {
             key: "date",
             width: "15%",
             search: false,
+            sorter: (a, b) => {
+                if (a.date < b.date) {
+                    return -1;
+                }
+                if (a.date > b.date) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Qarzdorlik",
@@ -131,6 +214,15 @@ const OutcomeSocks = () => {
             search: false,
             render: (record) => {
                 return record ? "Bor" : "Yo'q";
+            },
+            sorter: (a, b) => {
+                if (a.debt < b.debt) {
+                    return -1;
+                }
+                if (a.debt > b.debt) {
+                    return 1;
+                }
+                return 0;
             },
         },
     ];
@@ -150,7 +242,7 @@ const OutcomeSocks = () => {
             })
             .catch(function (error) {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Sotilgan naskini qo'shishda muammo bo'ldi");
             })
             .finally(() => {
@@ -176,7 +268,7 @@ const OutcomeSocks = () => {
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 const btn = (
                     <Button
                         type="primary"
@@ -214,6 +306,7 @@ const OutcomeSocks = () => {
                 onEdit={onEdit}
                 onCreate={onCreate}
                 getData={getOutcomeDryFruits}
+                getDataTimely={getOutcomeFruitTimely}
                 columns={columns}
                 tableData={outcomeFuel}
                 current={current}

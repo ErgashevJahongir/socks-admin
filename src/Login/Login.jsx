@@ -2,47 +2,30 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Checkbox, Form, Input, notification } from "antd";
 import useToken from "../Hook/UseToken";
-import { useData } from "../Hook/UseData";
-import instance from "../Api/Axios";
 import Loading from "../Components/Loading";
 import "./Login.css";
 import rasm from "./loginPicture.jpg";
 import { FrownOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const { token, setToken } = useToken();
-    const { setUserData } = useData();
     let navigate = useNavigate();
-
-    const getUser = (token) => {
-        instance
-            .get("api/socks/factory/user", {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            .then((data) => {
-                setUserData(data.data.data);
-                navigate("/", { replace: true });
-                window.location.href = "/";
-            })
-            .catch((err) => {
-                console.error(err);
-                navigate("/login");
-            })
-            .finally(() => setLoading(false));
-    };
 
     const onFinish = (values) => {
         setLoading(true);
-        console.log(values);
-        instance
-            .post("api/socks/factory/auth/login", {
-                username: values.phoneNumber,
-                password: values.password,
-            })
+        axios
+            .post(
+                "https://socks-java-app.herokuapp.com/api/socks/factory/auth/login",
+                {
+                    username: values.phoneNumber,
+                    password: values.password,
+                }
+            )
             .then((data) => {
-                getUser(data.data.data);
                 setToken(data.data.data, values.remember);
+                window.location.href = "/";
             })
             .catch((err) => {
                 notification["error"]({
@@ -60,7 +43,7 @@ const Login = () => {
 
     const onFinishFailed = (errorInfo) => {
         setLoading(false);
-        console.log(errorInfo);
+        console.error(errorInfo);
     };
 
     useEffect(() => {

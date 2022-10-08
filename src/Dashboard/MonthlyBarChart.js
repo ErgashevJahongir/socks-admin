@@ -1,50 +1,45 @@
-import {
-    useEffect,
-    useState
-} from 'react';
+import { useEffect, useState } from "react";
 
 // material-ui
-import {
-    useTheme
-} from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 
 // third-party
-import ReactApexChart from 'react-apexcharts';
-import instance from '../Api/Axios';
+import ReactApexChart from "react-apexcharts";
+import instance from "../Api/Axios";
 
 // chart options
 const barChartOptions = {
     chart: {
-        type: 'bar',
+        type: "bar",
         height: 365,
         toolbar: {
-            show: false
-        }
+            show: false,
+        },
     },
     plotOptions: {
         bar: {
-            columnWidth: '45%',
-            borderRadius: 4
-        }
+            columnWidth: "45%",
+            borderRadius: 4,
+        },
     },
     dataLabels: {
-        enabled: false
+        enabled: false,
     },
     xaxis: {
-        categories: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+        categories: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
         axisBorder: {
-            show: true
+            show: true,
         },
         axisTicks: {
-            show: false
-        }
+            show: false,
+        },
     },
     yaxis: {
-        show: false
+        show: false,
     },
     grid: {
-        show: false
-    }
+        show: false,
+    },
 };
 
 // ==============================|| MONTHLY BAR CHART ||============================== //
@@ -52,20 +47,16 @@ const barChartOptions = {
 const MonthlyBarChart = () => {
     const theme = useTheme();
 
-    const {
-        primary,
-        secondary
-    } = theme.palette.text;
+    const { primary, secondary } = theme.palette.text;
     const info = theme.palette.info.light;
 
     // const [series, setSeries] = useState([]);
     const [series] = useState([
         {
-            data: [80, 95, 70, 42, 65, 55, 78]
-        }
+            data: [80, 95, 70, 42, 65, 55, 78],
+        },
     ]);
     const [loading, setLoading] = useState(true);
-    console.log(series);
 
     const [options, setOptions] = useState(barChartOptions);
     const getNotification = () => {
@@ -73,18 +64,16 @@ const MonthlyBarChart = () => {
         instance
             .get(`api/socks/factory/notification/diagram`)
             .then((data) => {
-                const filtered = data.data.data.map(
-                    (item) => {
-                        return item.amount
-                    }
-                );
+                const filtered = data.data.data.map((item) => {
+                    return item.amount;
+                });
                 // setSeries([{data: [filtered]}]);
             })
             .catch((err) => {
                 console.error(err);
             })
             .finally(() => setLoading(false));
-    }; 
+    };
 
     useEffect(() => {
         setOptions((prevState) => ({
@@ -93,25 +82,34 @@ const MonthlyBarChart = () => {
             xaxis: {
                 labels: {
                     style: {
-                        colors: [secondary, secondary,
-                            secondary, secondary,
-                            secondary, secondary,
-                            secondary
-                        ]
-                    }
-                }
+                        colors: [
+                            secondary,
+                            secondary,
+                            secondary,
+                            secondary,
+                            secondary,
+                            secondary,
+                            secondary,
+                        ],
+                    },
+                },
             },
             tooltip: {
-                theme: 'light'
-            }
+                theme: "light",
+            },
         }));
-        getNotification()
+        getNotification();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [primary, info, secondary]);
 
     return (
         <div id="chart">
-            <ReactApexChart options={options} series={series} type="bar" height={365} />
+            <ReactApexChart
+                options={options}
+                series={series}
+                type="bar"
+                height={365}
+            />
         </div>
     );
 };

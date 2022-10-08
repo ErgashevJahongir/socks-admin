@@ -11,7 +11,7 @@ const Socks = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { categoryData } = useData();
+    const { categoryData, getSocksData } = useData();
     const navigate = useNavigate();
 
     const getIncomeDryFruits = (current, pageSize) => {
@@ -21,12 +21,13 @@ const Socks = () => {
                 `api/socks/factory/socks/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                setIncomeDryFruits(data.data.data.branches);
-                setTotalItems(data.data.data.totalItems);
+                getSocksData();
+                setIncomeDryFruits(data.data?.data?.branches);
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
@@ -38,13 +39,31 @@ const Socks = () => {
             dataIndex: "name",
             key: "name",
             width: "25%",
-            search: false,
+            search: true,
+            sorter: (a, b) => {
+                if (a.name < b.name) {
+                    return -1;
+                }
+                if (a.name > b.name) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Naski sorti",
             dataIndex: "categoryId",
             key: "categoryId",
             width: "25%",
+            sorter: (a, b) => {
+                if (a.categoryId < b.categoryId) {
+                    return -1;
+                }
+                if (a.categoryId > b.categoryId) {
+                    return 1;
+                }
+                return 0;
+            },
             render: (id) => {
                 const data = categoryData.filter((item) => item.id === id);
                 return data[0]?.name;
@@ -57,6 +76,15 @@ const Socks = () => {
             key: "price",
             width: "25%",
             search: false,
+            sorter: (a, b) => {
+                if (a.price < b.price) {
+                    return -1;
+                }
+                if (a.price > b.price) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Miqdori",
@@ -86,7 +114,7 @@ const Socks = () => {
             })
             .catch(function (error) {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan naskini qo'shishda muammo bo'ldi");
             })
             .finally(() => {
@@ -97,14 +125,16 @@ const Socks = () => {
     const onEdit = (values, initial) => {
         setLoading(true);
         instance
-            .put(`api/socks/factory/socks/update?socksId=${initial.id}`, { ...values })
+            .put(`api/socks/factory/socks/update?socksId=${initial.id}`, {
+                ...values,
+            })
             .then((res) => {
                 message.success("Kelgan naski muvaffaqiyatli taxrirlandi");
                 getIncomeDryFruits(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan naskini taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
@@ -119,21 +149,17 @@ const Socks = () => {
                 .delete(`api/socks/factory/socks/delete?socksId=${item}`)
                 .then((data) => {
                     getIncomeDryFruits(current - 1, pageSize);
-                    message.success(
-                        "Kelgan naski muvaffaqiyatli o'chirildi"
-                    );
+                    message.success("Kelgan naski muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
                     console.error(error);
-                    if (error.response.status === 500)
+                    if (error.response?.status === 500)
                         navigate("/server-error");
-                    message.error(
-                        "Kelgan naskini o'chirishda muammo bo'ldi"
-                    );
-                });
+                    message.error("Kelgan naskini o'chirishda muammo bo'ldi");
+                })
+                .finally(() => setLoading(false));
             return null;
         });
-        setLoading(false);
     };
 
     return (
