@@ -5,7 +5,7 @@ import CustomTable from "../Module/Table/Table";
 import { useData } from "../Hook/UseData";
 import { useNavigate } from "react-router-dom";
 
-const Material = () => {
+const OutcomeMaterial = () => {
     const [incomeDryFruits, setIncomeDryFruits] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
@@ -18,17 +18,20 @@ const Material = () => {
         setLoading(true);
         instance
             .get(
-                `api/socks/factory/api/socks/factory/material/getAllPageable?page=${current}&size=${pageSize}`
+                `api/socks/factoryoutcomeMaterial/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                getMaterialData();
-                setIncomeDryFruits(data.data?.data?.materials);
-                setTotalItems(data.data?.data?.totalItems);
+                console.log(data);
+                // getMaterialData();
+                // setIncomeDryFruits(data.data?.data?.materials);
+                // setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan materiallarni yuklashda muammo bo'ldi");
+                message.error(
+                    "Ishlatilgan materiallarni yuklashda muammo bo'ldi"
+                );
             })
             .finally(() => setLoading(false));
     };
@@ -95,13 +98,17 @@ const Material = () => {
                 ...values,
             })
             .then(function (response) {
-                message.success("Kelgan material muvaffaqiyatli qo'shildi");
+                message.success(
+                    "Ishlatilgan material muvaffaqiyatli qo'shildi"
+                );
                 getIncomeDryFruits(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan materialni qo'shishda muammo bo'ldi");
+                message.error(
+                    "Ishlatilgan materialni qo'shishda muammo bo'ldi"
+                );
             })
             .finally(() => {
                 setLoading(false);
@@ -116,13 +123,17 @@ const Material = () => {
                 { ...values }
             )
             .then((res) => {
-                message.success("Kelgan material muvaffaqiyatli taxrirlandi");
+                message.success(
+                    "Ishlatilgan material muvaffaqiyatli taxrirlandi"
+                );
                 getIncomeDryFruits(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan materialni taxrirlashda muammo bo'ldi");
+                message.error(
+                    "Ishlatilgan materialni taxrirlashda muammo bo'ldi"
+                );
             })
             .finally(() => {
                 setLoading(false);
@@ -139,7 +150,7 @@ const Material = () => {
                 .then((data) => {
                     getIncomeDryFruits(current - 1, pageSize);
                     message.success(
-                        "Kelgan material muvaffaqiyatli o'chirildi"
+                        "Ishlatilgan material muvaffaqiyatli o'chirildi"
                     );
                 })
                 .catch((error) => {
@@ -147,7 +158,7 @@ const Material = () => {
                     if (error.response?.status === 500)
                         navigate("/server-error");
                     message.error(
-                        "Kelgan materialni o'chirishda muammo bo'ldi"
+                        "Ishlatilgan materialni o'chirishda muammo bo'ldi"
                     );
                 })
                 .finally(() => setLoading(false));
@@ -177,4 +188,4 @@ const Material = () => {
     );
 };
 
-export default Material;
+export default OutcomeMaterial;

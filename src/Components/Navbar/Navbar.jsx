@@ -28,16 +28,18 @@ const { Header } = Layout;
 
 function Navbar() {
     const [isVisible, setIsVisible] = useState(false);
-    // const { user } = useData();
+    const { user } = useData();
     const { token } = useToken();
-    const navigate = useNavigate();
     const location = useLocation();
 
     const handleLogOut = (e) => {
         e.preventDefault();
-        sessionStorage.removeItem("socks", token);
-        localStorage.removeItem("socks", token);
-        navigate("/login", { replace: true });
+        if (sessionStorage.getItem("socks-token"))
+            sessionStorage.removeItem("socks-token", token);
+        if (localStorage.getItem("socks-token")) {
+            localStorage.removeItem("socks-token", token);
+        }
+        window.location.href = "/login";
     };
 
     const showDrawer = () => {
@@ -143,11 +145,24 @@ function Navbar() {
                             ),
                         },
                         {
+                            label: "Ishlatilgan Materiallar",
+                            key: "/outcome-material",
+                            icon: (
+                                <Link to="/outcome-material">
+                                    <CloudSyncOutlined
+                                        style={{ fontSize: "18px" }}
+                                    />
+                                </Link>
+                            ),
+                        },
+                        {
                             label: "Naskilar",
                             key: "/socks",
                             icon: (
                                 <Link to="/socks">
-                                    <CloudServerOutlined style={{ fontSize: "18px" }} />
+                                    <CloudServerOutlined
+                                        style={{ fontSize: "18px" }}
+                                    />
                                 </Link>
                             ),
                         },
@@ -242,15 +257,13 @@ function Navbar() {
                     <Dropdown overlay={menu} placement="bottomRight" arrow>
                         <Avatar
                             size="middle"
-                            icon={<UserOutlined />}
                             style={{
                                 color: "#f56a00",
                                 backgroundColor: "#fde3cf",
                             }}
-                        />
-                        {/* {user.username?.charAt(0)} */}
-                        {/* Ali
-                        </Avatar> */}
+                        >
+                            {user?.fio?.charAt(0)}
+                        </Avatar>
                     </Dropdown>
                 </span>
                 <div className="burger-menu">

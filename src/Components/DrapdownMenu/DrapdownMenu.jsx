@@ -1,18 +1,15 @@
 import { Drawer, Menu } from "antd";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
     DashboardOutlined,
     UserOutlined,
     LogoutOutlined,
     CloudUploadOutlined,
     CloudDownloadOutlined,
-    CloudOutlined,
-    ProfileOutlined,
     DollarCircleOutlined,
     AppstoreAddOutlined,
     TeamOutlined,
     AppstoreOutlined,
-    BranchesOutlined,
     CloudSyncOutlined,
     CloudServerOutlined,
 } from "@ant-design/icons";
@@ -21,15 +18,17 @@ import useToken from "../../Hook/UseToken";
 
 function DrapdownMenu({ onClose, isVisible }) {
     const { token } = useToken();
-    const navigate = useNavigate();
     // const { user } = useData();
     const location = useLocation();
 
     const handleLogOut = (e) => {
         e.preventDefault();
-        sessionStorage.removeItem("dry-fruit", token);
-        localStorage.removeItem("dry-fruit", token);
-        navigate("/login", { replace: true });
+        if (sessionStorage.getItem("socks-token"))
+            sessionStorage.removeItem("socks-token", token);
+        if (localStorage.getItem("socks-token")) {
+            localStorage.removeItem("socks-token", token);
+        }
+        window.location.href = "/login";
     };
     return (
         <Drawer
@@ -42,7 +41,7 @@ function DrapdownMenu({ onClose, isVisible }) {
             <Menu
                 style={{
                     height: "98%",
-                    paddingTop: '80px',
+                    paddingTop: "80px",
                 }}
                 defaultSelectedKeys={[location.pathname]}
                 defaultOpenKeys={["others"]}
@@ -76,7 +75,9 @@ function DrapdownMenu({ onClose, isVisible }) {
                         key: "/socks",
                         icon: (
                             <Link to="/socks">
-                                <CloudServerOutlined style={{ fontSize: "20px" }} />
+                                <CloudServerOutlined
+                                    style={{ fontSize: "20px" }}
+                                />
                             </Link>
                         ),
                     },
@@ -85,7 +86,7 @@ function DrapdownMenu({ onClose, isVisible }) {
                         key: "/income-socks",
                         icon: (
                             <Link to="/income-socks">
-                                <CloudDownloadOutlined 
+                                <CloudDownloadOutlined
                                     style={{ fontSize: "20px" }}
                                 />
                             </Link>

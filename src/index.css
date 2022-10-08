@@ -166,6 +166,156 @@ li {
     height: 100vh;
 }
 
+.space-dashboard {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+}
+
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-content
+    > table
+    > thead
+    > tr
+    > th,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-header
+    > table
+    > thead
+    > tr
+    > th,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-body
+    > table
+    > thead
+    > tr
+    > th,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-summary
+    > table
+    > thead
+    > tr
+    > th,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-content
+    > table
+    > tbody
+    > tr
+    > td,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-header
+    > table
+    > tbody
+    > tr
+    > td,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-body
+    > table
+    > tbody
+    > tr
+    > td,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-summary
+    > table
+    > tbody
+    > tr
+    > td,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-content
+    > table
+    > tfoot
+    > tr
+    > th,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-header
+    > table
+    > tfoot
+    > tr
+    > th,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-body
+    > table
+    > tfoot
+    > tr
+    > th,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-summary
+    > table
+    > tfoot
+    > tr
+    > th,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-content
+    > table
+    > tfoot
+    > tr
+    > td,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-header
+    > table
+    > tfoot
+    > tr
+    > td,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-body
+    > table
+    > tfoot
+    > tr
+    > td,
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-summary
+    > table
+    > tfoot
+    > tr
+    > td {
+    text-align: center;
+    padding: 10px;
+}
+
+.ant-table.ant-table-bordered
+    > .ant-table-container
+    > .ant-table-content
+    > table
+    > thead
+    > tr
+    > th {
+    font-weight: 600;
+}
+
+tr:hover,
+thead:hover {
+    background: rgb(203, 227, 247) !important;
+}
+
+.ant-menu-dark.ant-menu-horizontal > .ant-menu-item,
+.ant-menu-dark.ant-menu-horizontal > .ant-menu-submenu {
+    padding: 0 10px;
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+    background: none !important;
+}
+
+.ant-table-tbody > tr.ant-table-row-selected > td {
+    background: #e6f7ff;
+    border-color: rgba(0, 0, 0, 0.03);
+}
+
 .notification {
     display: none;
 }
@@ -187,7 +337,7 @@ li {
     display: flex !important;
 }
 
-.MuiPaper-root  {
+.MuiPaper-root {
     border-radius: 15px !important;
     padding-top: auto !important;
 }
@@ -202,6 +352,11 @@ li {
     .container {
         width: 768px;
         padding: 0;
+    }
+
+    .space-dashboard {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
 }
 
@@ -272,7 +427,7 @@ li {
         font-size: 16px !important;
     }
 
-    .ant-table-tbody>tr>td {
+    .ant-table-tbody > tr > td {
         padding: 10px 5px;
     }
 
@@ -290,5 +445,11 @@ li {
 
     .ant-table-pagination-right {
         justify-content: center;
+    }
+
+    .space-dashboard {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px !important;
     }
 }

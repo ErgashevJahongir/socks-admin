@@ -1,18 +1,13 @@
-import { message, notification } from "antd";
 import { useEffect, useState } from "react";
 import instance from "../Api/Axios";
-import { Grid, Card, Container, Typography, useTheme } from "@mui/material";
-import AppWidgetSummary from "../Components/AppWidgetSummary";
-import AppConversionRates from "../App/AppConversionRates";
-import AppCurrentVisits from "../App/AppCurrentVisits";
+import { Card } from "@mui/material";
+import ReactApexChart from "react-apexcharts";
+import { Space } from "antd";
 import AppCurrencySummary from "../Components/AppCurrencySummary";
 import { useData } from "../Hook/UseData";
-import MonthlyBarChart from "./MonthlyBarChart";
-import { Box, Stack } from "@mui/system";
-import MainCard from "../Components/MainCard";
+import Loading from "../Components/Loading";
 
 const Dashboard = () => {
-    const theme = useTheme();
     const { socksData } = useData();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -48,68 +43,127 @@ const Dashboard = () => {
         getCurrency();
     }, []);
 
-    return (
-        <Container className="content-container">
-            <Grid className="grid-container" container spacing={3}>
-                <Grid
-                    xs={12}
-                    sm={6}
-                    md={3}
-                    item
-                    key={"dollar"}
-                    sx={{ marginTop: "2%" }}
-                >
-                    <AppCurrencySummary
-                        title={currency.ccyNmUZ}
-                        currency={currency.rate}
-                        color="primary"
-                        icon={"ant-design:dollar-circle-filled"}
-                    />
-                </Grid>
-                {/* {data.map((item, i) => {
+    if (loading) {
+        return <Loading />;
+    }
+
+    const ApexChart = () => {
+        const [options, setOptions] = useState({
+            chart: {
+                type: "bar",
+                height: 380,
+            },
+            plotOptions: {
+                bar: {
+                    barHeight: "100%",
+                    distributed: true,
+                    horizontal: true,
+                    dataLabels: {
+                        position: "bottom",
+                    },
+                },
+            },
+            colors: data.map((item) => {
+                const color =
+                    item.color === "GREEN"
+                        ? "#0f0"
+                        : item.color === "YELLOW"
+                        ? "#ff0"
+                        : "#f00";
+                return color;
+            }),
+            dataLabels: {
+                enabled: true,
+                textAnchor: "start",
+                style: {
+                    colors: ["#fff"],
+                },
+                formatter: function (val, opt) {
+                    return (
+                        opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
+                    );
+                },
+                offsetX: 0,
+                dropShadow: {
+                    enabled: true,
+                },
+            },
+            stroke: {
+                width: 1,
+                colors: ["#fff"],
+            },
+            xaxis: {
+                categories: data.map((item) => {
                     const socks = socksData.filter(
                         (data) => data.id === item.socksId
                     );
-                    return (
-                        <Grid item xs={12} sm={6} md={3}>
-                            <AppWidgetSummary
-                                title={socks[0]?.name || "tur o'chirilgan"}
-                                total={item.amount}
-                                sx={{
-                                    bgcolor:
-                                        item.color === "GREEN"
-                                            ? "green"
-                                            : item.color === "YELLOW"
-                                            ? "yellow"
-                                            : "red",
-                                }}
-                                icon={"ant-design:pie-chart-filled"}
-                            />
-                        </Grid>
-                    );
-                })} */}
-                {/* <Grid sx={{ height: '50vh'}} item xs={12} md={6} lg={8}>
-                    <AppConversionRates
-                        title="Conversion Rates"
-                        subheader="(+43%) than last year"
-                        chartData={[
-                            { label: "France", value: data[1]?.amount },
-                            { label: "l", value: data[2]?.amount },
-                            { label: "China", value: data[3]?.amount },
-                            { label: "Canada", value: data[4]?.amount },
-                        ]}
-                        chartColors={[
-                            theme.palette.primary.main,
-                            // theme.palette.chart.yellow[0],
-                            // theme.palette.chart.blue[0],
-                            // theme.palette.chart.violet[0],
-                            // theme.palette.chart.green[0],
-                            // theme.palette.chart.red[0]
-                        ]}
+                    return socks[0]?.name || "tur o'chirilgan";
+                }),
+            },
+            yaxis: {
+                labels: {
+                    show: false,
+                },
+            },
+            title: {
+                text: "Mahsulotlar soni",
+                align: "center",
+                floating: true,
+            },
+            subtitle: {
+                text: "Mahsulotlar soni haqida malumot",
+                align: "center",
+            },
+            tooltip: {
+                theme: "dark",
+                x: {
+                    show: false,
+                },
+                y: {
+                    title: {
+                        formatter: function () {
+                            return "";
+                        },
+                    },
+                },
+            },
+        });
+        const [series, setSeries] = useState([
+            {
+                data: data.map((item) => {
+                    return item.amount;
+                }),
+            },
+        ]);
+
+        return (
+            <div id="chart">
+                <ReactApexChart
+                    options={options}
+                    series={series}
+                    type="bar"
+                    height={380}
+                />
+            </div>
+        );
+    };
+
+    return (
+        <>
+            <Space size={"large"} className="space-dashboard">
+                <Card xs={24} sm={24} md={12} lg={12} xl={12} key={"currency"}>
+                    <AppCurrencySummary
+                        title={currency?.ccyNmUZ}
+                        currency={currency?.rate}
+                        color="primary"
+                        icon={"ant-design:dollar-circle-filled"}
                     />
-                </Grid> */}
-            </Grid>
-        </Container>
+                </Card>
+                <Card xs={24} sm={24} md={12} lg={12} xl={12} key={"amount"}>
+                    <ApexChart />
+                </Card>
+            </Space>
+        </>
     );
 };
 

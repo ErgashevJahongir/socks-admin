@@ -4,6 +4,7 @@ import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import moment from "moment/moment";
 import { useData } from "../Hook/UseData";
+import { useNavigate } from "react-router-dom";
 
 const OutDebt = () => {
     const [debts, setDebts] = useState([]);
@@ -11,7 +12,8 @@ const OutDebt = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { clientData, otcomeSocksData } = useData();
+    const { clientData, otcomeSocksData, socksData } = useData();
+    const navigate = useNavigate();
 
     const getDebts = (current, pageSize) => {
         setLoading(true);
@@ -20,7 +22,7 @@ const OutDebt = () => {
                 `api/socks/factory/debt/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                let value = data.data.data.branches?.map((df) => {
+                let value = data.data?.data?.branches?.map((df) => {
                     const deadline = moment(df.deadline).format("DD-MM-YYYY");
                     return {
                         ...df,
@@ -28,10 +30,11 @@ const OutDebt = () => {
                     };
                 });
                 setDebts(value);
-                setTotalItems(data.data.data.totalItems);
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Tashqi qarzni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
@@ -52,6 +55,7 @@ const OutDebt = () => {
             })
             .catch(function (error) {
                 console.error(error);
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Tashqi qarzni qo'shishda muammo bo'ldi");
             })
             .finally(() => {
@@ -66,7 +70,7 @@ const OutDebt = () => {
             ...values,
             deadline,
             id: initial.id,
-        }
+        };
         instance
             .put("api/socks/factory/debt", { ...value })
             .then(function (response) {
@@ -75,6 +79,7 @@ const OutDebt = () => {
             })
             .catch(function (error) {
                 console.error(error);
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Tashqi qarzni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
@@ -93,11 +98,13 @@ const OutDebt = () => {
                 })
                 .catch((error) => {
                     console.error(error);
+                    if (error.response?.status === 500)
+                        navigate("/server-error");
                     message.error("Tashqi qarzni o'chirishda muammo bo'ldi");
-                });
+                })
+                .finally(() => setLoading(false));
             return null;
         });
-        setLoading(false);
     };
 
     const columns = [
@@ -111,6 +118,15 @@ const OutDebt = () => {
                 const data = clientData?.filter((item) => item.id === record);
                 return data[0]?.fio;
             },
+            sorter: (a, b) => {
+                if (a.clientId < b.clientId) {
+                    return -1;
+                }
+                if (a.clientId > b.clientId) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Sotilgan mahsulot",
@@ -119,8 +135,22 @@ const OutDebt = () => {
             width: "25%",
             search: false,
             render: (record) => {
-                const data = otcomeSocksData?.filter((item) => item.id === record);
-                return data[0]?.socksId;
+                const data = otcomeSocksData?.filter(
+                    (item) => item.id === record
+                );
+                const name = socksData.filter(
+                    (qism) => qism.id === data[0]?.socksId
+                );
+                return name[0]?.name || "bu tur o'chirilgan";
+            },
+            sorter: (a, b) => {
+                if (a.outcomeSocksId < b.outcomeSocksId) {
+                    return -1;
+                }
+                if (a.outcomeSocksId > b.outcomeSocksId) {
+                    return 1;
+                }
+                return 0;
             },
         },
         {
@@ -129,6 +159,15 @@ const OutDebt = () => {
             key: "price",
             width: "25%",
             search: false,
+            sorter: (a, b) => {
+                if (a.price < b.price) {
+                    return -1;
+                }
+                if (a.price > b.price) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Topshirish muddati",
@@ -136,6 +175,15 @@ const OutDebt = () => {
             key: "deadline",
             width: "25%",
             search: false,
+            sorter: (a, b) => {
+                if (a.deadline < b.deadline) {
+                    return -1;
+                }
+                if (a.deadline > b.deadline) {
+                    return 1;
+                }
+                return 0;
+            },
         },
     ];
 
