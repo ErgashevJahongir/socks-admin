@@ -17,8 +17,9 @@ export const DataProvider = ({ children }) => {
     const [measurementData, setMeasurementData] = useState([]);
     const [categoryData, setCategoryData] = useState([]);
     const [socksData, setSocksData] = useState([]);
+    const [outcomeSocksIdData, setOutcomeSocksData] = useState([]);
+    const [outcomeSocksFilterData, setOutcomeSocksFilterData] = useState([]);
     const [createMaterialData, setMaterialData] = useState([]);
-    const [otcomeSocksData, setOutcomeSocksData] = useState([]);
     const [roleData, setRoleData] = useState([]);
     const [clientData, setClientData] = useState([]);
     const { token } = useToken();
@@ -571,8 +572,8 @@ export const DataProvider = ({ children }) => {
             input: (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Quruq mevani tanlang"}
-                    selectData={otcomeSocksData}
+                    placeholder={"Mahsulkotni tanlang"}
+                    selectData={socksData}
                 />
             ),
         },
@@ -616,14 +617,14 @@ export const DataProvider = ({ children }) => {
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"Sotilgan mahsulot tanlang"}
-                    selectData={otcomeSocksData}
+                    selectData={socksData}
                 />
             ),
             inputSelect: (defaultId = null) => (
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"Sotilgan mahsulot tanlang"}
-                    selectData={otcomeSocksData?.map((item) => ({
+                    selectData={socksData?.map((item) => ({
                         ...item,
                         name: item.name,
                     }))}
@@ -703,18 +704,6 @@ export const DataProvider = ({ children }) => {
             .catch((err) => console.error(err));
     };
 
-    const getOutcomeSocksData = () => {
-        instance
-            .get("api/socks/factory/outcome/list")
-            .then((data) => {
-                const filtered = data.data.data.filter(
-                    (item) => item.debt === true
-                );
-                setOutcomeSocksData(filtered);
-            })
-            .catch((err) => console.error(err));
-    };
-
     const getSocksData = () => {
         instance
             .get("api/socks/factory/socks/list")
@@ -733,15 +722,29 @@ export const DataProvider = ({ children }) => {
             .catch((err) => console.error(err));
     };
 
+    const getOutcomeSocksData = () => {
+        instance
+            .get("api/socks/factory/outcome/list")
+            .then((data) => {
+                const filtered = data.data.data.filter((item) => {
+                    if (item.debt == true) {
+                        return item;
+                    }
+                });
+                setOutcomeSocksData(filtered);
+            })
+            .catch((err) => console.error(err));
+    };
+
     useEffect(() => {
         getUserData(token);
         getMaterialData();
         getMeasurementData();
         getCategoryData();
-        getOutcomeSocksData();
         getSocksData();
         getRoleData();
-        getClientData();
+        getClientData()
+        getOutcomeSocksData();
         getUsersData();
     }, []);
 
@@ -909,7 +912,7 @@ export const DataProvider = ({ children }) => {
         createMaterialData,
         socksData,
         clientData,
-        otcomeSocksData,
+        outcomeSocksIdData,
     };
 
     return (

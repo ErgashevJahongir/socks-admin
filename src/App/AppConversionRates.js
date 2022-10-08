@@ -4,8 +4,16 @@ import ReactApexChart from "react-apexcharts";
 // @mui
 import { Box, Card, CardHeader } from "@mui/material";
 // utils
-import BaseOptionChart from "../Components/chart/BaseOptionChart";
-import { fNumber } from "../Utils/formatNumber";
+import BaseOptionChart from '../Components/chart/BaseOptionChart';
+import { fNumber } from '../Utils/formatNumber';
+import {
+  useEffect,
+  useState
+} from "react";
+import instance from "../Api/Axios";
+import {
+  useData
+} from '../Hook/UseData';
 // components
 
 // ----------------------------------------------------------------------

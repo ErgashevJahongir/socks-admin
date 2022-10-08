@@ -1,7 +1,7 @@
 // @mui
 import PropTypes from 'prop-types';
 import { alpha, styled } from '@mui/material/styles';
-import { Card, Typography } from '@mui/material';
+import { Button, Card, Typography } from '@mui/material';
 // utils
 // import { fShortenNumber } from '../../../utils/formatNumber';
 import Iconify from './Iconify';
@@ -52,17 +52,18 @@ export default function AppCurrencySummary({ title, currency, icon, color = 'pri
             `linear-gradient(135deg, ${alpha(theme.palette[color].dark, 0)} 0%, ${alpha(
               theme.palette[color].dark,
               0.24
-            )} 100%)`,
+            )} 100%)`
         }}
       >
-        <Iconify icon={icon} width={24} height={24} />
+        <Iconify sx={{display: 'flex', alignItems: 'center'}} icon={icon} width={24} height={24} />
       </IconWrapperStyle>
 
       <Typography variant="h3">{fCurrency(currency)}</Typography>
 
-      <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
+      <Button variant="subtitle2" sx={{ opacity: 0.72, display: 'block' }}>
         {title}
-      </Typography>
+      </Button>
+
     </Card>
   );
 }
