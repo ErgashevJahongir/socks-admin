@@ -1,14 +1,14 @@
 import { Button, Col, Form, Input, message, Row, Space } from "antd";
 import { useEffect, useState } from "react";
-// import CustomSelect from "../Module/Select/Select";
 import Loading from "../Components/Loading";
-// import { useData } from "../Hook/UseData";
+import { useData } from "../Hook/UseData";
 import instance from "../Api/Axios";
+import CustomSelect from "../Module/Select/Select";
 
 const Profil = () => {
     const [loading, setLoading] = useState(true);
     const [form] = Form.useForm();
-    // const { user, getUserData } = useData();
+    const { user, getUserData, roleData } = useData();
 
     useEffect(() => {
         setLoading(false);
@@ -18,14 +18,13 @@ const Profil = () => {
         form.resetFields();
     };
 
-    // const onFill = (user) => {
-        // form.setFieldsValue({
-        //     fio: user.fio,
-        //     username: user.username,
-        //     phoneNumber: user.phoneNumber,
-        //     branchId: user.branchGetDTO?.name,
-        // });
-    // };
+    const onFill = (user) => {
+        form.setFieldsValue({
+            fio: user.fio,
+            roleId: user.roleId,
+            phoneNumber: user.phoneNumber,
+        });
+    };
 
     const onOk = () => {
         form.validateFields()
@@ -51,7 +50,7 @@ const Profil = () => {
                 }
             })
             .catch((info) => {
-                console.log("Validate Failed:", info);
+                console.error("Validate Failed:", info);
                 setLoading(false);
             });
     };
@@ -61,7 +60,7 @@ const Profil = () => {
         instance
             .put(`api/socks/factory/user`, { ...values })
             .then(function (response) {
-                // getUserData();
+                getUserData();
                 message.success("Foydalanuvchi muvaffaqiyatli taxrirlandi");
             })
             .catch(function (error) {
@@ -96,26 +95,25 @@ const Profil = () => {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item name="username" label="Usernameni kiriting">
-                            <Input placeholder="Usernameni kiriting" />
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row gutter={16}>
-                    <Col span={12}>
-                        <Form.Item name="branchId" label="Ishlash filiali">
-                            {/* <CustomSelect
-                                backValue={"id"}
-                                // DValue={user.branchGetDTO?.id}
-                            /> */}
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
                         <Form.Item
                             name="phoneNumber"
                             label="Foydalanuvchi nomeri"
                         >
                             <Input placeholder="Foydalanuvchi nomeri kiriting" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <Form.Item name="roleId" label="Roleni kiriting">
+                            <CustomSelect
+                                backValue={"id"}
+                                placeholder={"Roleni tanlang"}
+                                selectData={roleData?.filter(
+                                    (item) => item?.roleName !== "ROLE_ADMIN"
+                                )}
+                                disabled={true}
+                            />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -155,11 +153,7 @@ const Profil = () => {
                 <Row gutter={16} justify="center">
                     <Col span={24}>
                         <Form.Item>
-                            <Space
-                                // align="center"
-                                className="profil-buttons"
-                                size="middle"
-                            >
+                            <Space className="profil-buttons" size="middle">
                                 <Button
                                     type="primary"
                                     htmlType="submit"
@@ -177,7 +171,7 @@ const Profil = () => {
                                 </Button>
                                 <Button
                                     htmlType="button"
-                                    // onClick={() => onFill(user)}
+                                    onClick={() => onFill(user)}
                                     style={{ width: 120 }}
                                 >
                                     To'ldirish

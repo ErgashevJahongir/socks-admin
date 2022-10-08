@@ -11,7 +11,9 @@ export const DataContext = createContext();
 export const DataProvider = ({ children }) => {
     const [valueDebt, setValueDebt] = useState(null);
     const [qarzValue, setQarzValue] = useState("");
-    const [user, setUserData] = useState({});
+    const [usersdata, setUsersData] = useState({});
+    const [user, setUser] = useState({});
+    const [userLoading, setUserLoading] = useState(true);
     const [measurementData, setMeasurementData] = useState([]);
     const [categoryData, setCategoryData] = useState([]);
     const [socksData, setSocksData] = useState([]);
@@ -375,7 +377,7 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
-    const usersData = [
+    const usersDataForm = [
         {
             name: "fio",
             label: "Ishchi FIO",
@@ -430,7 +432,7 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
-    const editUsersData = [
+    const editUsersDataForm = [
         {
             name: "fio",
             label: "Ishchi FIO",
@@ -504,23 +506,23 @@ export const DataProvider = ({ children }) => {
     const materialData = [
         {
             name: "name",
-            label: "Nomi",
+            label: "Material nomi",
             input: <Input />,
         },
         {
             name: "measurementId",
-            label: "Kategoriyani tanlang",
+            label: "O'lchovini tanlang",
             input: (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Kategoriyani tanlang"}
+                    placeholder={"O'lchovini tanlang"}
                     selectData={measurementData}
                 />
             ),
         },
         {
             name: "amount",
-            label: "Naski miqdori",
+            label: "Material miqdori",
             input: <InputNumber style={{ width: "100%" }} />,
         },
     ];
@@ -528,23 +530,23 @@ export const DataProvider = ({ children }) => {
     const editmaterialData = [
         {
             name: "name",
-            label: "Nomi",
+            label: "Material nomi",
             input: <Input />,
         },
         {
             name: "measurementId",
-            label: "Kategoriyani tanlang",
+            label: "O'lchovini tanlang",
             input: (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Kategoriyani tanlang"}
+                    placeholder={"O'lchovini tanlang"}
                     selectData={measurementData}
                 />
             ),
         },
         {
             name: "amount",
-            label: "Naski miqdori",
+            label: "Material miqdori",
             input: <InputNumber style={{ width: "100%" }} />,
         },
     ];
@@ -642,11 +644,26 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
-    const getUserData = () => {
+    const getUserData = (token) => {
+        instance
+            .get("api/socks/factory/user/current", {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((data) => {
+                setUserLoading(false);
+                setUser(data.data.data);
+            })
+            .catch((err) => {
+                setUserLoading(false);
+                console.error(err);
+            });
+    };
+
+    const getUsersData = () => {
         instance
             .get("api/socks/factory/user")
             .then((data) => {
-                setUserData(data.data.data);
+                setUsersData(data.data.data);
             })
             .catch((err) => console.error(err));
     };
@@ -720,14 +737,15 @@ export const DataProvider = ({ children }) => {
     };
 
     useEffect(() => {
+        getUserData(token);
         getMaterialData();
         getMeasurementData();
         getCategoryData();
         getSocksData();
         getRoleData();
-        getClientData();
-        getUserData();
+        getClientData()
         getOutcomeSocksData();
+        getUsersData();
     }, []);
 
     let formData = {};
@@ -769,7 +787,7 @@ export const DataProvider = ({ children }) => {
                 editFormData: editsocksData,
                 branchData: false,
                 timeFilterInfo: false,
-                deleteInfo: true,
+                deleteInfo: false,
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: false,
@@ -840,8 +858,8 @@ export const DataProvider = ({ children }) => {
         }
         case "/users": {
             formData = {
-                formData: usersData,
-                editFormData: editUsersData,
+                formData: usersDataForm,
+                editFormData: editUsersDataForm,
                 branchData: false,
                 timeFilterInfo: false,
                 deleteInfo: true,
@@ -876,12 +894,20 @@ export const DataProvider = ({ children }) => {
     const value = {
         formData,
         getMeasurementData,
+        getOutcomeSocksData,
         measurementData,
         getCategoryData,
+        getMaterialData,
+        getUserData,
+        getUsersData,
+        getSocksData,
+        getClientData,
         categoryData,
         user,
+        userLoading,
+        usersdata,
         roleData,
-        setUserData,
+        setUsersData,
         qarzValue,
         createMaterialData,
         socksData,

@@ -1,20 +1,18 @@
 import { useState } from "react";
 import instance from "../Api/Axios";
 import moment from "moment";
-import { Card, Col, message, Row, Statistic } from "antd";
+import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../Hook/UseData";
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 
 const IncomeSocks = () => {
     const [outcomeFuel, setOutcomeFuel] = useState([]);
     const [loading, setLoading] = useState(true);
-    // const [totalFruit, setTotalFruit] = useState({});
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { measurementData,createMaterialData } = useData();
+    const { measurementData, createMaterialData } = useData();
     const navigate = useNavigate();
 
     const getOutcomeDryFruits = (current, pageSize) => {
@@ -24,48 +22,42 @@ const IncomeSocks = () => {
                 `api/socks/factory/incomeMaterial/getAllPageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                // const fuelsData = {
-                //     totalSumma: data.data.data.dryFruits.totalSumma,
-                //     totalCash: data.data.data.dryFruits.totalCash,
-                //     totalPlastic: data.data.data.dryFruits.totalPlastic,
-                //     totalDollar: data.data.data.dryFruits.totalDollar,
-                // };
-                // setTotalFruit(fuelsData);
-                const fuel = data.data.data.dryFruit.map((item) => {
+                const fuel = data.data?.data?.dryFruit.map((item) => {
                     return {
                         ...item,
                         date: moment(item.date).format("DD-MM-YYYY"),
                     };
                 });
                 setOutcomeFuel(fuel);
-                setTotalItems(data.data.data.totalItems);
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
 
     const getOutcomeFruitTimely = (value, current, pageSize) => {
+        setLoading(true);
         instance
             .get(
                 `api/socks/factory/incomeMaterial/getAllPageable/${value}?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                const fuel = data.data.data.dryFruit.map((item) => {
+                const fuel = data.data?.data?.dryFruit?.map((item) => {
                     return {
                         ...item,
-                        date: moment(item.date).format("DD-MM-YYYY"),
+                        date: moment(item?.date).format("DD-MM-YYYY"),
                     };
                 });
                 setOutcomeFuel(fuel);
-                setTotalItems(data.data.data.totalItems);
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
@@ -75,7 +67,11 @@ const IncomeSocks = () => {
         setLoading(true);
         instance
             .get(
-                `api/socks/factory/incomeMaterial/getAllPageable/dates?page=${current}&size=${pageSize}&startDate=${date[0]}&endDate=${date[1]}`
+                `api/socks/factory/incomeMaterial/getAllPageable/dates?page=${current}&size=${pageSize}&startDate=${moment(
+                    date[0]
+                ).format("YYYY-MM-DD HH:MM:SS")}&endDate=${moment(
+                    date[1]
+                ).format("YYYY-MM-DD HH:MM:SS")}`
             )
             .then((data) => {
                 const fuel = data.data.data.dryFruit.map((item) => {
@@ -89,6 +85,7 @@ const IncomeSocks = () => {
             })
             .catch((err) => {
                 console.error(err);
+                if (err.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
@@ -102,8 +99,19 @@ const IncomeSocks = () => {
             width: "20%",
             search: false,
             render: (record) => {
-                const data = createMaterialData?.filter((item) => item.id === record);
+                const data = createMaterialData?.filter(
+                    (item) => item.id === record
+                );
                 return data[0]?.name;
+            },
+            sorter: (a, b) => {
+                if (a.materialId < b.materialId) {
+                    return -1;
+                }
+                if (a.materialId > b.materialId) {
+                    return 1;
+                }
+                return 0;
             },
         },
         {
@@ -118,6 +126,15 @@ const IncomeSocks = () => {
                 return data[0]?.name;
             },
             search: false,
+            sorter: (a, b) => {
+                if (a.measurementId < b.measurementId) {
+                    return -1;
+                }
+                if (a.measurementId > b.measurementId) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Miqdori",
@@ -141,6 +158,15 @@ const IncomeSocks = () => {
             key: "price",
             width: "20%",
             search: false,
+            sorter: (a, b) => {
+                if (a.price < b.price) {
+                    return -1;
+                }
+                if (a.price > b.price) {
+                    return 1;
+                }
+                return 0;
+            },
         },
         {
             title: "Kelgan vaqti",
@@ -148,6 +174,15 @@ const IncomeSocks = () => {
             key: "date",
             width: "20%",
             search: false,
+            sorter: (a, b) => {
+                if (a.date < b.date) {
+                    return -1;
+                }
+                if (a.date > b.date) {
+                    return 1;
+                }
+                return 0;
+            },
         },
     ];
 
@@ -165,7 +200,7 @@ const IncomeSocks = () => {
             })
             .catch(function (error) {
                 console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan naskini qo'shishda muammo bo'ldi");
             })
             .finally(() => {
@@ -191,7 +226,7 @@ const IncomeSocks = () => {
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
-                if (error.response.status === 500) navigate("/server-error");
+                if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan naskini taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
@@ -210,13 +245,13 @@ const IncomeSocks = () => {
                 })
                 .catch((error) => {
                     console.error(error);
-                    if (error.response.status === 500)
+                    if (error.response?.status === 500)
                         navigate("/server-error");
                     message.error("Kelgan naskini o'chirishda muammo bo'ldi");
-                });
+                })
+                .finally(() => setLoading(false));
             return null;
         });
-        setLoading(false);
     };
 
     const timelySelect = [

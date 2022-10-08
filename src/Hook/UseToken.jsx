@@ -7,9 +7,7 @@ export default function useToken() {
         const userToken = JSON.parse(tokenStringSes || tokenStringLoc);
         return userToken;
     };
-
     const [token, setToken] = useState(getToken());
-
     const saveToken = (userToken, save) => {
         save
             ? localStorage.setItem("socks-token", JSON.stringify(userToken))
