@@ -67,29 +67,6 @@ const OutcomeSocks = () => {
             .finally(() => setLoading(false));
     };
 
-    const getOutcomeFruitTimely = (value, current, pageSize) => {
-        instance
-            .get(
-                `api/socks/factory/outcome/${value}?page=${current}&size=${pageSize}`
-            )
-            .then((data) => {
-                const fuel = data.data.data.outcomeSocks.map((item) => {
-                    return {
-                        ...item,
-                        date: moment(item.date).format("DD-MM-YYYY"),
-                    };
-                });
-                setOutcomeFuel(fuel);
-                setTotalItems(data.data.data.totalItems);
-            })
-            .catch((error) => {
-                console.error(error);
-                if (error.response.status === 500) navigate("/server-error");
-                message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
-            })
-            .finally(() => setLoading(false));
-    };
-
     const dateFilter = (date, current, pageSize) => {
         setLoading(true);
         instance
@@ -336,7 +313,6 @@ const OutcomeSocks = () => {
                 pageSize={pageSize}
                 totalItems={totalItems}
                 loading={loading}
-                getDataTimely={getOutcomeFruitTimely}
                 setLoading={setLoading}
                 setCurrent={setCurrent}
                 setPageSize={setPageSize}
