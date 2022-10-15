@@ -1,7 +1,7 @@
 import { DatePicker, Input, InputNumber, Radio } from "antd";
 import moment from "moment";
 import { createContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import instance from "../Api/Axios";
 import useToken from "../Hook/UseToken";
 import CustomSelect from "../Module/Select/Select";
@@ -9,8 +9,6 @@ import CustomSelect from "../Module/Select/Select";
 export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
-    const [valueDebt, setValueDebt] = useState(null);
-    const [qarzValue, setQarzValue] = useState("");
     const [usersdata, setUsersData] = useState({});
     const [user, setUser] = useState({});
     const [userLoading, setUserLoading] = useState(true);
@@ -18,16 +16,11 @@ export const DataProvider = ({ children }) => {
     const [categoryData, setCategoryData] = useState([]);
     const [socksData, setSocksData] = useState([]);
     const [outcomeSocksIdData, setOutcomeSocksData] = useState([]);
-    const [outcomeSocksFilterData, setOutcomeSocksFilterData] = useState([]);
     const [createMaterialData, setMaterialData] = useState([]);
     const [roleData, setRoleData] = useState([]);
     const [clientData, setClientData] = useState([]);
     const { token } = useToken();
-    let navigate = useNavigate();
     let location = useLocation();
-    const onChangeDebt = (e) => {
-        setValueDebt(e.target.value);
-    };
 
     const incomeSocksData = [
         {
@@ -173,32 +166,6 @@ export const DataProvider = ({ children }) => {
                 />
             ),
         },
-        // {
-        //     name: "debt",
-        //     label: "Qarzdorlik",
-        //     input: (
-        //         <Radio.Group onChange={onChangeDebt}>
-        //             <Radio value="false"> Yo'q </Radio>
-        //             <Radio value="true">
-        //                 {" "}
-        //                 <p>Bor</p>
-        //                 {valueDebt === "true" ? (
-        //                     <div style={{ width: "100%", marginLeft: "-20px" }}>
-        //                         Qarzdorlik
-        //                         <InputNumber
-        //                             value={qarzValue}
-        //                             placeholder="Qarzdorlik"
-        //                             onChange={(e) => setQarzValue(e)}
-        //                             style={{
-        //                                 width: "100%",
-        //                             }}
-        //                         />
-        //                     </div>
-        //                 ) : null}{" "}
-        //             </Radio>
-        //         </Radio.Group>
-        //     ),
-        // },
         {
             name: "debt",
             label: "Qarzdorlik",
@@ -727,7 +694,7 @@ export const DataProvider = ({ children }) => {
             .get("api/socks/factory/outcome/list")
             .then((data) => {
                 const filtered = data.data.data.filter((item) => {
-                    if (item.debt == true) {
+                    if (item.debt === true) {
                         return item;
                     }
                 });
@@ -743,7 +710,7 @@ export const DataProvider = ({ children }) => {
         getCategoryData();
         getSocksData();
         getRoleData();
-        getClientData()
+        getClientData();
         getOutcomeSocksData();
         getUsersData();
     }, []);
@@ -908,7 +875,6 @@ export const DataProvider = ({ children }) => {
         usersdata,
         roleData,
         setUsersData,
-        qarzValue,
         createMaterialData,
         socksData,
         clientData,

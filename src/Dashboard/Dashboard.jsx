@@ -1,58 +1,13 @@
 import { useEffect, useState } from "react";
 import instance from "../Api/Axios";
-import {
-    Grid,
-    Card,
-    Container,
-    Typography,
-    useTheme,
-    Avatar,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-} from "@mui/material";
-import AppWidgetSummary from "../Components/AppWidgetSummary";
-import AppConversionRates from "../App/AppConversionRates";
+import { Grid, Card, Container } from "@mui/material";
+// import AppConversionRates from "../App/AppConversionRates";
 import AppCurrentVisits from "../App/AppCurrentVisits";
 import AppCurrencySummary from "../Components/AppCurrencySummary";
 import { useData } from "../Hook/UseData";
-import MonthlyBarChart from "./MonthlyBarChart";
-import { Box, Stack } from "@mui/system";
-import MainCard from "../Components/MainCard";
-import styled from "@emotion/styled";
-const CardWrapper = styled(MainCard)(({ theme }) => ({
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.primary.light,
-    overflow: "hidden",
-    position: "relative",
-    "&:after": {
-        content: '""',
-        position: "absolute",
-        width: 210,
-        height: 210,
-        background: `linear-gradient(210.04deg, ${theme.palette.primary[200]} -50.94%, rgba(144, 202, 249, 0) 83.49%)`,
-        borderRadius: "50%",
-        top: -30,
-        right: -180,
-    },
-    "&:before": {
-        content: '""',
-        position: "absolute",
-        width: 210,
-        height: 210,
-        background: `linear-gradient(140.9deg, ${theme.palette.primary[200]} -14.02%, rgba(144, 202, 249, 0) 77.58%)`,
-        borderRadius: "50%",
-        top: -160,
-        right: -130,
-    },
-}));
-import { Card } from "@mui/material";
-import ReactApexChart from "react-apexcharts";
 import { Space } from "antd";
-import AppCurrencySummary from "../Components/AppCurrencySummary";
-import { useData } from "../Hook/UseData";
 import Loading from "../Components/Loading";
+import ReactApexChart from "react-apexcharts";
 
 const Dashboard = () => {
     const { socksData } = useData();
@@ -198,10 +153,15 @@ const Dashboard = () => {
     return (
         <Container className="content-container">
             <Grid className="grid-container" container spacing={3}>
-                <Grid className="currency" sx={{marginBottom: '10px'}} xs={12} sm={6} md={3} item key={"dollar"}>
-        <>
-            <Space size={"large"} className="space-dashboard">
-                <Card xs={24} sm={24} md={12} lg={12} xl={12} key={"currency"}>
+                <Grid
+                    className="currency"
+                    sx={{ marginBottom: "10px" }}
+                    xs={12}
+                    sm={6}
+                    md={3}
+                    item
+                    key={"dollar"}
+                >
                     <AppCurrencySummary
                         title={currency?.ccyNmUZ}
                         currency={currency?.rate}
@@ -210,7 +170,7 @@ const Dashboard = () => {
                     />
                 </Grid>
             </Grid>
-            <Grid sx={{gap: '20px'}} className="grid-container" spacing={2}>
+            <Grid sx={{ gap: "20px" }} className="grid-container" spacing={2}>
                 <Grid
                     className="grid1"
                     sx={{ width: "70%" }}
@@ -219,10 +179,9 @@ const Dashboard = () => {
                     md={6}
                     lg={3}
                 >
-                    <AppConversionRates
+                    {/* <AppConversionRates
                         title="Sotilgan mahsulotlar hisoboti"
-                        // subheader="(+43%) than last year"
-                    />
+                    /> */}
                 </Grid>
                 <Grid
                     className="grid1 grid2"
@@ -235,13 +194,21 @@ const Dashboard = () => {
                     <AppCurrentVisits title="Materiallar hisoboti" />
                 </Grid>
             </Grid>
+            <>
+                <Space size={"large"} className="space-dashboard">
+                    <Card
+                        xs={24}
+                        sm={24}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                        key={"amount"}
+                    >
+                        <ApexChart />
+                    </Card>
+                </Space>
+            </>
         </Container>
-                </Card>
-                <Card xs={24} sm={24} md={12} lg={12} xl={12} key={"amount"}>
-                    <ApexChart />
-                </Card>
-            </Space>
-        </>
     );
 };
 

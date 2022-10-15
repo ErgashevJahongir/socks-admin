@@ -4,16 +4,11 @@ import ReactApexChart from "react-apexcharts";
 // @mui
 import { Box, Card, CardHeader } from "@mui/material";
 // utils
-import BaseOptionChart from '../Components/chart/BaseOptionChart';
-import { fNumber } from '../Utils/formatNumber';
-import {
-  useEffect,
-  useState
-} from "react";
+import BaseOptionChart from "../Components/chart/BaseOptionChart";
+import { fNumber } from "../Utils/formatNumber";
+import { useEffect, useState } from "react";
 import instance from "../Api/Axios";
-import {
-  useData
-} from '../Hook/UseData';
+import { useData } from "../Hook/UseData";
 // components
 
 // ----------------------------------------------------------------------
@@ -30,9 +25,9 @@ export default function AppConversionRates({
     chartData,
     ...other
 }) {
-    const chartLabels = chartData.map((i) => i.label);
+    const chartLabels = chartData?.map((i) => i.label);
 
-    const chartSeries = chartData.map((i) => i.value);
+    const chartSeries = chartData?.map((i) => i.value);
 
     const chartOptions = merge(BaseOptionChart(), {
         tooltip: {

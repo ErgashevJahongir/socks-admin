@@ -361,14 +361,19 @@ thead:hover {
 .css-mufikw {
     color: aliceblue !important;
     margin-bottom: unset !important;
-    background-image: linear-gradient(135deg, rgb(229 229 229 / 78%) 0%, rgb(26 28 30 / 0%) 100%) !important;
+    background-image: linear-gradient(
+        135deg,
+        rgb(229 229 229 / 78%) 0%,
+        rgb(26 28 30 / 0%) 100%
+    ) !important;
 }
 
 .currency {
     margin-bottom: 20px !important;
 }
 
-.css-9ne04j-MuiGrid-root, .css-bhp9pd-MuiPaper-root-MuiCard-root {
+.css-9ne04j-MuiGrid-root,
+.css-bhp9pd-MuiPaper-root-MuiCard-root {
     height: 64vh !important;
 }
 
@@ -383,27 +388,27 @@ thead:hover {
         width: 768px;
         padding: 0;
     }
-    
+
     .space-dashboard {
         display: grid;
         grid-template-columns: 1fr 1fr;
-    } 
     }
 
-    .css-1vb7w3r  {
+    .css-1vb7w3r {
         margin-top: 20px !important;
     }
 
     .grid-container {
         flex-direction: column !important;
-        gap: unset !important;;
+        gap: unset !important;
     }
 
     .css-18r7b5m-MuiGrid-root {
         margin-bottom: 40px !important;
     }
 
-    .css-9ne04j-MuiGrid-root, .css-bhp9pd-MuiPaper-root-MuiCard-root {
+    .css-9ne04j-MuiGrid-root,
+    .css-bhp9pd-MuiPaper-root-MuiCard-root {
         height: unset !important;
     }
 
