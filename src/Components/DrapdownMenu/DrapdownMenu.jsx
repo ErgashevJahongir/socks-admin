@@ -12,6 +12,7 @@ import {
     AppstoreOutlined,
     CloudSyncOutlined,
     CloudServerOutlined,
+    BellOutlined,
 } from "@ant-design/icons";
 import useToken from "../../Hook/UseToken";
 // import { useData } from "../../Hook/UseData";
@@ -71,6 +72,28 @@ function DrapdownMenu({ onClose, isVisible }) {
                         ),
                     },
                     {
+                        label: "Kelgan Materiallar",
+                        key: "/income-material",
+                        icon: (
+                            <Link to="/income-material">
+                                <CloudDownloadOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
+                            </Link>
+                        ),
+                    },
+                    {
+                        label: "Ishlatilgan Materiallar",
+                        key: "/outcome-material",
+                        icon: (
+                            <Link to="/outcome-material">
+                                <CloudSyncOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
+                            </Link>
+                        ),
+                    },
+                    {
                         label: "Naskilar",
                         key: "/socks",
                         icon: (
@@ -81,17 +104,7 @@ function DrapdownMenu({ onClose, isVisible }) {
                             </Link>
                         ),
                     },
-                    {
-                        label: "Kelgan Mahsulotlar",
-                        key: "/income-socks",
-                        icon: (
-                            <Link to="/income-socks">
-                                <CloudDownloadOutlined
-                                    style={{ fontSize: "20px" }}
-                                />
-                            </Link>
-                        ),
-                    },
+
                     {
                         label: "Sotilgan Mahsulotlar",
                         key: "/outcome-socks",
@@ -162,6 +175,21 @@ function DrapdownMenu({ onClose, isVisible }) {
                         icon: (
                             <Link to="/profil">
                                 <UserOutlined style={{ fontSize: "18px" }} />
+                            </Link>
+                        ),
+                    },
+                    {
+                        key: "/notification",
+                        icon: <BellOutlined />,
+                        label: (
+                            <Link
+                                to="/notification"
+                                style={{
+                                    width: "100px",
+                                    display: "inline-block",
+                                }}
+                            >
+                                Eslatmalar
                             </Link>
                         ),
                     },

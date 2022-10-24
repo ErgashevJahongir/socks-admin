@@ -15,7 +15,7 @@ const CategoryVsMeasurement = () => {
     const [pageSize, setPageSize] = useState(10);
     const [currentCategory, setCurrentCategory] = useState(1);
     const [pageSizeCategory, setPageSizeCategory] = useState(10);
-    const { getCategoryData, getMeasurementData } = useData();
+    const { getCategoryData } = useData();
     const navigate = useNavigate();
 
     const getCategory = () => {
@@ -130,65 +130,15 @@ const CategoryVsMeasurement = () => {
     };
 
     const onCreate = (values) => {
-        setLoading(true);
-        instance
-            .post(`api/socks/factory/measurement/add?name=${values.name}`)
-            .then(function (response) {
-                getMeasurementData();
-                message.success("O'lchov birligi muvaffaqiyatli qo'shildi");
-            })
-            .catch(function (error) {
-                console.error(error);
-                if (error.response?.status === 500) navigate("/server-error");
-                message.error("O'lchov birligini qo'shishda muammo bo'ldi");
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        message.error("O'lchov birligi malumotlarini o'zgartirib bo'lmaydi!");
     };
 
     const onEdit = (values, initial) => {
-        setLoading(true);
-        instance
-            .post(
-                `api/socks/factory/measurement/update${initial.id}?name=${values.name}`
-            )
-            .then(function (response) {
-                getMeasurementData();
-                message.success("O'lchov birligi muvaffaqiyatli taxrirlandi");
-            })
-            .catch(function (error) {
-                console.error(error);
-                if (error.response?.status === 500) navigate("/server-error");
-                message.error("O'lchov birligini taxrirlashda muammo bo'ldi");
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        message.error("O'lchov birligi malumotlarini o'zgartirib bo'lmaydi!");
     };
 
     const handleDelete = (arr) => {
-        setLoading(true);
-        arr.map((item) => {
-            instance
-                .delete(`api/socks/factory/measurement/delete${item}`)
-                .then((data) => {
-                    getMeasurementData();
-                    message.success(
-                        "O'lchov birligi muvaffaqiyatli o'chirildi"
-                    );
-                })
-                .catch((error) => {
-                    console.error(error);
-                    if (error.response?.status === 500)
-                        navigate("/server-error");
-                    message.error(
-                        "O'lchov birligini o'chirishda muammo bo'ldi"
-                    );
-                });
-            return null;
-        });
-        setLoading(false);
+        message.error("O'lchov birligi malumotlarini o'zgartirib bo'lmaydi!");
     };
 
     const columns = [

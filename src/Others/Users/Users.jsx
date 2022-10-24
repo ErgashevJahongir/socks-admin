@@ -7,19 +7,19 @@ import { FrownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 const Users = () => {
-    const [workers, setWorkers] = useState([]);
+    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const { roleData, getUsersData } = useData();
     const navigate = useNavigate();
 
-    const getWorkers = (values) => {
+    const getUsers = (values) => {
         setLoading(true);
         instance
             .get(`api/socks/factory/user`)
             .then((data) => {
-                setWorkers(data.data.data);
+                setUsers(data.data.data);
                 getUsersData();
             })
             .catch((error) => {
@@ -89,7 +89,7 @@ const Users = () => {
             title: "Bloklangan",
             dataIndex: "block",
             key: "block",
-            width: "25%",
+            width: "24%",
             search: false,
             render: (record) => {
                 return record ? "Ha" : "Yo'q";
@@ -114,7 +114,7 @@ const Users = () => {
             })
             .then(function (response) {
                 message.success("Foydalanuvchi muvaffaqiyatli qo'shildi");
-                getWorkers(current - 1, pageSize);
+                getUsers(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -129,14 +129,14 @@ const Users = () => {
     const onEdit = (values, initial) => {
         setLoading(true);
         instance
-            .put(`api/socks/factory/user`, {
+            .put(`api/socks/factory/user/editForUsers/${initial.id}`, {
                 ...values,
                 id: initial.id,
                 deleted: false,
             })
             .then((res) => {
                 message.success("Foydalanuvchi muvaffaqiyatli taxrirlandi");
-                getWorkers(current - 1, pageSize);
+                getUsers(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -145,14 +145,35 @@ const Users = () => {
                 if (error.response?.status === 405)
                     notification["error"]({
                         message: "Ruxsat berilmagan usul",
-                        // description: message,
-                        // duration: 5,
+                        duration: 5,
                         icon: <FrownOutlined style={{ color: "#f00" }} />,
                     });
             })
             .finally(() => {
                 setLoading(false);
             });
+        (values.block === "true" || values.block === "false") &&
+            instance
+                .patch(`api/socks/factory/user/${initial.id}`)
+                .then((res) => {
+                    message.success("Foydalanuvchi muvaffaqiyatli blocklandi");
+                    getUsers(current - 1, pageSize);
+                })
+                .catch(function (error) {
+                    console.error("Error in edit: ", error);
+                    if (error.response?.status === 500)
+                        navigate("/server-error");
+                    message.error("Foydalanuvchini blocklashda muammo bo'ldi");
+                    if (error.response?.status === 405)
+                        notification["error"]({
+                            message: "Ruxsat berilmagan usul",
+                            duration: 5,
+                            icon: <FrownOutlined style={{ color: "#f00" }} />,
+                        });
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
     };
 
     const handleDelete = (arr) => {
@@ -161,7 +182,7 @@ const Users = () => {
             instance
                 .delete(`api/socks/factory/user/${item}`)
                 .then((data) => {
-                    getWorkers(current - 1, pageSize);
+                    getUsers(current - 1, pageSize);
                     message.success("Foydalanuvchi muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
@@ -181,9 +202,9 @@ const Users = () => {
                 onEdit={onEdit}
                 onCreate={onCreate}
                 onDelete={handleDelete}
-                getData={getWorkers}
+                getData={getUsers}
                 columns={columns}
-                tableData={workers}
+                tableData={users}
                 current={current}
                 pageSize={pageSize}
                 loading={loading}

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useData } from "../Hook/UseData";
 
 const Clients = () => {
-    const [incomeDryFruits, setIncomeDryFruits] = useState([]);
+    const [clients, setClients] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -14,7 +14,7 @@ const Clients = () => {
     const { getClientData } = useData();
     const navigate = useNavigate();
 
-    const getIncomeDryFruits = (current, pageSize) => {
+    const getClients = (current, pageSize) => {
         setLoading(true);
         instance
             .get(
@@ -22,7 +22,7 @@ const Clients = () => {
             )
             .then((data) => {
                 getClientData();
-                setIncomeDryFruits(data.data?.data?.clients);
+                setClients(data.data?.data?.clients);
                 setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
@@ -90,7 +90,7 @@ const Clients = () => {
             .post("api/socks/factory/client/add", { ...values })
             .then(function (response) {
                 message.success("Klient muvaffaqiyatli qo'shildi");
-                getIncomeDryFruits(current - 1, pageSize);
+                getClients(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -108,7 +108,7 @@ const Clients = () => {
             .put(`api/socks/factory/client/update${initial.id}`, { ...values })
             .then((res) => {
                 message.success("Klient muvaffaqiyatli taxrirlandi");
-                getIncomeDryFruits(current - 1, pageSize);
+                getClients(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -126,7 +126,7 @@ const Clients = () => {
             instance
                 .delete(`api/socks/factory/client/delete${item}`)
                 .then((data) => {
-                    getIncomeDryFruits(current - 1, pageSize);
+                    getClients(current - 1, pageSize);
                     message.success("Klient muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
@@ -146,9 +146,9 @@ const Clients = () => {
                 onEdit={onEdit}
                 onCreate={onCreate}
                 onDelete={handleDelete}
-                getData={getIncomeDryFruits}
+                getData={getClients}
                 columns={columns}
-                tableData={incomeDryFruits}
+                tableData={clients}
                 current={current}
                 pageSize={pageSize}
                 totalItems={totalItems}

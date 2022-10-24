@@ -47,7 +47,6 @@ const OutDebt = () => {
             ...values,
             deadline,
         };
-        console.log(value);
         instance
             .post("api/socks/factory/debt", { ...value })
             .then(function (response) {

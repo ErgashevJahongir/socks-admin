@@ -4,6 +4,7 @@ import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useData } from "../Hook/UseData";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const OutcomeMaterial = () => {
     const [incomeDryFruits, setIncomeDryFruits] = useState([]);
@@ -11,20 +12,29 @@ const OutcomeMaterial = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { measurementData, getMaterialData } = useData();
+    const { measurementData, getMaterialData, socksData, createMaterialData } =
+        useData();
     const navigate = useNavigate();
 
     const getIncomeDryFruits = (current, pageSize) => {
         setLoading(true);
         instance
             .get(
-                `api/socks/factoryoutcomeMaterial/pageable?page=${current}&size=${pageSize}`
+                `api/socks/factory/outcomeMaterial/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                console.log(data);
-                // getMaterialData();
-                // setIncomeDryFruits(data.data?.data?.materials);
-                // setTotalItems(data.data?.data?.totalItems);
+                getMaterialData();
+                setIncomeDryFruits(
+                    data.data?.data?.outcomeMaterials.map((item) => {
+                        return {
+                            ...item,
+                            date: moment(item?.date).format("DD-MM-YYYY"),
+                            materialId: item.resources[0].materialId,
+                            materialAmount: item.resources[0].amount,
+                        };
+                    })
+                );
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
@@ -39,15 +49,57 @@ const OutcomeMaterial = () => {
     const columns = [
         {
             title: "Material nomi",
-            dataIndex: "name",
-            key: "name",
-            width: "33%",
-            search: true,
+            dataIndex: "materialId",
+            key: "materialId",
+            width: "20%",
+            search: false,
+            render: (record) => {
+                const data = createMaterialData?.filter(
+                    (item) => item.id === record
+                );
+                return data[0]?.name;
+            },
             sorter: (a, b) => {
-                if (a.name < b.name) {
+                if (a.materialId < b.materialId) {
                     return -1;
                 }
-                if (a.name > b.name) {
+                if (a.materialId > b.materialId) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
+            title: "Miqdori",
+            dataIndex: "materialAmount",
+            key: "materialAmount",
+            width: "15%",
+            sorter: (a, b) => {
+                if (a.materialAmount < b.materialAmount) {
+                    return -1;
+                }
+                if (a.materialAmount > b.materialAmount) {
+                    return 1;
+                }
+                return 0;
+            },
+            search: false,
+        },
+        {
+            title: "Naski nomi",
+            dataIndex: "socksId",
+            key: "socksId",
+            width: "20%",
+            search: false,
+            render: (record) => {
+                const data = socksData?.filter((item) => item.id === record);
+                return data[0]?.name;
+            },
+            sorter: (a, b) => {
+                if (a.socksId < b.socksId) {
+                    return -1;
+                }
+                if (a.socksId > b.socksId) {
                     return 1;
                 }
                 return 0;
@@ -57,7 +109,7 @@ const OutcomeMaterial = () => {
             title: "O'lchov birligi",
             dataIndex: "measurementId",
             key: "measurementId",
-            width: "33%",
+            width: "15%",
             sorter: (a, b) => {
                 if (a.measurementId < b.measurementId) {
                     return -1;
@@ -77,7 +129,7 @@ const OutcomeMaterial = () => {
             title: "Miqdori",
             dataIndex: "amount",
             key: "amount",
-            width: "33%",
+            width: "15%",
             sorter: (a, b) => {
                 if (a.amount < b.amount) {
                     return -1;
@@ -89,13 +141,41 @@ const OutcomeMaterial = () => {
             },
             search: false,
         },
+        {
+            title: "Sana",
+            dataIndex: "date",
+            key: "date",
+            width: "15%",
+            sorter: (a, b) => {
+                if (a.date < b.date) {
+                    return -1;
+                }
+                if (a.date > b.date) {
+                    return 1;
+                }
+                return 0;
+            },
+            search: false,
+        },
     ];
 
     const onCreate = (values) => {
         setLoading(true);
+        const value = {
+            resources: [
+                {
+                    materialId: values.materialId,
+                    amount: values.materialAmount,
+                },
+            ],
+            socksId: values.socksId,
+            measurementId: values.measurementId,
+            amount: values.amount,
+            date: values.date,
+        };
         instance
-            .post("api/socks/factory/api/socks/factory/material/add", {
-                ...values,
+            .post("api/socks/factory/outcomeMaterial", {
+                ...value,
             })
             .then(function (response) {
                 message.success(

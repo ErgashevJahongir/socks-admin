@@ -6,7 +6,7 @@ import { useData } from "../Hook/UseData";
 import { useNavigate } from "react-router-dom";
 
 const Material = () => {
-    const [incomeDryFruits, setIncomeDryFruits] = useState([]);
+    const [materials, setMaterials] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -14,7 +14,7 @@ const Material = () => {
     const { measurementData, getMaterialData } = useData();
     const navigate = useNavigate();
 
-    const getIncomeDryFruits = (current, pageSize) => {
+    const getMaterials = (current, pageSize) => {
         setLoading(true);
         instance
             .get(
@@ -22,13 +22,13 @@ const Material = () => {
             )
             .then((data) => {
                 getMaterialData();
-                setIncomeDryFruits(data.data?.data?.materials);
+                setMaterials(data.data?.data?.materials);
                 setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan materiallarni yuklashda muammo bo'ldi");
+                message.error("Materiallarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
@@ -93,15 +93,16 @@ const Material = () => {
         instance
             .post("api/socks/factory/api/socks/factory/material/add", {
                 ...values,
+                amount: 0,
             })
             .then(function (response) {
-                message.success("Kelgan material muvaffaqiyatli qo'shildi");
-                getIncomeDryFruits(current - 1, pageSize);
+                message.success("Material muvaffaqiyatli qo'shildi");
+                getMaterials(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan materialni qo'shishda muammo bo'ldi");
+                message.error("Materialni qo'shishda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -116,13 +117,13 @@ const Material = () => {
                 { ...values }
             )
             .then((res) => {
-                message.success("Kelgan material muvaffaqiyatli taxrirlandi");
-                getIncomeDryFruits(current - 1, pageSize);
+                message.success("Material muvaffaqiyatli taxrirlandi");
+                getMaterials(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan materialni taxrirlashda muammo bo'ldi");
+                message.error("Materialni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -137,18 +138,14 @@ const Material = () => {
                     `api/socks/factory/api/socks/factory/material/delete${item}`
                 )
                 .then((data) => {
-                    getIncomeDryFruits(current - 1, pageSize);
-                    message.success(
-                        "Kelgan material muvaffaqiyatli o'chirildi"
-                    );
+                    getMaterials(current - 1, pageSize);
+                    message.success("Material muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
                     console.error(error);
                     if (error.response?.status === 500)
                         navigate("/server-error");
-                    message.error(
-                        "Kelgan materialni o'chirishda muammo bo'ldi"
-                    );
+                    message.error("Materialni o'chirishda muammo bo'ldi");
                 })
                 .finally(() => setLoading(false));
             return null;
@@ -161,9 +158,9 @@ const Material = () => {
                 onEdit={onEdit}
                 onCreate={onCreate}
                 onDelete={handleDelete}
-                getData={getIncomeDryFruits}
+                getData={getMaterials}
                 columns={columns}
-                tableData={incomeDryFruits}
+                tableData={materials}
                 current={current}
                 pageSize={pageSize}
                 totalItems={totalItems}

@@ -1,37 +1,43 @@
 import { useState } from "react";
 import instance from "../Api/Axios";
 import moment from "moment";
-import { Button, message, notification } from "antd";
+import { Button, Card, Col, message, notification, Row, Statistic } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../Hook/UseData";
-import { FrownOutlined } from "@ant-design/icons";
+import { ArrowDownOutlined, FrownOutlined } from "@ant-design/icons";
 
 const OutcomeSocks = () => {
-    const [outcomeFuel, setOutcomeFuel] = useState([]);
+    const [outcomeSocks, setOutcomeSocks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { socksData, clientData, measurementData, getOutcomeSocksData } =
+    const [totalsum, setTotalsum] = useState();
+    const { socksData, clientData, measurementData, qarzValue, deadlineValue } =
         useData();
     const navigate = useNavigate();
 
-    const getOutcomeDryFruits = (current, pageSize) => {
+    const getOutcomeSocks = (current, pageSize) => {
         setLoading(true);
         instance
             .get(
                 `api/socks/factory/outcome/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                getOutcomeSocksData();
-                const fuel = data.data?.data?.outcomeSocks?.map((item) => {
-                    return {
-                        ...item,
-                        date: moment(item?.date).format("DD-MM-YYYY"),
-                    };
+                const fuel =
+                    data.data?.data?.outcomeSocks.outcomeSocksGetDTOList?.map(
+                        (item) => {
+                            return {
+                                ...item,
+                                date: moment(item?.date).format("DD-MM-YYYY"),
+                            };
+                        }
+                    );
+                setTotalsum({
+                    totalSumma: data.data?.data?.outcomeSocks?.totalSumma,
                 });
-                setOutcomeFuel(fuel);
+                setOutcomeSocks(fuel);
                 setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
@@ -49,14 +55,19 @@ const OutcomeSocks = () => {
                 `api/socks/factory/outcome/${value}?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                getOutcomeSocksData();
-                const fuel = data.data?.data?.outcomeSocks?.map((item) => {
-                    return {
-                        ...item,
-                        date: moment(item?.date).format("DD-MM-YYYY"),
-                    };
+                const fuel =
+                    data.data?.data?.outcomeSocks.outcomeSocksGetDTOList?.map(
+                        (item) => {
+                            return {
+                                ...item,
+                                date: moment(item?.date).format("DD-MM-YYYY"),
+                            };
+                        }
+                    );
+                setTotalsum({
+                    totalSumma: data.data?.data?.outcomeSocks?.totalSumma,
                 });
-                setOutcomeFuel(fuel);
+                setOutcomeSocks(fuel);
                 setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
@@ -78,14 +89,19 @@ const OutcomeSocks = () => {
                 ).format("YYYY-MM-DD HH:MM:SS")}`
             )
             .then((data) => {
-                getOutcomeSocksData();
-                const fuel = data.data?.data?.outcomeSocks?.map((item) => {
-                    return {
-                        ...item,
-                        date: moment(item?.date).format("DD-MM-YYYY"),
-                    };
+                const fuel =
+                    data.data?.data?.outcomeSocks.outcomeSocksGetDTOList?.map(
+                        (item) => {
+                            return {
+                                ...item,
+                                date: moment(item?.date).format("DD-MM-YYYY"),
+                            };
+                        }
+                    );
+                setTotalsum({
+                    totalSumma: data.data?.data?.outcomeSocks?.totalSumma,
                 });
-                setOutcomeFuel(fuel);
+                setOutcomeSocks(fuel);
                 setTotalItems(data.data?.data?.totalItems);
             })
             .catch((err) => {
@@ -96,26 +112,6 @@ const OutcomeSocks = () => {
     };
 
     const columns = [
-        {
-            title: "Naski turi",
-            dataIndex: "socksId",
-            key: "socksId",
-            width: "15%",
-            search: false,
-            render: (record) => {
-                const data = socksData?.filter((item) => item.id === record);
-                return data[0]?.name;
-            },
-            sorter: (a, b) => {
-                if (a.socksId < b.socksId) {
-                    return -1;
-                }
-                if (a.socksId > b.socksId) {
-                    return 1;
-                }
-                return 0;
-            },
-        },
         {
             title: "Klient ismi",
             dataIndex: "clientId",
@@ -131,6 +127,26 @@ const OutcomeSocks = () => {
                     return -1;
                 }
                 if (a.clientId > b.clientId) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
+            title: "Naski turi",
+            dataIndex: "socksId",
+            key: "socksId",
+            width: "15%",
+            search: false,
+            render: (record) => {
+                const data = socksData?.filter((item) => item.id === record);
+                return data[0]?.name;
+            },
+            sorter: (a, b) => {
+                if (a.socksId < b.socksId) {
+                    return -1;
+                }
+                if (a.socksId > b.socksId) {
                     return 1;
                 }
                 return 0;
@@ -229,15 +245,41 @@ const OutcomeSocks = () => {
 
     const onCreate = (values) => {
         setLoading(true);
-        const value = {
+        const data = {
             ...values,
             date: values.date.toISOString(),
-            debt: values.debt.target.value,
+            debt: values.debt.target.value === "true" ? true : false,
         };
         instance
-            .post("api/socks/factory/outcome", { ...value })
+            .post("api/socks/factory/outcome", { ...data })
             .then(function (response) {
-                getOutcomeDryFruits(current - 1, pageSize);
+                const deadline = deadlineValue;
+                const value = {
+                    clientId: values.clientId,
+                    price: values.price * values.amount - qarzValue,
+                    outcomeSocksId: values,
+                    deadline,
+                };
+                values.debt.target.value === "true" &&
+                    instance
+                        .post("api/socks/factory/debt", { ...value })
+                        .then(function (response) {
+                            message.success(
+                                "Tashqi qarz muvaffaqiyatli qo'shildi"
+                            );
+                        })
+                        .catch(function (error) {
+                            console.error(error);
+                            if (error.response?.status === 500)
+                                navigate("/server-error");
+                            message.error(
+                                "Tashqi qarzni qo'shishda muammo bo'ldi"
+                            );
+                        })
+                        .finally(() => {
+                            setLoading(false);
+                        });
+                getOutcomeSocks(current - 1, pageSize);
                 message.success("Sotilgan naski muvaffaqiyatli qo'shildi");
             })
             .catch(function (error) {
@@ -263,8 +305,34 @@ const OutcomeSocks = () => {
                 ...data,
             })
             .then((res) => {
+                const deadline = deadlineValue;
+                const value = {
+                    clientId: values.clientId,
+                    price: values.price * values.amount - qarzValue,
+                    outcomeSocksId: values,
+                    deadline,
+                };
+                values.debt.target.value === "true" &&
+                    instance
+                        .post("api/socks/factory/debt", { ...value })
+                        .then(function (response) {
+                            message.success(
+                                "Tashqi qarz muvaffaqiyatli qo'shildi"
+                            );
+                        })
+                        .catch(function (error) {
+                            console.error(error);
+                            if (error.response?.status === 500)
+                                navigate("/server-error");
+                            message.error(
+                                "Tashqi qarzni qo'shishda muammo bo'ldi"
+                            );
+                        })
+                        .finally(() => {
+                            setLoading(false);
+                        });
                 message.success("Sotilgan naski muvaffaqiyatli taxrirlandi");
-                getOutcomeDryFruits(current - 1, pageSize);
+                getOutcomeSocks(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -302,13 +370,35 @@ const OutcomeSocks = () => {
 
     return (
         <>
+            {totalsum ? (
+                <div
+                    style={{ marginBottom: "20px" }}
+                    className="site-statistic-demo-card"
+                >
+                    <Row gutter={[10, 10]}>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                            <Card>
+                                <Statistic
+                                    title="Jami sarflangan summa"
+                                    value={totalsum?.totalSumma}
+                                    valueStyle={{
+                                        color: "#cf1322",
+                                    }}
+                                    prefix={<ArrowDownOutlined />}
+                                    suffix="So'm"
+                                />
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
+            ) : null}
             <CustomTable
                 onEdit={onEdit}
                 onCreate={onCreate}
-                getData={getOutcomeDryFruits}
+                getData={getOutcomeSocks}
                 getDataTimely={getOutcomeFruitTimely}
                 columns={columns}
-                tableData={outcomeFuel}
+                tableData={outcomeSocks}
                 current={current}
                 pageSize={pageSize}
                 totalItems={totalItems}

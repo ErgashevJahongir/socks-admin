@@ -15,14 +15,24 @@ export const DataProvider = ({ children }) => {
     const [measurementData, setMeasurementData] = useState([]);
     const [categoryData, setCategoryData] = useState([]);
     const [socksData, setSocksData] = useState([]);
-    const [outcomeSocksIdData, setOutcomeSocksData] = useState([]);
     const [createMaterialData, setMaterialData] = useState([]);
     const [roleData, setRoleData] = useState([]);
     const [clientData, setClientData] = useState([]);
+    const [qarzValue, setQarzValue] = useState("");
+    const [deadlineValue, setDeadlineValue] = useState("");
+    const [valueDebt, setValueDebt] = useState(null);
     const { token } = useToken();
     let location = useLocation();
 
-    const incomeSocksData = [
+    const onChangeDebt = (e) => {
+        setValueDebt(e.target.value);
+    };
+
+    const onChangeDeadline = (e) => {
+        setDeadlineValue(moment(e).toISOString());
+    };
+
+    const incomeMaterialFormData = [
         {
             name: "materialId",
             label: "Material nomi",
@@ -36,23 +46,23 @@ export const DataProvider = ({ children }) => {
         },
         {
             name: "measurementId",
-            label: "Naski o'lchovi",
+            label: "Material o'lchovi",
             input: (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Naski o'lchovi"}
+                    placeholder={"Material o'lchovini tanlang"}
                     selectData={measurementData}
                 />
             ),
         },
         {
             name: "amount",
-            label: "Naski miqdori",
+            label: "Material miqdori",
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
             name: "price",
-            label: "Naski narxi",
+            label: "Material narxi",
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
@@ -67,7 +77,7 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
-    const editIncomeSocksData = [
+    const editIncomeMaterialFormData = [
         {
             name: "materialId",
             label: "Material nomi",
@@ -82,11 +92,11 @@ export const DataProvider = ({ children }) => {
         },
         {
             name: "measurementId",
-            label: "Naski o'lchovi",
+            label: "Material o'lchvini tanlang",
             inputSelect: (defaultId = null) => (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Naski o'lchovi"}
+                    placeholder={"Material o'lchvini tanlang"}
                     selectData={measurementData}
                     DValue={defaultId}
                 />
@@ -94,12 +104,12 @@ export const DataProvider = ({ children }) => {
         },
         {
             name: "amount",
-            label: "Naski miqdori",
+            label: "Material miqdori",
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
             name: "price",
-            label: "Naski narxi",
+            label: "Material narxi",
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
@@ -170,9 +180,44 @@ export const DataProvider = ({ children }) => {
             name: "debt",
             label: "Qarzdorlik",
             input: (
-                <Radio.Group>
+                <Radio.Group onChange={onChangeDebt}>
                     <Radio value="false"> Yo'q </Radio>
-                    <Radio value="true"> Bor </Radio>
+                    <Radio value="true">
+                        {" "}
+                        <p>Bor</p>
+                        {valueDebt === "true" ? (
+                            <>
+                                <div
+                                    style={{
+                                        width: "115%",
+                                        marginLeft: "-25px",
+                                    }}
+                                >
+                                    Qancha pul to'langan
+                                    <InputNumber
+                                        value={qarzValue}
+                                        placeholder="Qancha pul to'langan"
+                                        onChange={(e) => setQarzValue(e)}
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                    />
+                                </div>
+                                <div
+                                    style={{
+                                        width: "115%",
+                                        marginLeft: "-25px",
+                                    }}
+                                >
+                                    Qaytarish vaqti
+                                    <DatePicker
+                                        style={{ width: "100%" }}
+                                        onChange={onChangeDeadline}
+                                    />
+                                </div>
+                            </>
+                        ) : null}{" "}
+                    </Radio>
                 </Radio.Group>
             ),
         },
@@ -248,15 +293,47 @@ export const DataProvider = ({ children }) => {
         {
             name: "debt",
             label: "Qarzdorlik",
-            inputSelect: (defaultId = null) => {
-                const str = defaultId?.toString();
-                return (
-                    <Radio.Group defaultValue={str}>
-                        <Radio value="false"> Yo'q </Radio>
-                        <Radio value="true"> Ha </Radio>
-                    </Radio.Group>
-                );
-            },
+            input: (
+                <Radio.Group onChange={onChangeDebt}>
+                    <Radio value="false"> Yo'q </Radio>
+                    <Radio value="true">
+                        {" "}
+                        <p>Bor</p>
+                        {valueDebt === "true" ? (
+                            <>
+                                <div
+                                    style={{
+                                        width: "115%",
+                                        marginLeft: "-25px",
+                                    }}
+                                >
+                                    Qancha pul to'langan
+                                    <InputNumber
+                                        value={qarzValue}
+                                        placeholder="Qancha pul to'langan"
+                                        onChange={(e) => setQarzValue(e)}
+                                        style={{
+                                            width: "100%",
+                                        }}
+                                    />
+                                </div>
+                                <div
+                                    style={{
+                                        width: "115%",
+                                        marginLeft: "-25px",
+                                    }}
+                                >
+                                    Qaytarish vaqti
+                                    <DatePicker
+                                        style={{ width: "100%" }}
+                                        onChange={onChangeDeadline}
+                                    />
+                                </div>
+                            </>
+                        ) : null}{" "}
+                    </Radio>
+                </Radio.Group>
+            ),
         },
     ];
 
@@ -363,40 +440,38 @@ export const DataProvider = ({ children }) => {
         user?.roleId === 1
             ? {
                   name: "roleId",
-                  label: "Role",
+                  label: "Roleni tanlang",
                   input: (
                       <CustomSelect
                           backValue={"id"}
                           placeholder={"Roleni tanlang"}
-                          selectData={roleData?.filter(
-                              (item) => item?.roleName !== "ROLE_ADMIN"
-                          )}
+                          selectData={roleData
+                              ?.filter(
+                                  (item) => item?.roleName !== "ROLE_ADMIN"
+                              )
+                              .map((item) => {
+                                  return { ...item, name: item.roleName };
+                              })}
                       />
                   ),
               }
             : {
                   name: "roleId",
-                  label: "Role",
+                  label: "Roleni tanlang",
                   input: (
                       <CustomSelect
                           backValue={"id"}
                           placeholder={"Roleni tanlang"}
-                          selectData={roleData?.filter(
-                              (item) => item?.roleName === "ROLE_EMPLOYEE"
-                          )}
+                          selectData={roleData
+                              ?.filter(
+                                  (item) => item?.roleName === "ROLE_EMPLOYEE"
+                              )
+                              .map((item) => {
+                                  return { ...item, name: item.roleName };
+                              })}
                       />
                   ),
               },
-        {
-            name: "block",
-            label: "block",
-            input: (
-                <Radio.Group>
-                    <Radio value="false"> Yo'q </Radio>
-                    <Radio value="true"> Ha </Radio>
-                </Radio.Group>
-            ),
-        },
     ];
 
     const editUsersDataForm = [
@@ -410,11 +485,6 @@ export const DataProvider = ({ children }) => {
             label: "Ishchi nomeri",
             input: <Input />,
         },
-        {
-            name: "password",
-            label: "Ishchi passwordi",
-            input: <Input />,
-        },
         user?.roleId === 1
             ? {
                   name: "roleId",
@@ -423,9 +493,13 @@ export const DataProvider = ({ children }) => {
                       <CustomSelect
                           backValue={"id"}
                           placeholder={"Roleni tanlang"}
-                          selectData={roleData?.filter(
-                              (item) => item?.roleName !== "ROLE_ADMIN"
-                          )}
+                          selectData={roleData
+                              ?.filter(
+                                  (item) => item?.roleName !== "ROLE_ADMIN"
+                              )
+                              .map((item) => {
+                                  return { ...item, name: item.roleName };
+                              })}
                           DValue={initial}
                       />
                   ),
@@ -437,7 +511,6 @@ export const DataProvider = ({ children }) => {
                       <CustomSelect
                           backValue={"id"}
                           placeholder={"Roleni tanlang"}
-                          //   selectData={roleData}
                           DValue={initial}
                           selectData={roleData?.map((item) => ({
                               ...item,
@@ -470,7 +543,26 @@ export const DataProvider = ({ children }) => {
               },
     ];
 
-    const materialData = [
+    const materialFormData = [
+        {
+            name: "name",
+            label: "Material nomi",
+            input: <Input />,
+        },
+        {
+            name: "measurementId",
+            label: "O'lchovini tanlang",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"O'lchovini tanlang"}
+                    selectData={measurementData}
+                />
+            ),
+        },
+    ];
+
+    const editmaterialFormData = [
         {
             name: "name",
             label: "Material nomi",
@@ -491,73 +583,6 @@ export const DataProvider = ({ children }) => {
             name: "amount",
             label: "Material miqdori",
             input: <InputNumber style={{ width: "100%" }} />,
-        },
-    ];
-
-    const editmaterialData = [
-        {
-            name: "name",
-            label: "Material nomi",
-            input: <Input />,
-        },
-        {
-            name: "measurementId",
-            label: "O'lchovini tanlang",
-            input: (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"O'lchovini tanlang"}
-                    selectData={measurementData}
-                />
-            ),
-        },
-        {
-            name: "amount",
-            label: "Material miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
-        },
-    ];
-
-    const outdebtFormData = [
-        {
-            name: "clientId",
-            label: "Klient ismi",
-            input: (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Klientni tanlang"}
-                    selectData={clientData?.map((item) => ({
-                        ...item,
-                        name: item.fio,
-                    }))}
-                />
-            ),
-        },
-        {
-            name: "outcomeSocksId",
-            label: "Qarzga olingan mahsulot",
-            input: (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Mahsulkotni tanlang"}
-                    selectData={socksData}
-                />
-            ),
-        },
-        {
-            name: "price",
-            label: "Naski narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
-        },
-        {
-            name: "deadline",
-            label: "Topshirish muddati",
-            input: (
-                <DatePicker
-                    style={{ width: "100%" }}
-                    value={moment().format()}
-                />
-            ),
         },
     ];
 
@@ -578,28 +603,6 @@ export const DataProvider = ({ children }) => {
             ),
         },
         {
-            name: "outcomeSocksId",
-            label: "Qarzga olingan mahsulot",
-            input: (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Sotilgan mahsulot tanlang"}
-                    selectData={socksData}
-                />
-            ),
-            inputSelect: (defaultId = null) => (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Sotilgan mahsulot tanlang"}
-                    selectData={socksData?.map((item) => ({
-                        ...item,
-                        name: item.name,
-                    }))}
-                    DValue={defaultId}
-                />
-            ),
-        },
-        {
             name: "price",
             label: "Naski narxi",
             input: <InputNumber style={{ width: "100%" }} />,
@@ -607,6 +610,116 @@ export const DataProvider = ({ children }) => {
         {
             name: "deadline",
             label: "Topshirish muddati",
+            input: <Input />,
+        },
+    ];
+
+    const outcomeMaterialData = [
+        {
+            name: "materialId",
+            label: "Material nomi",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Materialni tanlang"}
+                    selectData={createMaterialData}
+                />
+            ),
+        },
+        {
+            name: "materialAmount",
+            label: "Material miqdori",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
+            name: "socksId",
+            label: "Naski nomi",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naskini tanlang"}
+                    selectData={socksData}
+                />
+            ),
+        },
+        {
+            name: "measurementId",
+            label: "Naski o'lchovi",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naski o'lchovi"}
+                    selectData={measurementData}
+                />
+            ),
+        },
+        {
+            name: "amount",
+            label: "Naski miqdori",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
+            name: "date",
+            label: "Ishlab chiqarilgan vaqt",
+            input: (
+                <DatePicker
+                    style={{ width: "100%" }}
+                    value={moment().format()}
+                />
+            ),
+        },
+    ];
+
+    const editOutcomeMaterialData = [
+        {
+            name: "materialId",
+            label: "Material nomi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naskini tanlang"}
+                    selectData={socksData}
+                    DValue={defaultId}
+                />
+            ),
+        },
+        {
+            name: "materialAmount",
+            label: "Material miqdori",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
+            name: "socksId",
+            label: "Naski nomi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naskini tanlang"}
+                    selectData={socksData}
+                    DValue={defaultId}
+                />
+            ),
+        },
+        {
+            name: "measurementId",
+            label: "Naski o'lchovi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naski o'lchovi"}
+                    selectData={measurementData}
+                    DValue={defaultId}
+                />
+            ),
+        },
+        {
+            name: "amount",
+            label: "Naski miqdori",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
+            name: "date",
+            label: "Ishlab chiqarilgan vaqt",
             input: <Input />,
         },
     ];
@@ -689,20 +802,6 @@ export const DataProvider = ({ children }) => {
             .catch((err) => console.error(err));
     };
 
-    const getOutcomeSocksData = () => {
-        instance
-            .get("api/socks/factory/outcome/list")
-            .then((data) => {
-                const filtered = data.data.data.filter((item) => {
-                    if (item.debt === true) {
-                        return item;
-                    }
-                });
-                setOutcomeSocksData(filtered);
-            })
-            .catch((err) => console.error(err));
-    };
-
     useEffect(() => {
         getUserData(token);
         getMaterialData();
@@ -711,7 +810,6 @@ export const DataProvider = ({ children }) => {
         getSocksData();
         getRoleData();
         getClientData();
-        getOutcomeSocksData();
         getUsersData();
     }, []);
 
@@ -765,8 +863,8 @@ export const DataProvider = ({ children }) => {
         }
         case "/material": {
             formData = {
-                formData: materialData,
-                editFormData: editmaterialData,
+                formData: materialFormData,
+                editFormData: editmaterialFormData,
                 branchData: false,
                 timeFilterInfo: false,
                 deleteInfo: true,
@@ -778,18 +876,18 @@ export const DataProvider = ({ children }) => {
             };
             break;
         }
-        case "/income-socks": {
+        case "/income-material": {
             formData = {
-                formData: incomeSocksData,
-                editFormData: editIncomeSocksData,
+                formData: incomeMaterialFormData,
+                editFormData: editIncomeMaterialFormData,
                 branchData: false,
                 timeFilterInfo: true,
                 deleteInfo: true,
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: true,
-                editModalTitle: "Kelgan naskini o'zgartirish",
-                modalTitle: "Kelgan naskini qo'shish",
+                editModalTitle: "Kelgan materialni o'zgartirish",
+                modalTitle: "Kelgan materialni qo'shish",
             };
             break;
         }
@@ -810,12 +908,12 @@ export const DataProvider = ({ children }) => {
         }
         case "/debts": {
             formData = {
-                formData: outdebtFormData,
+                formData: editOutdebtFormData,
                 editFormData: editOutdebtFormData,
                 branchData: false,
                 timeFilterInfo: false,
                 deleteInfo: true,
-                createInfo: true,
+                createInfo: false,
                 editInfo: true,
                 timelyInfo: false,
                 editModalTitle: "Tashqi qarzni o'zgartirish",
@@ -853,6 +951,21 @@ export const DataProvider = ({ children }) => {
             };
             break;
         }
+        case "/outcome-material": {
+            formData = {
+                formData: outcomeMaterialData,
+                editFormData: editOutcomeMaterialData,
+                branchData: false,
+                timeFilterInfo: false,
+                deleteInfo: false,
+                createInfo: true,
+                editInfo: true,
+                timelyInfo: false,
+                editModalTitle: "Sotilgan naskini o'zgartirish",
+                modalTitle: "Sotilgan naskini qo'shish",
+            };
+            break;
+        }
         default: {
             formData = { ...formData };
         }
@@ -860,8 +973,6 @@ export const DataProvider = ({ children }) => {
 
     const value = {
         formData,
-        getMeasurementData,
-        getOutcomeSocksData,
         measurementData,
         getCategoryData,
         getMaterialData,
@@ -878,7 +989,8 @@ export const DataProvider = ({ children }) => {
         createMaterialData,
         socksData,
         clientData,
-        outcomeSocksIdData,
+        deadlineValue,
+        qarzValue,
     };
 
     return (

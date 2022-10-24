@@ -57,7 +57,7 @@ const actionSX = {
 // ==============================|| HEADER CONTENT - NOTIFICATION ||============================== //
 
 const Notification = () => {
-    const Arr = []
+    const Arr = [];
     const theme = useTheme();
     const matchesXs = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -72,10 +72,9 @@ const Notification = () => {
     const [loading, setLoading] = useState(true);
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
-        setBadge(null)
+        setBadge(null);
     };
 
-console.log(Arr);
     const handleClose = (event) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
@@ -100,7 +99,7 @@ console.log(Arr);
     const iconBackColor = "grey.100";
     useEffect(() => {
         getNotification();
-        Arr.push(...data)
+        Arr.push(...data);
         setBadge(Arr.length);
     }, []);
 
@@ -124,7 +123,7 @@ console.log(Arr);
             >
                 <Badge
                     sx={{ width: "21px", height: "27px", padding: "1px" }}
-                    badgeContent={!open ? badge : Arr.length = 0}
+                    badgeContent={!open ? badge : (Arr.length = 0)}
                     color="error"
                 >
                     {/* <NotificationBadge
@@ -193,8 +192,8 @@ console.log(Arr);
                                                         position: "relative",
                                                     },
                                             },
-                                            paddingLeft: '15px',
-                                            paddingRight: '15px',
+                                            paddingLeft: "15px",
+                                            paddingRight: "15px",
                                         }}
                                     >
                                         {!data.length && "No New Message"}
@@ -228,18 +227,28 @@ console.log(Arr);
                                                     }
                                                     secondary={
                                                         <Typography
-                                                          variant="caption"
-                                                          sx={{
-                                                            mt: 0.5,
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            color: 'text.disabled',
-                                                          }}
+                                                            variant="caption"
+                                                            sx={{
+                                                                mt: 0.5,
+                                                                display: "flex",
+                                                                alignItems:
+                                                                    "center",
+                                                                color: "text.disabled",
+                                                            }}
                                                         >
-                                                          <Iconify icon="eva:clock-outline" sx={{ mr: 0.5, width: 16, height: 16 }} />
-                                                          {item.measurementName} 
+                                                            <Iconify
+                                                                icon="eva:clock-outline"
+                                                                sx={{
+                                                                    mr: 0.5,
+                                                                    width: 16,
+                                                                    height: 16,
+                                                                }}
+                                                            />
+                                                            {
+                                                                item.measurementName
+                                                            }
                                                         </Typography>
-                                                      }
+                                                    }
                                                 />
                                             </ListItemButton>
                                         ))}
@@ -293,7 +302,6 @@ export default Notification;
 // import "./Notification.css";
 
 // const Notification = (props) => {
-//     console.log(props);
 //     moment.locale(navigator.languages[0].toLowerCase());
 
 //     // State variabls
@@ -454,7 +462,7 @@ export default Notification;
 //                             <ul className="notification-info-panel">
 //                                 {
 //                                     data.length > 0 ?
-                                    
+
 //                                     data.map((message, index) =>
 //                                         <li
 //                                             className={index < raedIndex ? 'notification-message unread' : 'notification-message'}

@@ -42,7 +42,10 @@ const RoutesPage = () => {
                             element={<OutcomeMaterial />}
                         />
                         <Route path="socks" element={<Socks />} />
-                        <Route path="income-socks" element={<IncomeSocks />} />
+                        <Route
+                            path="income-material"
+                            element={<IncomeSocks />}
+                        />
                         <Route
                             path="outcome-socks"
                             element={<OutcomeSocks />}
