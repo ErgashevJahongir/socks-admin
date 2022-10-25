@@ -252,28 +252,11 @@ export const DataProvider = ({ children }) => {
             ),
         },
         {
-            name: "measurementId",
-            label: "Naski o'lchovi",
-            inputSelect: (defaultId = null) => (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Naski o'lchovi"}
-                    selectData={measurementData}
-                    DValue={defaultId}
-                />
-            ),
-        },
-        {
             name: "price",
             label: "Naski narxi",
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
-            name: "amount",
-            label: "Naski miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
-        },
-        {
             name: "measurementId",
             label: "Naski o'lchovi",
             inputSelect: (defaultId = null) => (
@@ -284,6 +267,11 @@ export const DataProvider = ({ children }) => {
                     DValue={defaultId}
                 />
             ),
+        },
+        {
+            name: "amount",
+            label: "Naski miqdori",
+            input: <InputNumber style={{ width: "100%" }} />,
         },
         {
             name: "date",
@@ -991,6 +979,9 @@ export const DataProvider = ({ children }) => {
         clientData,
         deadlineValue,
         qarzValue,
+        setQarzValue,
+        setValueDebt,
+        setDeadlineValue,
     };
 
     return (

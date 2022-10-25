@@ -12,7 +12,8 @@ const OutDebt = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { clientData, otcomeSocksData, socksData } = useData();
+    const [socksDataWith, setSocksDataWith] = useState([]);
+    const { clientData, socksData } = useData();
     const navigate = useNavigate();
 
     const getDebts = (current, pageSize) => {
@@ -22,8 +23,26 @@ const OutDebt = () => {
                 `api/socks/factory/debt/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
+                console.log(data);
                 let value = data.data?.data?.branches?.map((df) => {
                     const deadline = moment(df.deadline).format("DD-MM-YYYY");
+                    const func = (record) => {
+                        instance
+                            .get(`api/socks/factory/outcome/get?id=${record}`)
+                            .then((data) => {
+                                setSocksDataWith((prev) => [
+                                    ...prev,
+                                    {
+                                        record: record,
+                                        socksId: data.data.data.socksId,
+                                    },
+                                ]);
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                            });
+                    };
+                    func(df?.outcomeSocksId);
                     return {
                         ...df,
                         deadline,
@@ -39,6 +58,8 @@ const OutDebt = () => {
             })
             .finally(() => setLoading(false));
     };
+
+    console.log(socksDataWith);
 
     const onCreate = (values) => {
         setLoading(true);
@@ -135,13 +156,13 @@ const OutDebt = () => {
             width: "25%",
             search: false,
             render: (record) => {
-                const data = otcomeSocksData?.filter(
-                    (item) => item.id === record
+                const socks = socksDataWith.filter(
+                    (data) => data.record === record
                 );
-                const name = socksData.filter(
-                    (qism) => qism.id === data[0]?.socksId
+                const socksName = socksData.filter(
+                    (item) => item.id === socks[0]?.socksId
                 );
-                return name[0]?.name || "bu tur o'chirilgan";
+                return socksName[0]?.name || "Topilmadi";
             },
             sorter: (a, b) => {
                 if (a.outcomeSocksId < b.outcomeSocksId) {

@@ -14,8 +14,16 @@ const OutcomeSocks = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
     const [totalsum, setTotalsum] = useState();
-    const { socksData, clientData, measurementData, qarzValue, deadlineValue } =
-        useData();
+    const {
+        socksData,
+        clientData,
+        measurementData,
+        qarzValue,
+        deadlineValue,
+        setQarzValue,
+        setValueDebt,
+        setDeadlineValue,
+    } = useData();
     const navigate = useNavigate();
 
     const getOutcomeSocks = (current, pageSize) => {
@@ -253,11 +261,12 @@ const OutcomeSocks = () => {
         instance
             .post("api/socks/factory/outcome", { ...data })
             .then(function (response) {
+                console.log(response);
                 const deadline = deadlineValue;
                 const value = {
                     clientId: values.clientId,
                     price: values.price * values.amount - qarzValue,
-                    outcomeSocksId: values,
+                    outcomeSocksId: response.data.data,
                     deadline,
                 };
                 values.debt.target.value === "true" &&
@@ -289,6 +298,9 @@ const OutcomeSocks = () => {
             })
             .finally(() => {
                 setLoading(false);
+                setQarzValue(null);
+                setValueDebt(null);
+                setDeadlineValue(null);
             });
     };
 
@@ -309,10 +321,11 @@ const OutcomeSocks = () => {
                 const value = {
                     clientId: values.clientId,
                     price: values.price * values.amount - qarzValue,
-                    outcomeSocksId: values,
+                    outcomeSocksId: res.data.data,
                     deadline,
                 };
                 values.debt.target.value === "true" &&
+                    initial.debt === false &&
                     instance
                         .post("api/socks/factory/debt", { ...value })
                         .then(function (response) {
@@ -358,6 +371,9 @@ const OutcomeSocks = () => {
             })
             .finally(() => {
                 setLoading(false);
+                setQarzValue(null);
+                setValueDebt(null);
+                setDeadlineValue(null);
             });
     };
 
