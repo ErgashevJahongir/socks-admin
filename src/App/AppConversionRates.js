@@ -25,11 +25,56 @@ export default function AppConversionRates({
     chartData,
     ...other
 }) {
-    const chartLabels = chartData?.map((i) => i.label);
 
-    const chartSeries = chartData?.map((i) => i.value);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const {
+        socksData
+    } = useData();
+    
+    const getNotification = () => {
+        setLoading(true);
+        instance
+            .get(`api/socks/factory/notification/statistics`)
+            .then((data) => {
+                setData(data.data.data);
+            })
+            .catch((err) => {
+                console.error(err);
+            })
+            .finally(() => setLoading(false));
+    };
+
+    useEffect(() => {
+        getNotification();
+    }, []);
+
+    const chartLabels = data.map((item) => {
+        const socks = socksData.filter(
+            (data) => data.id === item.socksId
+        );
+        return socks[0]?.name || "tur o'chirilgan"
+    })
+
+    const chartSeries = data?.map((i) => i.amount);
 
     const chartOptions = merge(BaseOptionChart(), {
+        dataLabels: {
+            enabled: true,
+            textAnchor: "start",
+            style: {
+                colors: ["#fff"],
+            },
+            formatter: function (val, opt) {
+                return (
+                    opt.w.globals.labels[opt.dataPointIndex] + ":  " + val
+                );
+            },
+            offsetX: 0,
+            dropShadow: {
+                enabled: true,
+            },
+        },
         tooltip: {
             marker: { show: false },
             y: {
@@ -44,6 +89,11 @@ export default function AppConversionRates({
         },
         xaxis: {
             categories: chartLabels,
+        },
+        yaxis: {
+            labels: {
+                show: false,
+            },
         },
     });
 

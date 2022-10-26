@@ -5,15 +5,110 @@ import { Grid, Card, Container } from "@mui/material";
 import AppCurrentVisits from "../App/AppCurrentVisits";
 import AppCurrencySummary from "../Components/AppCurrencySummary";
 import { useData } from "../Hook/UseData";
-import { Space } from "antd";
+import { message, Space } from "antd";
 import Loading from "../Components/Loading";
 import ReactApexChart from "react-apexcharts";
+import AppConversionRates from "../App/AppConversionRates";
+import { useNavigate } from "react-router-dom";
+import CustomTable from "../Module/Table/Table";
 
 const Dashboard = () => {
     const { socksData } = useData();
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currency, setCurrency] = useState([]);
+    const [incomeDryFruits, setIncomeDryFruits] = useState([]);
+    const { measurementData, getMaterialData } = useData();
+    const navigate = useNavigate();
+
+    const getIncomeDryFruits = () => {
+        setLoading(true);
+        instance
+            .get(
+                `api/socks/factory/notification/statistics`
+            )
+            .then((data) => {
+                setIncomeDryFruits(data.data?.data);
+            })
+            .catch((error) => {
+                console.error(error);
+                if (error.response?.status === 500) navigate("/server-error");
+                message.error("Kelgan materiallarni yuklashda muammo bo'ldi");
+            })
+            .finally(() => setLoading(false));
+    };
+
+    const columns = [
+        {
+            title: "Material nomi",
+            dataIndex: "name",
+            key: "name",
+            width: "25%",
+            search: true,
+            sorter: (a, b) => {
+                if (a.name < b.name) {
+                    return -1;
+                }
+                if (a.name > b.name) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
+            title: "Miqdori",
+            dataIndex: "amount",
+            key: "amount",
+            width: "25%",
+            sorter: (a, b) => {
+                if (a.amount < b.amount) {
+                    return -1;
+                }
+                if (a.amount > b.amount) {
+                    return 1;
+                }
+                return 0;
+            },
+            search: false,
+        },
+        {
+            title: "O'lchov birligi",
+            dataIndex: "measurementName",
+            key: "measurementName",
+            width: "25%",
+            sorter: (a, b) => {
+                if (a.measurementId < b.measurementId) {
+                    return -1;
+                }
+                if (a.measurementId > b.measurementId) {
+                    return 1;
+                }
+                return 0;
+            },
+            // render: (id) => {
+            //     const data = measurementData.filter((item) => item.id === id);
+            //     return data[0]?.name;
+            // },
+            search: false,
+        },
+        {
+            title: "Mahsulot summasi",
+            dataIndex: "totalSumma",
+            key: "totalSumma",
+            width: "25%",
+            sorter: (a, b) => {
+                if (a.amount < b.amount) {
+                    return -1;
+                }
+                if (a.amount > b.amount) {
+                    return 1;
+                }
+                return 0;
+            },
+            search: false,
+        },
+    ];
+
     const getNotification = () => {
         setLoading(true);
         instance
@@ -179,9 +274,9 @@ const Dashboard = () => {
                     md={6}
                     lg={3}
                 >
-                    {/* <AppConversionRates
+                    <AppConversionRates
                         title="Sotilgan mahsulotlar hisoboti"
-                    /> */}
+                    />
                 </Grid>
                 <Grid
                     className="grid1 grid2"
@@ -194,7 +289,14 @@ const Dashboard = () => {
                     <AppCurrentVisits title="Materiallar hisoboti" />
                 </Grid>
             </Grid>
-            <>
+            <CustomTable
+                getData={getIncomeDryFruits}
+                columns={columns}
+                tableData={incomeDryFruits}
+                loading={loading}
+                setLoading={setLoading}
+            />
+            {/* <>
                 <Space size={"large"} className="space-dashboard">
                     <Card
                         xs={24}
@@ -207,7 +309,7 @@ const Dashboard = () => {
                         <ApexChart />
                     </Card>
                 </Space>
-            </>
+            </> */}
         </Container>
     );
 };
