@@ -7,17 +7,15 @@ import {
     LogoutOutlined,
     CloudUploadOutlined,
     CloudDownloadOutlined,
-    CloudOutlined,
-    ProfileOutlined,
     DollarCircleOutlined,
     AppstoreAddOutlined,
     TeamOutlined,
     AppstoreOutlined,
-    BellOutlined,
     CloudServerOutlined,
     CloudSyncOutlined,
+    BellOutlined,
 } from "@ant-design/icons";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useData } from "../../Hook/UseData";
 import useToken from "../../Hook/UseToken";
 import DrapdownMenu from "../DrapdownMenu/DrapdownMenu";
@@ -62,6 +60,21 @@ function Navbar() {
                             style={{ width: "100px", display: "inline-block" }}
                         >
                             Profil
+                        </Link>
+                    ),
+                },
+                {
+                    key: "/notification",
+                    icon: <BellOutlined />,
+                    label: (
+                        <Link
+                            to="/notification"
+                            style={{
+                                width: "100px",
+                                display: "inline-block",
+                            }}
+                        >
+                            Eslatmalar
                         </Link>
                     ),
                 },
@@ -145,6 +158,17 @@ function Navbar() {
                             ),
                         },
                         {
+                            label: "Kelgan Materiallar",
+                            key: "/income-material",
+                            icon: (
+                                <Link to="/income-material">
+                                    <CloudDownloadOutlined
+                                        style={{ fontSize: "18px" }}
+                                    />
+                                </Link>
+                            ),
+                        },
+                        {
                             label: "Ishlatilgan Materiallar",
                             key: "/outcome-material",
                             icon: (
@@ -167,26 +191,39 @@ function Navbar() {
                             ),
                         },
                         {
-                            label: "Kelgan Mahsulotlar",
-                            key: "/income-socks",
+                            label: "Sotilgan Naskilar",
+                            key: "/outcome",
                             icon: (
-                                <Link to="/income-socks">
-                                    <CloudDownloadOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
-                                </Link>
-                            ),
-                        },
-                        {
-                            label: "Sotilgan Mahsulotlar",
-                            key: "/outcome-socks",
-                            icon: (
-                                <Link to="/outcome-socks">
+                                <Link to="/outcome">
                                     <CloudUploadOutlined
                                         style={{ fontSize: "18px" }}
                                     />
                                 </Link>
                             ),
+                            children: [
+                                {
+                                    label: "Sotilgan Naskilar",
+                                    key: "/outcome-socks",
+                                    icon: (
+                                        <Link to="/outcome-socks">
+                                            <DollarCircleOutlined
+                                                style={{ fontSize: "18px" }}
+                                            />
+                                        </Link>
+                                    ),
+                                },
+                                {
+                                    label: "Ko'proq sotish",
+                                    key: "/outcome-nakladnoy",
+                                    icon: (
+                                        <Link to="/outcome-nakladnoy">
+                                            <DollarCircleOutlined
+                                                style={{ fontSize: "18px" }}
+                                            />
+                                        </Link>
+                                    ),
+                                },
+                            ],
                         },
                         {
                             label: "Qarzlar",

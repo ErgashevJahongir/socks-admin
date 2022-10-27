@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useData } from "../Hook/UseData";
 
 const IncomeSocks = () => {
-    const [outcomeFuel, setOutcomeFuel] = useState([]);
+    const [incomeMaterials, setIncomeMaterials] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -15,7 +15,7 @@ const IncomeSocks = () => {
     const { measurementData, createMaterialData } = useData();
     const navigate = useNavigate();
 
-    const getOutcomeDryFruits = (current, pageSize) => {
+    const getIncomeMaterials = (current, pageSize) => {
         setLoading(true);
         instance
             .get(
@@ -28,13 +28,13 @@ const IncomeSocks = () => {
                         date: moment(item.date).format("DD-MM-YYYY"),
                     };
                 });
-                setOutcomeFuel(fuel);
+                setIncomeMaterials(fuel);
                 setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
+                message.error("Kelgan materiallarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
@@ -46,19 +46,19 @@ const IncomeSocks = () => {
                 `api/socks/factory/incomeMaterial/getAllPageable/${value}?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                const fuel = data.data?.data?.dryFruit?.map((item) => {
+                const fuel = data.data?.data?.dryFruit.map((item) => {
                     return {
                         ...item,
-                        date: moment(item?.date).format("DD-MM-YYYY"),
+                        date: moment(item.date).format("DD-MM-YYYY"),
                     };
                 });
-                setOutcomeFuel(fuel);
+                setIncomeMaterials(fuel);
                 setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
+                message.error("Kelgan materiallarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
@@ -74,26 +74,25 @@ const IncomeSocks = () => {
                 ).format("YYYY-MM-DD HH:MM:SS")}`
             )
             .then((data) => {
-                const fuel = data.data.data.dryFruit.map((item) => {
+                const fuel = data.data?.data?.dryFruit.map((item) => {
                     return {
                         ...item,
                         date: moment(item.date).format("DD-MM-YYYY"),
                     };
                 });
-                setOutcomeFuel(fuel);
-                setTotalItems(data.data.data.totalItems);
+                setIncomeMaterials(fuel);
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((err) => {
                 console.error(err);
-                if (err.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
+                message.error("Kelgan materiallarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
 
     const columns = [
         {
-            title: "Material",
+            title: "Material nomi",
             dataIndex: "materialId",
             key: "materialId",
             width: "20%",
@@ -195,13 +194,13 @@ const IncomeSocks = () => {
         instance
             .post("api/socks/factory/incomeMaterial/add", { ...value })
             .then(function (response) {
-                message.success("Kelgan naski muvaffaqiyatli qo'shildi");
-                getOutcomeDryFruits(current - 1, pageSize);
+                message.success("Kelgan material muvaffaqiyatli qo'shildi");
+                getIncomeMaterials(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan naskini qo'shishda muammo bo'ldi");
+                message.error("Kelgan materialni qo'shishda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -214,20 +213,19 @@ const IncomeSocks = () => {
         const data = {
             ...values,
             date: time,
-            deleted: false,
         };
         instance
             .put(`api/socks/factory/incomeMaterial/update${initial.id}`, {
                 ...data,
             })
             .then((res) => {
-                message.success("Kelgan naski muvaffaqiyatli taxrirlandi");
-                getOutcomeDryFruits(current - 1, pageSize);
+                message.success("Kelgan material muvaffaqiyatli taxrirlandi");
+                getIncomeMaterials(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kelgan naskini taxrirlashda muammo bo'ldi");
+                message.error("Kelgan materialni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -240,14 +238,18 @@ const IncomeSocks = () => {
             instance
                 .delete(`api/socks/factory/incomeMaterial/delete${item}`)
                 .then((data) => {
-                    getOutcomeDryFruits(current - 1, pageSize);
-                    message.success("Kelgan naski muvaffaqiyatli o'chirildi");
+                    getIncomeMaterials(current - 1, pageSize);
+                    message.success(
+                        "Kelgan material muvaffaqiyatli o'chirildi"
+                    );
                 })
                 .catch((error) => {
                     console.error(error);
                     if (error.response?.status === 500)
                         navigate("/server-error");
-                    message.error("Kelgan naskini o'chirishda muammo bo'ldi");
+                    message.error(
+                        "Kelgan materialni o'chirishda muammo bo'ldi"
+                    );
                 })
                 .finally(() => setLoading(false));
             return null;
@@ -264,23 +266,23 @@ const IncomeSocks = () => {
     return (
         <>
             <CustomTable
-                dateFilter={dateFilter}
                 onEdit={onEdit}
                 onCreate={onCreate}
                 onDelete={handleDelete}
-                getData={getOutcomeDryFruits}
+                getData={getIncomeMaterials}
                 getDataTimely={getOutcomeFruitTimely}
+                dateFilter={dateFilter}
                 columns={columns}
-                tableData={outcomeFuel}
+                tableData={incomeMaterials}
                 current={current}
                 pageSize={pageSize}
                 totalItems={totalItems}
                 loading={loading}
+                timelySelect={timelySelect}
                 setLoading={setLoading}
                 setCurrent={setCurrent}
                 setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
-                timelySelect={timelySelect}
             />
         </>
     );

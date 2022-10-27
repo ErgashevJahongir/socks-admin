@@ -12,6 +12,7 @@ import {
     AppstoreOutlined,
     CloudSyncOutlined,
     CloudServerOutlined,
+    BellOutlined,
 } from "@ant-design/icons";
 import useToken from "../../Hook/UseToken";
 // import { useData } from "../../Hook/UseData";
@@ -71,6 +72,28 @@ function DrapdownMenu({ onClose, isVisible }) {
                         ),
                     },
                     {
+                        label: "Kelgan Materiallar",
+                        key: "/income-material",
+                        icon: (
+                            <Link to="/income-material">
+                                <CloudDownloadOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
+                            </Link>
+                        ),
+                    },
+                    {
+                        label: "Ishlatilgan Materiallar",
+                        key: "/outcome-material",
+                        icon: (
+                            <Link to="/outcome-material">
+                                <CloudSyncOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
+                            </Link>
+                        ),
+                    },
+                    {
                         label: "Naskilar",
                         key: "/socks",
                         icon: (
@@ -82,26 +105,39 @@ function DrapdownMenu({ onClose, isVisible }) {
                         ),
                     },
                     {
-                        label: "Kelgan Mahsulotlar",
-                        key: "/income-socks",
+                        label: "Sotilgan Naskilar",
+                        key: "/outcome",
                         icon: (
-                            <Link to="/income-socks">
-                                <CloudDownloadOutlined
-                                    style={{ fontSize: "20px" }}
-                                />
-                            </Link>
-                        ),
-                    },
-                    {
-                        label: "Sotilgan Mahsulotlar",
-                        key: "/outcome-socks",
-                        icon: (
-                            <Link to="/outcome-socks">
+                            <Link to="/outcome">
                                 <CloudUploadOutlined
-                                    style={{ fontSize: "20px" }}
+                                    style={{ fontSize: "18px" }}
                                 />
                             </Link>
                         ),
+                        children: [
+                            {
+                                label: "Sotilgan Naskilar",
+                                key: "/outcome-socks",
+                                icon: (
+                                    <Link to="/outcome-socks">
+                                        <DollarCircleOutlined
+                                            style={{ fontSize: "18px" }}
+                                        />
+                                    </Link>
+                                ),
+                            },
+                            {
+                                label: "Ko'proq sotish",
+                                key: "/outcome-nakladnoy",
+                                icon: (
+                                    <Link to="/outcome-nakladnoy">
+                                        <DollarCircleOutlined
+                                            style={{ fontSize: "18px" }}
+                                        />
+                                    </Link>
+                                ),
+                            },
+                        ],
                     },
                     {
                         label: "Qarzlar",
@@ -162,6 +198,21 @@ function DrapdownMenu({ onClose, isVisible }) {
                         icon: (
                             <Link to="/profil">
                                 <UserOutlined style={{ fontSize: "18px" }} />
+                            </Link>
+                        ),
+                    },
+                    {
+                        key: "/notification",
+                        icon: <BellOutlined />,
+                        label: (
+                            <Link
+                                to="/notification"
+                                style={{
+                                    width: "100px",
+                                    display: "inline-block",
+                                }}
+                            >
+                                Eslatmalar
                             </Link>
                         ),
                     },

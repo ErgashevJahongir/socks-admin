@@ -58,7 +58,7 @@ const Profil = () => {
     const onUpdate = (values) => {
         delete values.passwordRetry;
         instance
-            .put(`api/socks/factory/user`, { ...values })
+            .put(`api/socks/factory/user`, { ...user, ...values })
             .then(function (response) {
                 getUserData();
                 message.success("Foydalanuvchi muvaffaqiyatli taxrirlandi");
@@ -109,9 +109,15 @@ const Profil = () => {
                             <CustomSelect
                                 backValue={"id"}
                                 placeholder={"Roleni tanlang"}
-                                selectData={roleData?.filter(
-                                    (item) => item?.roleName !== "ROLE_ADMIN"
-                                )}
+                                selectData={roleData
+                                    ?.filter(
+                                        (item) =>
+                                            item?.roleName !== "ROLE_ADMIN"
+                                    )
+                                    .map((data) => {
+                                        return { ...data, name: data.roleName };
+                                    })}
+                                DValue={user?.roleId}
                                 disabled={true}
                             />
                         </Form.Item>

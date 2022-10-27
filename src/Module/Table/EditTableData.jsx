@@ -3,13 +3,20 @@ import { Button, Form, Modal } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import moment from "moment";
 
-const EditData = ({ selectedRowKeys, onEdit, editData, editModalTitle }) => {
+const EditData = ({
+    selectedRowKeys,
+    onEdit,
+    editData,
+    editModalTitle,
+    setSelectedRowKeys,
+}) => {
     const [form] = Form.useForm();
     const [visible, setVisible] = useState(false);
 
     const onEdited = (values) => {
         onEdit(values, selectedRowKeys);
         setVisible(false);
+        setSelectedRowKeys([[], []]);
     };
 
     const onCancel = () => {

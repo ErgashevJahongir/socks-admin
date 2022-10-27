@@ -17,6 +17,8 @@ import Material from "./Material/Material";
 import Loading from "./Components/Loading";
 import BlockPage from "./Module/ErrorPages/BlockPage";
 import OutcomeMaterial from "./OutcomeMaterial/OutcomeMaterial";
+import NotificationList from "./Components/NotificationList/NotificationList";
+import OutcomeNakladnoy from "./OutcomeNakladnoy/OutcomeNakladnoy";
 
 const RoutesPage = () => {
     const { user, userLoading } = useData();
@@ -42,16 +44,27 @@ const RoutesPage = () => {
                             element={<OutcomeMaterial />}
                         />
                         <Route path="socks" element={<Socks />} />
-                        <Route path="income-socks" element={<IncomeSocks />} />
+                        <Route
+                            path="income-material"
+                            element={<IncomeSocks />}
+                        />
                         <Route
                             path="outcome-socks"
                             element={<OutcomeSocks />}
+                        />
+                        <Route
+                            path="outcome-nakladnoy"
+                            element={<OutcomeNakladnoy />}
                         />
                         <Route path="debts" element={<OutDebt />} />
                         <Route path="clients" element={<Clients />} />
                         <Route path="users" element={<Users />} />
                         <Route path="others" element={<Others />} />
                         <Route path="profil" element={<Profil />} />
+                        <Route
+                            path="notification"
+                            element={<NotificationList />}
+                        />
                     </Route>
                     <Route path="login" element={<Login />} />
                     <Route path="*" element={<Error404 />} />
