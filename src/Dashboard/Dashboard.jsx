@@ -43,7 +43,7 @@ const Dashboard = () => {
             title: "Material nomi",
             dataIndex: "name",
             key: "name",
-            width: "25%",
+            width: "20%",
             search: true,
             sorter: (a, b) => {
                 if (a.name < b.name) {
@@ -59,7 +59,7 @@ const Dashboard = () => {
             title: "Miqdori",
             dataIndex: "amount",
             key: "amount",
-            width: "25%",
+            width: "20%",
             sorter: (a, b) => {
                 if (a.amount < b.amount) {
                     return -1;
@@ -75,7 +75,7 @@ const Dashboard = () => {
             title: "O'lchov birligi",
             dataIndex: "measurementName",
             key: "measurementName",
-            width: "25%",
+            width: "20%",
             sorter: (a, b) => {
                 if (a.measurementId < b.measurementId) {
                     return -1;
@@ -92,10 +92,26 @@ const Dashboard = () => {
             search: false,
         },
         {
+            title: "Material categoriyasi",
+            dataIndex: "categoryName",
+            key: "categoryName",
+            width: "20%",
+            search: true,
+            sorter: (a, b) => {
+                if (a.categoryName < b.categoryName) {
+                    return -1;
+                }
+                if (a.categoryName > b.categoryName) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
             title: "Mahsulot summasi",
             dataIndex: "totalSumma",
             key: "totalSumma",
-            width: "25%",
+            width: "20%",
             sorter: (a, b) => {
                 if (a.amount < b.amount) {
                     return -1;
