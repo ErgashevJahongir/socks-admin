@@ -192,14 +192,38 @@ function Navbar() {
                         },
                         {
                             label: "Sotilgan Naskilar",
-                            key: "/outcome-socks",
+                            key: "/outcome",
                             icon: (
-                                <Link to="/outcome-socks">
+                                <Link to="/outcome">
                                     <CloudUploadOutlined
                                         style={{ fontSize: "18px" }}
                                     />
                                 </Link>
                             ),
+                            children: [
+                                {
+                                    label: "Sotilgan Naskilar",
+                                    key: "/outcome-socks",
+                                    icon: (
+                                        <Link to="/outcome-socks">
+                                            <DollarCircleOutlined
+                                                style={{ fontSize: "18px" }}
+                                            />
+                                        </Link>
+                                    ),
+                                },
+                                {
+                                    label: "Ko'proq sotish",
+                                    key: "/outcome-nakladnoy",
+                                    icon: (
+                                        <Link to="/outcome-nakladnoy">
+                                            <DollarCircleOutlined
+                                                style={{ fontSize: "18px" }}
+                                            />
+                                        </Link>
+                                    ),
+                                },
+                            ],
                         },
                         {
                             label: "Qarzlar",

@@ -23,7 +23,6 @@ const OutDebt = () => {
                 `api/socks/factory/debt/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                console.log(data);
                 let value = data.data?.data?.branches?.map((df) => {
                     const deadline = moment(df.deadline).format("DD-MM-YYYY");
                     const func = (record) => {
@@ -59,8 +58,6 @@ const OutDebt = () => {
             .finally(() => setLoading(false));
     };
 
-    console.log(socksDataWith);
-
     const onCreate = (values) => {
         setLoading(true);
         const deadline = values.deadline.toISOString();
@@ -90,6 +87,7 @@ const OutDebt = () => {
         const value = {
             ...values,
             deadline,
+            outcomeSocksId: initial.outcomeSocksId,
             id: initial.id,
         };
         instance

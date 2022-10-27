@@ -5,7 +5,7 @@ import { Button, Card, Col, message, notification, Row, Statistic } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../Hook/UseData";
-import { ArrowDownOutlined, FrownOutlined } from "@ant-design/icons";
+import { ArrowUpOutlined, FrownOutlined } from "@ant-design/icons";
 
 const OutcomeSocks = () => {
     const [outcomeSocks, setOutcomeSocks] = useState([]);
@@ -261,7 +261,6 @@ const OutcomeSocks = () => {
         instance
             .post("api/socks/factory/outcome", { ...data })
             .then(function (response) {
-                console.log(response);
                 const deadline = deadlineValue;
                 const value = {
                     clientId: values.clientId,
@@ -398,9 +397,9 @@ const OutcomeSocks = () => {
                                     title="Jami sarflangan summa"
                                     value={totalsum?.totalSumma}
                                     valueStyle={{
-                                        color: "#cf1322",
+                                        color: "#3f8600",
                                     }}
-                                    prefix={<ArrowDownOutlined />}
+                                    prefix={<ArrowUpOutlined />}
                                     suffix="So'm"
                                 />
                             </Card>

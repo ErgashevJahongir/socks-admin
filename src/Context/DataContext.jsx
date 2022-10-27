@@ -325,6 +325,78 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
+    const optomOutcomeSocksData = [
+        {
+            name: "socksId",
+            label: "Naski nomi",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naskini tanlang"}
+                    selectData={socksData}
+                />
+            ),
+        },
+        {
+            name: "measurementId",
+            label: "Naski o'lchovi",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naski o'lchovi"}
+                    selectData={measurementData}
+                />
+            ),
+        },
+        {
+            name: "amount",
+            label: "Naski miqdori",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
+            name: "price",
+            label: "Naski narxi",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+    ];
+
+    const editOptomOutcomeSocksData = [
+        {
+            name: "socksId",
+            label: "Naski nomi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naskini tanlang"}
+                    selectData={socksData}
+                    DValue={defaultId}
+                />
+            ),
+        },
+        {
+            name: "price",
+            label: "Naski narxi",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
+            name: "measurementId",
+            label: "Naski o'lchovi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naski o'lchovi"}
+                    selectData={measurementData}
+                    DValue={defaultId}
+                />
+            ),
+        },
+        {
+            name: "amount",
+            label: "Naski miqdori",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+    ];
+
     const othersData = [
         {
             name: "name",
@@ -946,6 +1018,21 @@ export const DataProvider = ({ children }) => {
                 branchData: false,
                 timeFilterInfo: false,
                 deleteInfo: false,
+                createInfo: true,
+                editInfo: true,
+                timelyInfo: false,
+                editModalTitle: "Sotilgan naskini o'zgartirish",
+                modalTitle: "Sotilgan naskini qo'shish",
+            };
+            break;
+        }
+        case "/outcome-nakladnoy": {
+            formData = {
+                formData: optomOutcomeSocksData,
+                editFormData: editOptomOutcomeSocksData,
+                branchData: false,
+                timeFilterInfo: false,
+                deleteInfo: true,
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: false,

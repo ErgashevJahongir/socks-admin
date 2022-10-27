@@ -108,16 +108,7 @@ li {
     width: 1440px;
     margin: 0 auto;
 }
-
-.ant-drawer-body {
-    padding: 0 !important;
-}
-
-.ant-drawer-content-wrapper {
-    width: 250px !important;
-}
-
-.ant-layout-header {
+x .ant-layout-header {
     padding: 0 25px !important;
 }
 
