@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import instance from "../Api/Axios";
-import { Grid, Card, Container } from "@mui/material";
-// import AppConversionRates from "../App/AppConversionRates";
+import { Grid, Container } from "@mui/material";
 import AppCurrentVisits from "../App/AppCurrentVisits";
 import AppCurrencySummary from "../Components/AppCurrencySummary";
 import { useData } from "../Hook/UseData";
-import { message, Space } from "antd";
+import { message } from "antd";
 import Loading from "../Components/Loading";
 import ReactApexChart from "react-apexcharts";
 import AppConversionRates from "../App/AppConversionRates";
@@ -18,15 +17,12 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [currency, setCurrency] = useState([]);
     const [incomeDryFruits, setIncomeDryFruits] = useState([]);
-    const { measurementData, getMaterialData } = useData();
     const navigate = useNavigate();
 
     const getIncomeDryFruits = () => {
         setLoading(true);
         instance
-            .get(
-                `api/socks/factory/notification/statistics`
-            )
+            .get(`api/socks/factory/notification/statistics`)
             .then((data) => {
                 setIncomeDryFruits(data.data?.data);
             })
@@ -85,10 +81,6 @@ const Dashboard = () => {
                 }
                 return 0;
             },
-            // render: (id) => {
-            //     const data = measurementData.filter((item) => item.id === id);
-            //     return data[0]?.name;
-            // },
             search: false,
         },
         {
@@ -126,7 +118,6 @@ const Dashboard = () => {
     ];
 
     const getNotification = () => {
-        setLoading(true);
         instance
             .get(`api/socks/factory/notification/diagram`)
             .then((data) => {
@@ -134,12 +125,10 @@ const Dashboard = () => {
             })
             .catch((err) => {
                 console.error(err);
-            })
-            .finally(() => setLoading(false));
+            });
     };
 
     const getCurrency = () => {
-        setLoading(true);
         instance
             .get(`api/socks/factory/api/socks/factory/currency`)
             .then((data) => {
@@ -147,18 +136,13 @@ const Dashboard = () => {
             })
             .catch((err) => {
                 console.error(err);
-            })
-            .finally(() => setLoading(false));
+            });
     };
 
     useEffect(() => {
         getNotification();
         getCurrency();
     }, []);
-
-    if (loading) {
-        return <Loading />;
-    }
 
     const ApexChart = () => {
         const [options, setOptions] = useState({
@@ -290,9 +274,7 @@ const Dashboard = () => {
                     md={6}
                     lg={3}
                 >
-                    <AppConversionRates
-                        title="Sotilgan mahsulotlar hisoboti"
-                    />
+                    <AppConversionRates title="Sotilgan mahsulotlar hisoboti" />
                 </Grid>
                 <Grid
                     className="grid1 grid2"
