@@ -15,11 +15,11 @@ import {
     BellOutlined,
 } from "@ant-design/icons";
 import useToken from "../../Hook/UseToken";
-// import { useData } from "../../Hook/UseData";
+import { useData } from "../../Hook/UseData";
 
 function DrapdownMenu({ onClose, isVisible }) {
     const { token } = useToken();
-    // const { user } = useData();
+    const { user } = useData();
     const location = useLocation();
 
     const handleLogOut = (e) => {
@@ -41,8 +41,7 @@ function DrapdownMenu({ onClose, isVisible }) {
         >
             <Menu
                 style={{
-                    height: "98%",
-                    paddingTop: "80px",
+                    height: "120%",
                 }}
                 defaultSelectedKeys={[location.pathname]}
                 defaultOpenKeys={["others"]}
@@ -168,17 +167,21 @@ function DrapdownMenu({ onClose, isVisible }) {
                                     </Link>
                                 ),
                             },
-                            {
-                                label: "Foydalanuvchilar",
-                                key: "/users",
-                                icon: (
-                                    <Link to="/users">
-                                        <UserOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
-                                ),
-                            },
+                            user.roleId === 1
+                                ? {
+                                      label: "Foydalanuvchilar",
+                                      key: "/users",
+                                      icon: (
+                                          <Link to="/users">
+                                              <UserOutlined
+                                                  style={{
+                                                      fontSize: "18px",
+                                                  }}
+                                              />
+                                          </Link>
+                                      ),
+                                  }
+                                : null,
                             {
                                 label: "Boshqalar",
                                 key: "/others",
@@ -201,21 +204,23 @@ function DrapdownMenu({ onClose, isVisible }) {
                             </Link>
                         ),
                     },
-                    {
-                        key: "/notification",
-                        icon: <BellOutlined />,
-                        label: (
-                            <Link
-                                to="/notification"
-                                style={{
-                                    width: "100px",
-                                    display: "inline-block",
-                                }}
-                            >
-                                Eslatmalar
-                            </Link>
-                        ),
-                    },
+                    user.roleId === 1
+                        ? {
+                              key: "/notification",
+                              icon: <BellOutlined />,
+                              label: (
+                                  <Link
+                                      to="/notification"
+                                      style={{
+                                          width: "100px",
+                                          display: "inline-block",
+                                      }}
+                                  >
+                                      Eslatmalar
+                                  </Link>
+                              ),
+                          }
+                        : null,
                     {
                         label: "Chiqish",
                         key: "/logout",

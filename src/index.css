@@ -108,7 +108,7 @@ li {
     width: 1440px;
     margin: 0 auto;
 }
-x .ant-layout-header {
+.ant-layout-header {
     padding: 0 25px !important;
 }
 
@@ -118,6 +118,10 @@ x .ant-layout-header {
 
 .ant-form-item {
     margin-bottom: 7px;
+}
+
+.ant-drawer-body {
+    padding: 0;
 }
 
 .burger-menu {
