@@ -25,6 +25,7 @@ import MainCard from "../MainCard";
 import Iconify from "../Iconify";
 import { Button, Tooltip } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useData } from "../../Hook/UseData";
 
 // sx styles
 const avatarSX = {
@@ -50,6 +51,7 @@ const Notification = () => {
     const anchorRef = useRef(null);
     const [open, setOpen] = useState(false);
     const [data, setData] = useState([]);
+    const { user } = useData();
     const navigate = useNavigate();
 
     const handleToggle = () => {
@@ -77,7 +79,9 @@ const Notification = () => {
     const iconBackColorOpen = "grey.300";
     const iconBackColor = "grey.100";
     useEffect(() => {
-        getNotification();
+        if (user.roleId === 1) {
+            getNotification();
+        }
     }, []);
 
     return (

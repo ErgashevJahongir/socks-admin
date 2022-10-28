@@ -63,21 +63,23 @@ function Navbar() {
                         </Link>
                     ),
                 },
-                {
-                    key: "/notification",
-                    icon: <BellOutlined />,
-                    label: (
-                        <Link
-                            to="/notification"
-                            style={{
-                                width: "100px",
-                                display: "inline-block",
-                            }}
-                        >
-                            Eslatmalar
-                        </Link>
-                    ),
-                },
+                user.roleId === 1
+                    ? {
+                          key: "/notification",
+                          icon: <BellOutlined />,
+                          label: (
+                              <Link
+                                  to="/notification"
+                                  style={{
+                                      width: "100px",
+                                      display: "inline-block",
+                                  }}
+                              >
+                                  Eslatmalar
+                              </Link>
+                          ),
+                      }
+                    : null,
                 {
                     key: "3",
                     danger: true,
@@ -125,9 +127,11 @@ function Navbar() {
                         />
                     </Link>
                 </div>
-                <div className="notification">
-                    <Notification />
-                </div>
+                {user.roleId === 1 ? (
+                    <div className="notification">
+                        <Notification />
+                    </div>
+                ) : null}
                 <Menu
                     style={{ width: "75%" }}
                     className="inline-navber"
@@ -256,17 +260,21 @@ function Navbar() {
                                         </Link>
                                     ),
                                 },
-                                {
-                                    label: "Foydalanuvchilar",
-                                    key: "/users",
-                                    icon: (
-                                        <Link to="/users">
-                                            <UserOutlined
-                                                style={{ fontSize: "18px" }}
-                                            />
-                                        </Link>
-                                    ),
-                                },
+                                user.roleId === 1
+                                    ? {
+                                          label: "Foydalanuvchilar",
+                                          key: "/users",
+                                          icon: (
+                                              <Link to="/users">
+                                                  <UserOutlined
+                                                      style={{
+                                                          fontSize: "18px",
+                                                      }}
+                                                  />
+                                              </Link>
+                                          ),
+                                      }
+                                    : null,
                                 {
                                     label: "Boshqalar",
                                     key: "/others",
@@ -290,7 +298,7 @@ function Navbar() {
                         alignItems: "center",
                     }}
                 >
-                    <Notification />
+                    {user.roleId === 1 ? <Notification /> : null}
                     <Dropdown overlay={menu} placement="bottomRight" arrow>
                         <Avatar
                             size="middle"

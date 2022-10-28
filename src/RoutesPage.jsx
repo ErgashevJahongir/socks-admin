@@ -56,15 +56,21 @@ const RoutesPage = () => {
                             path="outcome-nakladnoy"
                             element={<OutcomeNakladnoy />}
                         />
-                        <Route path="debts" element={<OutDebt />} />
                         <Route path="clients" element={<Clients />} />
-                        <Route path="users" element={<Users />} />
                         <Route path="others" element={<Others />} />
                         <Route path="profil" element={<Profil />} />
-                        <Route
-                            path="notification"
-                            element={<NotificationList />}
-                        />
+                        {user.roleId === 1 || user.roleId === 2 ? (
+                            <>
+                                <Route path="users" element={<Users />} />
+                                <Route path="debts" element={<OutDebt />} />
+                            </>
+                        ) : null}
+                        {user.roleId === 1 ? (
+                            <Route
+                                path="notification"
+                                element={<NotificationList />}
+                            />
+                        ) : null}
                     </Route>
                     <Route path="login" element={<Login />} />
                     <Route path="*" element={<Error404 />} />

@@ -11,7 +11,7 @@ const Socks = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { categoryData, getSocksData } = useData();
+    const { categoryData, getSocksData, measurementData } = useData();
     const navigate = useNavigate();
 
     const getIncomeDryFruits = (current, pageSize) => {
@@ -38,7 +38,7 @@ const Socks = () => {
             title: "Naski nomi",
             dataIndex: "name",
             key: "name",
-            width: "25%",
+            width: "20%",
             search: true,
             sorter: (a, b) => {
                 if (a.name < b.name) {
@@ -54,7 +54,7 @@ const Socks = () => {
             title: "Naski sorti",
             dataIndex: "categoryId",
             key: "categoryId",
-            width: "25%",
+            width: "20%",
             sorter: (a, b) => {
                 if (a.categoryId < b.categoryId) {
                     return -1;
@@ -74,7 +74,7 @@ const Socks = () => {
             title: "Narxi",
             dataIndex: "price",
             key: "price",
-            width: "25%",
+            width: "15%",
             search: false,
             sorter: (a, b) => {
                 if (a.price < b.price) {
@@ -87,10 +87,48 @@ const Socks = () => {
             },
         },
         {
+            title: "Optom narxi",
+            dataIndex: "retailPrice",
+            key: "retailPrice",
+            width: "15%",
+            search: false,
+            sorter: (a, b) => {
+                if (a.retailPrice < b.retailPrice) {
+                    return -1;
+                }
+                if (a.retailPrice > b.retailPrice) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
+            title: "O'lchovi",
+            dataIndex: "measurementId",
+            key: "measurementId",
+            width: "15%",
+            sorter: (a, b) => {
+                if (a.measurementId < b.measurementId) {
+                    return -1;
+                }
+                if (a.measurementId > b.measurementId) {
+                    return 1;
+                }
+                return 0;
+            },
+            search: false,
+            render: (record) => {
+                const data = measurementData.filter(
+                    (item) => item.id === record
+                );
+                return data[0]?.name;
+            },
+        },
+        {
             title: "Miqdori",
             dataIndex: "amount",
             key: "amount",
-            width: "25%",
+            width: "15%",
             sorter: (a, b) => {
                 if (a.amount < b.amount) {
                     return -1;

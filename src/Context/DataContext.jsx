@@ -428,6 +428,22 @@ export const DataProvider = ({ children }) => {
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
+            name: "retailPrice",
+            label: "Optom narxi",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
+            name: "measurementId",
+            label: "Naski o'lchovi",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naski o'lchovi"}
+                    selectData={measurementData}
+                />
+            ),
+        },
+        {
             name: "amount",
             label: "Naski miqdori",
             input: <InputNumber style={{ width: "100%" }} />,
@@ -452,13 +468,30 @@ export const DataProvider = ({ children }) => {
             ),
         },
         {
-            name: "amount",
-            label: "Naski miqdori",
+            name: "price",
+            label: "Narxi",
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
-            name: "price",
-            label: "Narxi",
+            name: "retailPrice",
+            label: "Optom narxi",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
+            name: "measurementId",
+            label: "Naski o'lchovi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naski o'lchovi"}
+                    selectData={measurementData}
+                    DValue={defaultId}
+                />
+            ),
+        },
+        {
+            name: "amount",
+            label: "Naski miqdori",
             input: <InputNumber style={{ width: "100%" }} />,
         },
     ];
