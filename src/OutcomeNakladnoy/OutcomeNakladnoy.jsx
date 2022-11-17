@@ -324,7 +324,7 @@ const OutcomeNakladnoy = () => {
                                 <CustomSelect
                                     backValue={"id"}
                                     placeholder={
-                                        "Quruq meva sotilayotgan klient"
+                                        "Naski sotilayotgan klient"
                                     }
                                     selectData={clientData?.map((item) => ({
                                         ...item,
@@ -334,7 +334,7 @@ const OutcomeNakladnoy = () => {
                                 />
                             </div>
                             <div>
-                                <p>Qarzmagi</p>
+                                <p>Qarzgami</p>
                                 <Radio.Group onChange={onChangeDebt}>
                                     <Radio value="false"> Yo'q </Radio>
                                     <Radio value="true">
