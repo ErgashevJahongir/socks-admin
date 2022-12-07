@@ -342,6 +342,10 @@ thead:hover {
     height: 400px !important;
 }
 
+.grid::before {
+    content: icon;
+}
+
 .css-1qx0kfu-MuiPaper-root-MuiCard-root {
     display: flex;
     flex-wrap: wrap;
