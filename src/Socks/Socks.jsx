@@ -6,31 +6,38 @@ import { useData } from "../Hook/UseData";
 import { useNavigate } from "react-router-dom";
 
 const Socks = () => {
-    const [incomeDryFruits, setIncomeDryFruits] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
+    const [pageData, setPageData] = useState({
+        socks: [],
+        loading: true,
+        current: 1,
+        pageSize: 10,
+        totalItems: 0,
+    });
     const { categoryData, getSocksData, measurementData } = useData();
     const navigate = useNavigate();
 
-    const getIncomeDryFruits = (current, pageSize) => {
-        setLoading(true);
+    const getSocks = (current, pageSize) => {
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(
                 `api/socks/factory/socks/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
                 getSocksData();
-                setIncomeDryFruits(data.data?.data?.branches);
-                setTotalItems(data.data?.data?.totalItems);
+                setPageData((prev) => ({
+                    ...prev,
+                    socks: data.data?.data?.branches,
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan naskilarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const columns = [
@@ -127,12 +134,12 @@ const Socks = () => {
     ];
 
     const onCreate = (values) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .post("api/socks/factory/socks/add", { ...values, amaunt: 0 })
             .then(function (response) {
                 message.success("Kelgan naski muvaffaqiyatli qo'shildi");
-                getIncomeDryFruits(current - 1, pageSize);
+                getSocks(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -140,19 +147,19 @@ const Socks = () => {
                 message.error("Kelgan naskini qo'shishda muammo bo'ldi");
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const onEdit = (values, initial) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .put(`api/socks/factory/socks/update?socksId=${initial.id}`, {
                 ...values,
             })
             .then((res) => {
                 message.success("Kelgan naski muvaffaqiyatli taxrirlandi");
-                getIncomeDryFruits(current - 1, pageSize);
+                getSocks(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -160,17 +167,17 @@ const Socks = () => {
                 message.error("Kelgan naskini taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const handleDelete = (arr) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         arr.map((item) => {
             instance
                 .delete(`api/socks/factory/socks/delete?socksId=${item}`)
                 .then((data) => {
-                    getIncomeDryFruits(current - 1, pageSize);
+                    getSocks(pageData.current - 1, pageData.pageSize);
                     message.success("Kelgan naski muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
@@ -179,7 +186,9 @@ const Socks = () => {
                         navigate("/server-error");
                     message.error("Kelgan naskini o'chirishda muammo bo'ldi");
                 })
-                .finally(() => setLoading(false));
+                .finally(() =>
+                    setPageData((prev) => ({ ...prev, loading: false }))
+                );
             return null;
         });
     };
@@ -190,17 +199,23 @@ const Socks = () => {
                 onEdit={onEdit}
                 onCreate={onCreate}
                 onDelete={handleDelete}
-                getData={getIncomeDryFruits}
+                getData={getSocks}
                 columns={columns}
-                tableData={incomeDryFruits}
-                current={current}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                loading={loading}
-                setLoading={setLoading}
-                setCurrent={setCurrent}
-                setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
+                tableData={pageData.socks}
+                totalItems={pageData.totalItems}
+                current={pageData.current}
+                pageSize={pageData.pageSize}
+                setCurrent={(newProp) =>
+                    setPageData((prev) => ({ ...prev, current: newProp }))
+                }
+                setPageSize={(newProp) =>
+                    setPageData((prev) => ({ ...prev, pageSize: newProp }))
+                }
+                loading={pageData.loading}
+                setLoading={(newProp) =>
+                    setPageData((prev) => ({ ...prev, loading: newProp }))
+                }
             />
         </>
     );

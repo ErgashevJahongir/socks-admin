@@ -7,17 +7,19 @@ import { useData } from "../Hook/UseData";
 import { useNavigate } from "react-router-dom";
 
 const OutDebt = () => {
-    const [debts, setDebts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
+    const [pageData, setPageData] = useState({
+        debts: [],
+        loading: true,
+        current: 1,
+        pageSize: 10,
+        totalItems: 0,
+    });
     const [socksDataWith, setSocksDataWith] = useState([]);
     const { clientData, socksData } = useData();
     const navigate = useNavigate();
 
     const getDebts = (current, pageSize) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(
                 `api/socks/factory/debt/pageable?page=${current}&size=${pageSize}`
@@ -47,19 +49,24 @@ const OutDebt = () => {
                         deadline,
                     };
                 });
-                setDebts(value);
-                setTotalItems(data.data?.data?.totalItems);
+                setPageData((prev) => ({
+                    ...prev,
+                    debts: value,
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error("Tashqi qarzni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const onCreate = (values) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         const deadline = values.deadline.toISOString();
         const value = {
             ...values,
@@ -69,7 +76,7 @@ const OutDebt = () => {
             .post("api/socks/factory/debt", { ...value })
             .then(function (response) {
                 message.success("Tashqi qarz muvaffaqiyatli qo'shildi");
-                getDebts(current - 1, pageSize);
+                getDebts(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -77,12 +84,12 @@ const OutDebt = () => {
                 message.error("Tashqi qarzni qo'shishda muammo bo'ldi");
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const onEdit = (values, initial) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         const deadline = moment(values.deadline, "DD-MM-YYYY").toISOString();
         const value = {
             ...values,
@@ -94,7 +101,7 @@ const OutDebt = () => {
             .put("api/socks/factory/debt", { ...value })
             .then(function (response) {
                 message.success("Tashqi qarz muvaffaqiyatli taxrirlandi");
-                getDebts(current - 1, pageSize);
+                getDebts(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -102,18 +109,18 @@ const OutDebt = () => {
                 message.error("Tashqi qarzni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const handleDelete = (arr) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         arr.map((item) => {
             instance
                 .delete(`api/socks/factory/debt/${item}`)
                 .then((data) => {
                     message.success("Tashqi qarz muvaffaqiyatli o'chirildi");
-                    getDebts(current - 1, pageSize);
+                    getDebts(pageData.current - 1, pageData.pageSize);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -121,7 +128,9 @@ const OutDebt = () => {
                         navigate("/server-error");
                     message.error("Tashqi qarzni o'chirishda muammo bo'ldi");
                 })
-                .finally(() => setLoading(false));
+                .finally(() =>
+                    setPageData((prev) => ({ ...prev, loading: false }))
+                );
             return null;
         });
     };
@@ -214,15 +223,21 @@ const OutDebt = () => {
                 getData={getDebts}
                 onDelete={handleDelete}
                 columns={columns}
-                tableData={debts}
-                current={current}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                loading={loading}
-                setLoading={setLoading}
-                setCurrent={setCurrent}
-                setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
+                tableData={pageData.materials}
+                totalItems={pageData.totalItems}
+                current={pageData.current}
+                pageSize={pageData.pageSize}
+                setCurrent={(newProp) =>
+                    setPageData((prev) => ({ ...prev, current: newProp }))
+                }
+                setPageSize={(newProp) =>
+                    setPageData((prev) => ({ ...prev, pageSize: newProp }))
+                }
+                loading={pageData.loading}
+                setLoading={(newProp) =>
+                    setPageData((prev) => ({ ...prev, loading: newProp }))
+                }
             />
         </>
     );

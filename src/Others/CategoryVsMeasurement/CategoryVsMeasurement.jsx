@@ -7,31 +7,43 @@ import { useData } from "../../Hook/UseData";
 import "./CategoryVsMeasurment.css";
 
 const CategoryVsMeasurement = () => {
-    const [category, setCategory] = useState([]);
-    const [measurement, setMeasurment] = useState([]);
-    const [loadingCategory, setLoadingCategory] = useState(true);
-    const [loading, setLoading] = useState(true);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [currentCategory, setCurrentCategory] = useState(1);
-    const [pageSizeCategory, setPageSizeCategory] = useState(10);
+    const [pageData, setPageData] = useState({
+        measurement: [],
+        loading: true,
+        current: 1,
+        pageSize: 10,
+    });
+    const [pageDataCategory, setPageDataCategory] = useState({
+        category: [],
+        loadingCategory: true,
+        currentCategory: 1,
+        pageSizeCategory: 10,
+    });
     const { getCategoryData } = useData();
     const navigate = useNavigate();
 
     const getCategory = () => {
-        setLoadingCategory(true);
+        setPageDataCategory((prev) => ({ ...prev, loadingCategory: true }));
         instance
             .get(`api/socks/factory/category/getAll`)
             .then((data) => {
                 getCategoryData();
-                setCategory(data.data?.data);
+                setPageDataCategory((prev) => ({
+                    ...prev,
+                    category: data.data?.data,
+                }));
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kategoriyalarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoadingCategory(false));
+            .finally(() =>
+                setPageDataCategory((prev) => ({
+                    ...prev,
+                    loadingCategory: false,
+                }))
+            );
     };
 
     const columnsCategory = [
@@ -54,19 +66,24 @@ const CategoryVsMeasurement = () => {
     ];
 
     const getMeasurment = () => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get("api/socks/factory/measurement/getAll")
             .then((data) => {
                 getMeasurment();
-                setMeasurment(data.data?.data);
+                setPageData((prev) => ({
+                    ...prev,
+                    measurement: data.data?.data,
+                }));
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error("O'lchov birligilarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const columns = [
@@ -94,31 +111,61 @@ const CategoryVsMeasurement = () => {
                 <div>
                     <h3>Kategoriya</h3>
                     <CustomTable
-                        current={currentCategory}
-                        pageSize={pageSizeCategory}
                         pageSizeOptions={[10, 20]}
-                        setCurrent={setCurrentCategory}
-                        setPageSize={setPageSizeCategory}
                         getData={getCategory}
                         columns={columnsCategory}
-                        tableData={category}
-                        loading={loadingCategory}
-                        setLoading={setLoadingCategory}
+                        tableData={pageDataCategory.category}
+                        current={pageDataCategory.currentCategory}
+                        pageSize={pageDataCategory.pageSizeCategory}
+                        setCurrent={(newProp) =>
+                            setPageDataCategory((prev) => ({
+                                ...prev,
+                                currentCategory: newProp,
+                            }))
+                        }
+                        setPageSize={(newProp) =>
+                            setPageDataCategory((prev) => ({
+                                ...prev,
+                                pageSizeCategory: newProp,
+                            }))
+                        }
+                        loading={pageDataCategory.loadingCategory}
+                        setLoading={(newProp) =>
+                            setPageDataCategory((prev) => ({
+                                ...prev,
+                                loadingCategory: newProp,
+                            }))
+                        }
                     />
                 </div>
                 <div>
                     <h3>O'lchov birligi</h3>
                     <CustomTable
-                        current={current}
-                        pageSize={pageSize}
                         pageSizeOptions={[10, 20]}
-                        setCurrent={setCurrent}
-                        setPageSize={setPageSize}
                         getData={getMeasurment}
                         columns={columns}
-                        tableData={measurement}
-                        loading={loading}
-                        setLoading={setLoading}
+                        tableData={pageData.measurement}
+                        current={pageData.current}
+                        pageSize={pageData.pageSize}
+                        setCurrent={(newProp) =>
+                            setPageData((prev) => ({
+                                ...prev,
+                                current: newProp,
+                            }))
+                        }
+                        setPageSize={(newProp) =>
+                            setPageData((prev) => ({
+                                ...prev,
+                                pageSize: newProp,
+                            }))
+                        }
+                        loading={pageData.loading}
+                        setLoading={(newProp) =>
+                            setPageData((prev) => ({
+                                ...prev,
+                                loading: newProp,
+                            }))
+                        }
                     />
                 </div>
             </div>

@@ -7,16 +7,18 @@ import { useNavigate } from "react-router-dom";
 import { useData } from "../Hook/UseData";
 
 const IncomeSocks = () => {
-    const [incomeMaterials, setIncomeMaterials] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
+    const [pageData, setPageData] = useState({
+        incomeMaterials: [],
+        loading: true,
+        current: 1,
+        pageSize: 10,
+        totalItems: 0,
+    });
     const { measurementData, createMaterialData } = useData();
     const navigate = useNavigate();
 
     const getIncomeMaterials = (current, pageSize) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(
                 `api/socks/factory/incomeMaterial/getAllPageable?page=${current}&size=${pageSize}`
@@ -28,19 +30,24 @@ const IncomeSocks = () => {
                         date: moment(item.date).format("DD-MM-YYYY"),
                     };
                 });
-                setIncomeMaterials(fuel);
-                setTotalItems(data.data?.data?.totalItems);
+                setPageData((prev) => ({
+                    ...prev,
+                    incomeMaterials: fuel,
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan materiallarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const getOutcomeFruitTimely = (value, current, pageSize) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(
                 `api/socks/factory/incomeMaterial/getAllPageable/${value}?page=${current}&size=${pageSize}`
@@ -52,19 +59,24 @@ const IncomeSocks = () => {
                         date: moment(item.date).format("DD-MM-YYYY"),
                     };
                 });
-                setIncomeMaterials(fuel);
-                setTotalItems(data.data?.data?.totalItems);
+                setPageData((prev) => ({
+                    ...prev,
+                    incomeMaterials: fuel,
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error("Kelgan materiallarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const dateFilter = (date, current, pageSize) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(
                 `api/socks/factory/incomeMaterial/getAllPageable/dates?page=${current}&size=${pageSize}&startDate=${moment(
@@ -80,14 +92,19 @@ const IncomeSocks = () => {
                         date: moment(item.date).format("DD-MM-YYYY"),
                     };
                 });
-                setIncomeMaterials(fuel);
-                setTotalItems(data.data?.data?.totalItems);
+                setPageData((prev) => ({
+                    ...prev,
+                    incomeMaterials: fuel,
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((err) => {
                 console.error(err);
                 message.error("Kelgan materiallarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const columns = [
@@ -186,7 +203,7 @@ const IncomeSocks = () => {
     ];
 
     const onCreate = (values) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         const value = {
             ...values,
             date: values.date.toISOString(),
@@ -195,7 +212,7 @@ const IncomeSocks = () => {
             .post("api/socks/factory/incomeMaterial/add", { ...value })
             .then(function (response) {
                 message.success("Kelgan material muvaffaqiyatli qo'shildi");
-                getIncomeMaterials(current - 1, pageSize);
+                getIncomeMaterials(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -203,12 +220,12 @@ const IncomeSocks = () => {
                 message.error("Kelgan materialni qo'shishda muammo bo'ldi");
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const onEdit = (values, initial) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         const time = moment(values.date, "DD-MM-YYYY").toISOString();
         const data = {
             ...values,
@@ -220,7 +237,7 @@ const IncomeSocks = () => {
             })
             .then((res) => {
                 message.success("Kelgan material muvaffaqiyatli taxrirlandi");
-                getIncomeMaterials(current - 1, pageSize);
+                getIncomeMaterials(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -228,17 +245,17 @@ const IncomeSocks = () => {
                 message.error("Kelgan materialni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const handleDelete = (arr) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         arr.map((item) => {
             instance
                 .delete(`api/socks/factory/incomeMaterial/delete${item}`)
                 .then((data) => {
-                    getIncomeMaterials(current - 1, pageSize);
+                    getIncomeMaterials(pageData.current - 1, pageData.pageSize);
                     message.success(
                         "Kelgan material muvaffaqiyatli o'chirildi"
                     );
@@ -251,7 +268,9 @@ const IncomeSocks = () => {
                         "Kelgan materialni o'chirishda muammo bo'ldi"
                     );
                 })
-                .finally(() => setLoading(false));
+                .finally(() =>
+                    setPageData((prev) => ({ ...prev, loading: false }))
+                );
             return null;
         });
     };
@@ -273,16 +292,22 @@ const IncomeSocks = () => {
                 getDataTimely={getOutcomeFruitTimely}
                 dateFilter={dateFilter}
                 columns={columns}
-                tableData={incomeMaterials}
-                current={current}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                loading={loading}
                 timelySelect={timelySelect}
-                setLoading={setLoading}
-                setCurrent={setCurrent}
-                setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
+                tableData={pageData.incomeMaterials}
+                totalItems={pageData.totalItems}
+                current={pageData.current}
+                pageSize={pageData.pageSize}
+                setCurrent={(newProp) =>
+                    setPageData((prev) => ({ ...prev, current: newProp }))
+                }
+                setPageSize={(newProp) =>
+                    setPageData((prev) => ({ ...prev, pageSize: newProp }))
+                }
+                loading={pageData.loading}
+                setLoading={(newProp) =>
+                    setPageData((prev) => ({ ...prev, loading: newProp }))
+                }
             />
         </>
     );
