@@ -7,19 +7,25 @@ import { FrownOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 const Users = () => {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageData, setPageData] = useState({
+        users: [],
+        loading: true,
+        current: 1,
+        pageSize: 10,
+        totalItems: 0,
+    });
     const { roleData, getUsersData } = useData();
     const navigate = useNavigate();
 
-    const getUsers = (values) => {
-        setLoading(true);
+    const getUsers = () => {
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(`api/socks/factory/user`)
             .then((data) => {
-                setUsers(data.data.data);
+                setPageData((prev) => ({
+                    ...prev,
+                    users: data.data?.data,
+                }));
                 getUsersData();
             })
             .catch((error) => {
@@ -27,7 +33,9 @@ const Users = () => {
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error("Foydalanuvchilarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const columns = [
@@ -107,14 +115,14 @@ const Users = () => {
     ];
 
     const onCreate = (values) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .post("api/socks/factory/user", {
                 ...values,
             })
             .then(function (response) {
                 message.success("Foydalanuvchi muvaffaqiyatli qo'shildi");
-                getUsers(current - 1, pageSize);
+                getUsers(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -122,12 +130,12 @@ const Users = () => {
                 message.error(error.response?.data?.message);
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const onEdit = (values, initial) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .put(`api/socks/factory/user/editForUsers/${initial.id}`, {
                 ...values,
@@ -136,7 +144,7 @@ const Users = () => {
             })
             .then((res) => {
                 message.success("Foydalanuvchi muvaffaqiyatli taxrirlandi");
-                getUsers(current - 1, pageSize);
+                getUsers(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -150,7 +158,7 @@ const Users = () => {
                     });
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
         ((values.block === "true" && initial.block === false) ||
             (values.block === "false" && initial.block === true)) &&
@@ -164,7 +172,7 @@ const Users = () => {
                         : message.success(
                               "Foydalanuvchi muvaffaqiyatli blockdan ochildi"
                           );
-                    getUsers(current - 1, pageSize);
+                    getUsers(pageData.current - 1, pageData.pageSize);
                 })
                 .catch(function (error) {
                     console.error("Error in edit: ", error);
@@ -179,17 +187,17 @@ const Users = () => {
                         });
                 })
                 .finally(() => {
-                    setLoading(false);
+                    setPageData((prev) => ({ ...prev, loading: false }));
                 });
     };
 
     const handleDelete = (arr) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         arr.map((item) => {
             instance
                 .delete(`api/socks/factory/user/${item}`)
                 .then((data) => {
-                    getUsers(current - 1, pageSize);
+                    getUsers(pageData.current - 1, pageData.pageSize);
                     message.success("Foydalanuvchi muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
@@ -198,7 +206,9 @@ const Users = () => {
                         navigate("/server-error");
                     message.error("Foydalanuvchini o'chirishda muammo bo'ldi");
                 })
-                .finally(() => setLoading(false));
+                .finally(() =>
+                    setPageData((prev) => ({ ...prev, loading: false }))
+                );
             return null;
         });
     };
@@ -211,14 +221,21 @@ const Users = () => {
                 onDelete={handleDelete}
                 getData={getUsers}
                 columns={columns}
-                tableData={users}
-                current={current}
-                pageSize={pageSize}
-                loading={loading}
-                setLoading={setLoading}
-                setCurrent={setCurrent}
-                setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
+                tableData={pageData.users}
+                totalItems={pageData.totalItems}
+                current={pageData.current}
+                pageSize={pageData.pageSize}
+                setCurrent={(newProp) =>
+                    setPageData((prev) => ({ ...prev, current: newProp }))
+                }
+                setPageSize={(newProp) =>
+                    setPageData((prev) => ({ ...prev, pageSize: newProp }))
+                }
+                loading={pageData.loading}
+                setLoading={(newProp) =>
+                    setPageData((prev) => ({ ...prev, loading: newProp }))
+                }
             />
         </>
     );

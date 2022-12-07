@@ -7,32 +7,37 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 
 const OutcomeMaterial = () => {
-    const [incomeDryFruits, setIncomeDryFruits] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
+    const [pageData, setPageData] = useState({
+        outcomeMaterials: [],
+        loading: true,
+        current: 1,
+        pageSize: 10,
+        totalItems: 0,
+    });
     const { measurementData, getMaterialData, socksData, createMaterialData } =
         useData();
     const navigate = useNavigate();
 
-    const getIncomeDryFruits = (current, pageSize) => {
-        setLoading(true);
+    const getOutcomeMaterials = (current, pageSize) => {
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(
                 `api/socks/factory/outcomeMaterial/pageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
                 getMaterialData();
-                setIncomeDryFruits(
-                    data.data?.data?.outcomeMaterials.map((item) => {
-                        return {
-                            ...item,
-                            date: moment(item?.date).format("DD-MM-YYYY"),
-                        };
-                    })
-                );
-                setTotalItems(data.data?.data?.totalItems);
+                setPageData((prev) => ({
+                    ...prev,
+                    outcomeMaterials: data.data?.data?.outcomeMaterials.map(
+                        (item) => {
+                            return {
+                                ...item,
+                                date: moment(item?.date).format("DD-MM-YYYY"),
+                            };
+                        }
+                    ),
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((error) => {
                 console.error(error);
@@ -41,7 +46,9 @@ const OutcomeMaterial = () => {
                     "Ishlatilgan materiallarni yuklashda muammo bo'ldi"
                 );
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const columns = [
@@ -120,7 +127,7 @@ const OutcomeMaterial = () => {
     ];
 
     const onCreate = (values) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         const value = {
             socksId: values.socksId,
             measurementId: values.measurementId,
@@ -135,7 +142,7 @@ const OutcomeMaterial = () => {
                 message.success(
                     "Ishlatilgan material muvaffaqiyatli qo'shildi"
                 );
-                getIncomeDryFruits(current - 1, pageSize);
+                getOutcomeMaterials(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -145,12 +152,12 @@ const OutcomeMaterial = () => {
                 );
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const onEdit = (values, initial) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         const date = moment(values?.date, "DD-MM-YYYY").toISOString();
         instance
             .put("/api/socks/factory/outcomeMaterial", {
@@ -162,7 +169,7 @@ const OutcomeMaterial = () => {
                 message.success(
                     "Ishlatilgan material muvaffaqiyatli taxrirlandi"
                 );
-                getIncomeDryFruits(current - 1, pageSize);
+                getOutcomeMaterials(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -172,7 +179,7 @@ const OutcomeMaterial = () => {
                 );
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
@@ -181,17 +188,23 @@ const OutcomeMaterial = () => {
             <CustomTable
                 onEdit={onEdit}
                 onCreate={onCreate}
-                getData={getIncomeDryFruits}
+                getData={getOutcomeMaterials}
                 columns={columns}
-                tableData={incomeDryFruits}
-                current={current}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                loading={loading}
-                setLoading={setLoading}
-                setCurrent={setCurrent}
-                setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
+                tableData={pageData.outcomeMaterials}
+                totalItems={pageData.totalItems}
+                current={pageData.current}
+                pageSize={pageData.pageSize}
+                setCurrent={(newProp) =>
+                    setPageData((prev) => ({ ...prev, current: newProp }))
+                }
+                setPageSize={(newProp) =>
+                    setPageData((prev) => ({ ...prev, pageSize: newProp }))
+                }
+                loading={pageData.loading}
+                setLoading={(newProp) =>
+                    setPageData((prev) => ({ ...prev, loading: newProp }))
+                }
                 expandable={{
                     expandedRowRender: (record) => {
                         return (

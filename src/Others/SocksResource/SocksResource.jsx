@@ -6,29 +6,32 @@ import { useData } from "../../Hook/UseData";
 import { useNavigate } from "react-router-dom";
 
 const SocksResource = () => {
-    const [socksResource, setSocksResource] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
+    const [pageData, setPageData] = useState({
+        socksResource: [],
+        loading: true,
+        current: 1,
+        pageSize: 10,
+        totalItems: 0,
+    });
     const { measurementData, socksData, createMaterialData } = useData();
     const navigate = useNavigate();
 
     const getSocksResource = (current, pageSize) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get("api/socks/factory/resources")
             .then((data) => {
                 console.log(data);
-                setSocksResource(
-                    data.data?.data?.map((item) => {
+                setPageData((prev) => ({
+                    ...prev,
+                    socksResource: data.data?.data?.map((item) => {
                         return {
                             ...item,
                             id: item.socksId,
                         };
-                    })
-                );
-                setTotalItems(data.data?.data?.totalItems);
+                    }),
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((error) => {
                 console.error(error);
@@ -37,7 +40,9 @@ const SocksResource = () => {
                     "Naski tayyorlashda ishlatiladigan materiallarni yuklashda muammo bo'ldi"
                 );
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const columns = [
@@ -64,7 +69,7 @@ const SocksResource = () => {
     ];
 
     const onCreate = (values) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         console.log(values);
         instance
             .post(
@@ -74,7 +79,7 @@ const SocksResource = () => {
                 message.success(
                     "Naski tayyorlashda ishlatiladigan material muvaffaqiyatli qo'shildi"
                 );
-                getSocksResource(current - 1, pageSize);
+                getSocksResource(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -84,12 +89,12 @@ const SocksResource = () => {
                 );
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const onEdit = (values, initial) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .put(
                 `/api/socks/factory/resources?socksId=${values.socksId}&oldMaterialId=${values.oldMaterialId}`,
@@ -103,7 +108,7 @@ const SocksResource = () => {
                 message.success(
                     "Naski tayyorlashda ishlatiladigan material muvaffaqiyatli taxrirlandi"
                 );
-                getSocksResource(current - 1, pageSize);
+                getSocksResource(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -113,19 +118,19 @@ const SocksResource = () => {
                 );
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const handleDelete = (arr) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         arr.map((item) => {
             instance
                 .delete(
                     `api/socks/factory/api/socks/factory/material/delete${item}`
                 )
                 .then((data) => {
-                    getSocksResource(current - 1, pageSize);
+                    getSocksResource(pageData.current - 1, pageData.pageSize);
                     message.success(
                         "Naski tayyorlashda ishlatiladigan material muvaffaqiyatli o'chirildi"
                     );
@@ -138,7 +143,9 @@ const SocksResource = () => {
                         "Naski tayyorlashda ishlatiladigan materialni o'chirishda muammo bo'ldi"
                     );
                 })
-                .finally(() => setLoading(false));
+                .finally(() =>
+                    setPageData((prev) => ({ ...prev, loading: false }))
+                );
             return null;
         });
     };
@@ -151,15 +158,21 @@ const SocksResource = () => {
                 onDelete={handleDelete}
                 getData={getSocksResource}
                 columns={columns}
-                tableData={socksResource}
-                current={current}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                loading={loading}
-                setLoading={setLoading}
-                setCurrent={setCurrent}
-                setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
+                tableData={pageData.socksResource}
+                totalItems={pageData.totalItems}
+                current={pageData.current}
+                pageSize={pageData.pageSize}
+                setCurrent={(newProp) =>
+                    setPageData((prev) => ({ ...prev, current: newProp }))
+                }
+                setPageSize={(newProp) =>
+                    setPageData((prev) => ({ ...prev, pageSize: newProp }))
+                }
+                loading={pageData.loading}
+                setLoading={(newProp) =>
+                    setPageData((prev) => ({ ...prev, loading: newProp }))
+                }
                 expandable={{
                     expandedRowRender: (record) => {
                         return (

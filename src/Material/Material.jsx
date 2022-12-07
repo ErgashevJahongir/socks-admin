@@ -6,31 +6,38 @@ import { useData } from "../Hook/UseData";
 import { useNavigate } from "react-router-dom";
 
 const Material = () => {
-    const [materials, setMaterials] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
+    const [pageData, setPageData] = useState({
+        materials: [],
+        loading: true,
+        current: 1,
+        pageSize: 10,
+        totalItems: 0,
+    });
     const { measurementData, getMaterialData } = useData();
     const navigate = useNavigate();
 
     const getMaterials = (current, pageSize) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(
                 `api/socks/factory/api/socks/factory/material/getAllPageable?page=${current}&size=${pageSize}`
             )
             .then((data) => {
                 getMaterialData();
-                setMaterials(data.data?.data?.materials);
-                setTotalItems(data.data?.data?.totalItems);
+                setPageData((prev) => ({
+                    ...prev,
+                    materials: data.data?.data?.materials,
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error("Materiallarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const columns = [
@@ -89,7 +96,7 @@ const Material = () => {
     ];
 
     const onCreate = (values) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .post("api/socks/factory/api/socks/factory/material/add", {
                 ...values,
@@ -97,7 +104,7 @@ const Material = () => {
             })
             .then(function (response) {
                 message.success("Material muvaffaqiyatli qo'shildi");
-                getMaterials(current - 1, pageSize);
+                getMaterials(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error(error);
@@ -105,12 +112,12 @@ const Material = () => {
                 message.error("Materialni qo'shishda muammo bo'ldi");
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const onEdit = (values, initial) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .put(
                 `api/socks/factory/api/socks/factory/material/update${initial.id}`,
@@ -118,7 +125,7 @@ const Material = () => {
             )
             .then((res) => {
                 message.success("Material muvaffaqiyatli taxrirlandi");
-                getMaterials(current - 1, pageSize);
+                getMaterials(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -126,19 +133,19 @@ const Material = () => {
                 message.error("Materialni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
             });
     };
 
     const handleDelete = (arr) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         arr.map((item) => {
             instance
                 .delete(
                     `api/socks/factory/api/socks/factory/material/delete${item}`
                 )
                 .then((data) => {
-                    getMaterials(current - 1, pageSize);
+                    getMaterials(pageData.current - 1, pageData.pageSize);
                     message.success("Material muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
@@ -147,7 +154,9 @@ const Material = () => {
                         navigate("/server-error");
                     message.error("Materialni o'chirishda muammo bo'ldi");
                 })
-                .finally(() => setLoading(false));
+                .finally(() =>
+                    setPageData((prev) => ({ ...prev, loading: false }))
+                );
             return null;
         });
     };
@@ -160,15 +169,21 @@ const Material = () => {
                 onDelete={handleDelete}
                 getData={getMaterials}
                 columns={columns}
-                tableData={materials}
-                current={current}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                loading={loading}
-                setLoading={setLoading}
-                setCurrent={setCurrent}
-                setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
+                tableData={pageData.materials}
+                totalItems={pageData.totalItems}
+                current={pageData.current}
+                pageSize={pageData.pageSize}
+                setCurrent={(newProp) =>
+                    setPageData((prev) => ({ ...prev, current: newProp }))
+                }
+                setPageSize={(newProp) =>
+                    setPageData((prev) => ({ ...prev, pageSize: newProp }))
+                }
+                loading={pageData.loading}
+                setLoading={(newProp) =>
+                    setPageData((prev) => ({ ...prev, loading: newProp }))
+                }
             />
         </>
     );

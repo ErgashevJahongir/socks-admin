@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { AxiosInterceptor } from "./Api/Axios";
 import { DataProvider } from "./Context/DataContext";
 import useToken from "./Hook/UseToken";
@@ -28,6 +28,7 @@ function App() {
             {token ? null : (
                 <Routes>
                     <Route path="/login" element={<Login />} />
+                    <Route path="*" element={<Navigate to={"/login"} />} />
                 </Routes>
             )}
         </>

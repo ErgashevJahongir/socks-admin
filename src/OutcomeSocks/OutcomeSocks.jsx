@@ -8,11 +8,13 @@ import { useData } from "../Hook/UseData";
 import { ArrowUpOutlined, FrownOutlined } from "@ant-design/icons";
 
 const OutcomeSocks = () => {
-    const [outcomeSocks, setOutcomeSocks] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
+    const [pageData, setPageData] = useState({
+        outcomeSocks: [],
+        loading: true,
+        current: 1,
+        pageSize: 10,
+        totalItems: 0,
+    });
     const [totalsum, setTotalsum] = useState();
     const {
         socksData,
@@ -27,7 +29,7 @@ const OutcomeSocks = () => {
     const navigate = useNavigate();
 
     const getOutcomeSocks = (current, pageSize) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(
                 `api/socks/factory/outcome/pageable?page=${current}&size=${pageSize}`
@@ -45,19 +47,24 @@ const OutcomeSocks = () => {
                 setTotalsum({
                     totalSumma: data.data?.data?.outcomeSocks?.totalSumma,
                 });
-                setOutcomeSocks(fuel);
-                setTotalItems(data.data?.data?.totalItems);
+                setPageData((prev) => ({
+                    ...prev,
+                    outcomeSocks: fuel,
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error("Sotilgan naskilarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const getOutcomeFruitTimely = (value, current, pageSize) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(
                 `api/socks/factory/outcome/${value}?page=${current}&size=${pageSize}`
@@ -75,19 +82,24 @@ const OutcomeSocks = () => {
                 setTotalsum({
                     totalSumma: data.data?.data?.outcomeSocks?.totalSumma,
                 });
-                setOutcomeSocks(fuel);
-                setTotalItems(data.data?.data?.totalItems);
+                setPageData((prev) => ({
+                    ...prev,
+                    outcomeSocks: fuel,
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error("Sotilgan naskilarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const dateFilter = (date, current, pageSize) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         instance
             .get(
                 `api/socks/factory/outcome/between?page=${current}&size=${pageSize}&startDate=${moment(
@@ -109,14 +121,19 @@ const OutcomeSocks = () => {
                 setTotalsum({
                     totalSumma: data.data?.data?.outcomeSocks?.totalSumma,
                 });
-                setOutcomeSocks(fuel);
-                setTotalItems(data.data?.data?.totalItems);
+                setPageData((prev) => ({
+                    ...prev,
+                    outcomeSocks: fuel,
+                    totalItems: data.data?.data?.totalItems,
+                }));
             })
             .catch((err) => {
                 console.error(err);
                 message.error("Sotilgan naskilarni yuklashda muammo bo'ldi");
             })
-            .finally(() => setLoading(false));
+            .finally(() =>
+                setPageData((prev) => ({ ...prev, loading: false }))
+            );
     };
 
     const columns = [
@@ -252,11 +269,11 @@ const OutcomeSocks = () => {
     ];
 
     const onCreate = (values) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         const data = {
             ...values,
             date: values.date.toISOString(),
-            debt: values.debt.target.value === "true" ? true : false,
+            debt: values.debt === "true" ? true : false,
         };
         instance
             .post("api/socks/factory/outcome", { ...data })
@@ -268,7 +285,7 @@ const OutcomeSocks = () => {
                     outcomeSocksId: response.data.data,
                     deadline,
                 };
-                values.debt.target.value === "true" &&
+                values.debt === "true" &&
                     instance
                         .post("api/socks/factory/debt", { ...value })
                         .then(function (response) {
@@ -285,9 +302,12 @@ const OutcomeSocks = () => {
                             );
                         })
                         .finally(() => {
-                            setLoading(false);
+                            setPageData((prev) => ({
+                                ...prev,
+                                loading: false,
+                            }));
                         });
-                getOutcomeSocks(current - 1, pageSize);
+                getOutcomeSocks(pageData.current - 1, pageData.pageSize);
                 message.success("Sotilgan naski muvaffaqiyatli qo'shildi");
             })
             .catch(function (error) {
@@ -296,7 +316,7 @@ const OutcomeSocks = () => {
                 message.error("Sotilgan naskini qo'shishda muammo bo'ldi");
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
                 setQarzValue(null);
                 setValueDebt(null);
                 setDeadlineValue(null);
@@ -304,12 +324,12 @@ const OutcomeSocks = () => {
     };
 
     const onEdit = (values, initial) => {
-        setLoading(true);
+        setPageData((prev) => ({ ...prev, loading: true }));
         const time = moment(values.date, "DD-MM-YYYY").toISOString();
         const data = {
             ...values,
             date: time,
-            debt: values.debt?.target?.value === "false" ? false : true,
+            debt: values.debt === "false" ? false : true,
         };
         instance
             .put(`api/socks/factory/outcome?id=${initial.id}`, {
@@ -323,7 +343,7 @@ const OutcomeSocks = () => {
                     outcomeSocksId: res.data.data,
                     deadline,
                 };
-                values.debt.target.value === "true" &&
+                values.debt === "true" &&
                     initial.debt === false &&
                     instance
                         .post("api/socks/factory/debt", { ...value })
@@ -341,10 +361,13 @@ const OutcomeSocks = () => {
                             );
                         })
                         .finally(() => {
-                            setLoading(false);
+                            setPageData((prev) => ({
+                                ...prev,
+                                loading: false,
+                            }));
                         });
                 message.success("Sotilgan naski muvaffaqiyatli taxrirlandi");
-                getOutcomeSocks(current - 1, pageSize);
+                getOutcomeSocks(pageData.current - 1, pageData.pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
@@ -369,7 +392,7 @@ const OutcomeSocks = () => {
                 message.error("Sotilgan naskini taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
-                setLoading(false);
+                setPageData((prev) => ({ ...prev, loading: false }));
                 setQarzValue(null);
                 setValueDebt(null);
                 setDeadlineValue(null);
@@ -413,17 +436,23 @@ const OutcomeSocks = () => {
                 getData={getOutcomeSocks}
                 getDataTimely={getOutcomeFruitTimely}
                 columns={columns}
-                tableData={outcomeSocks}
-                current={current}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                loading={loading}
-                setLoading={setLoading}
-                setCurrent={setCurrent}
-                setPageSize={setPageSize}
                 pageSizeOptions={[10, 20]}
                 timelySelect={timelySelect}
                 dateFilter={dateFilter}
+                tableData={pageData.outcomeSocks}
+                totalItems={pageData.totalItems}
+                current={pageData.current}
+                pageSize={pageData.pageSize}
+                setCurrent={(newProp) =>
+                    setPageData((prev) => ({ ...prev, current: newProp }))
+                }
+                setPageSize={(newProp) =>
+                    setPageData((prev) => ({ ...prev, pageSize: newProp }))
+                }
+                loading={pageData.loading}
+                setLoading={(newProp) =>
+                    setPageData((prev) => ({ ...prev, loading: newProp }))
+                }
             />
         </>
     );

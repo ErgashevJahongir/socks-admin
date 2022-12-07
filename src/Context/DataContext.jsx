@@ -58,12 +58,22 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Material miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder={"Material miqdorini kiriting"}
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "price",
             label: "Material narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder={"Material narxini kiriting"}
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "date",
@@ -72,6 +82,7 @@ export const DataProvider = ({ children }) => {
                 <DatePicker
                     style={{ width: "100%" }}
                     value={moment().format()}
+                    placeholder="Kelish vaqtini kiriting"
                 />
             ),
         },
@@ -105,17 +116,27 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Material miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder={"Material miqdorini kiriting"}
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "price",
             label: "Material narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder={"Material narxini kiriting"}
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "date",
             label: "Kelish vaqti",
-            input: <Input />,
+            input: <Input placeholder="Kelish vaqtini kiriting" />,
         },
     ];
 
@@ -486,17 +507,17 @@ export const DataProvider = ({ children }) => {
         {
             name: "fio",
             label: "Klient FIO",
-            input: <Input />,
+            input: <Input placeholder="Klient FIOsini kiriting" />,
         },
         {
             name: "phoneNumber",
             label: "Klient nomeri",
-            input: <Input />,
+            input: <Input placeholder="Klient nomerini kiriting" />,
         },
         {
             name: "address",
             label: "Klient addressi",
-            input: <Input />,
+            input: <Input placeholder="Klient addressini kiriting" />,
         },
     ];
 
@@ -626,7 +647,7 @@ export const DataProvider = ({ children }) => {
         {
             name: "name",
             label: "Material nomi",
-            input: <Input />,
+            input: <Input placeholder="Material nomini kiriting" />,
         },
         {
             name: "measurementId",
@@ -645,7 +666,7 @@ export const DataProvider = ({ children }) => {
         {
             name: "name",
             label: "Material nomi",
-            input: <Input />,
+            input: <Input placeholder="Material nomini kiriting" />,
         },
         {
             name: "measurementId",
@@ -662,7 +683,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Material miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Material miqdorini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
     ];
 
@@ -720,7 +746,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Naski miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski miqdorini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "date",
@@ -729,6 +760,7 @@ export const DataProvider = ({ children }) => {
                 <DatePicker
                     style={{ width: "100%" }}
                     value={moment().format()}
+                    placeholder="Ishlab chiqarilgan vaqtini kiriting"
                 />
             ),
         },
@@ -762,12 +794,17 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Naski miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski miqdorini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "date",
             label: "Ishlab chiqarilgan vaqt",
-            input: <Input />,
+            input: <Input placeholder="Ishlab chiqarilgan vaqtini kiriting" />,
         },
     ];
 
@@ -797,7 +834,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Material miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Material miqdorini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "socksId",
@@ -852,7 +894,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Material miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Material miqdorini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "socksId",
@@ -1000,8 +1047,8 @@ export const DataProvider = ({ children }) => {
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: false,
-                editModalTitle: "Quruq mevanini o'zgartirish",
-                modalTitle: "Quruq meva qo'shish",
+                editModalTitle: "Naski ma'lumotlarini o'zgartirish",
+                modalTitle: "Yangi naski qo'shish",
             };
             break;
         }
@@ -1015,8 +1062,8 @@ export const DataProvider = ({ children }) => {
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: false,
-                editModalTitle: "Quruq mevanini o'zgartirish",
-                modalTitle: "Quruq meva qo'shish",
+                editModalTitle: "Material ma'lumotlarini o'zgartirish",
+                modalTitle: "Yangi material qo'shish",
             };
             break;
         }
@@ -1030,7 +1077,7 @@ export const DataProvider = ({ children }) => {
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: true,
-                editModalTitle: "Kelgan materialni o'zgartirish",
+                editModalTitle: "Kelgan material ma'lumotlarini o'zgartirish",
                 modalTitle: "Kelgan materialni qo'shish",
             };
             break;
@@ -1045,7 +1092,7 @@ export const DataProvider = ({ children }) => {
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: false,
-                editModalTitle: "Klientni o'zgartirish",
+                editModalTitle: "Klient ma'lumotlarini o'zgartirish",
                 modalTitle: "Yangi klient qo'shish",
             };
             break;
@@ -1060,8 +1107,8 @@ export const DataProvider = ({ children }) => {
                 createInfo: false,
                 editInfo: true,
                 timelyInfo: false,
-                editModalTitle: "Tashqi qarzni o'zgartirish",
-                modalTitle: "Tashqi qarz qo'shish",
+                editModalTitle: "Qarz ma'lumotlarini o'zgartirish",
+                modalTitle: "Qarz qo'shish",
             };
             break;
         }
@@ -1075,7 +1122,7 @@ export const DataProvider = ({ children }) => {
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: false,
-                editModalTitle: "Foydalanuvchini o'zgartirish",
+                editModalTitle: "Foydalanuvchi ma'lumotlarini o'zgartirish",
                 modalTitle: "Yangi foydalanuvchi qo'shish",
             };
             break;
@@ -1090,7 +1137,7 @@ export const DataProvider = ({ children }) => {
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: true,
-                editModalTitle: "Sotilgan naskini o'zgartirish",
+                editModalTitle: "Sotilgan naski ma'lumotlarini o'zgartirish",
                 modalTitle: "Sotilgan naskini qo'shish",
             };
             break;
@@ -1131,7 +1178,7 @@ export const DataProvider = ({ children }) => {
                 editFormData: editSocksMaterialData,
                 branchData: false,
                 timeFilterInfo: false,
-                deleteInfo: true,
+                deleteInfo: false,
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: false,
