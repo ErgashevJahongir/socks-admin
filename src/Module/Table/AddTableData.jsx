@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form, Modal } from "antd";
+import { Button, Col, Form, Modal } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 const CollectionCreateForm = ({
@@ -12,11 +12,17 @@ const CollectionCreateForm = ({
     const [form] = Form.useForm();
     return (
         <Modal
-            visible={visible}
+            open={visible}
             title={modalTitle}
             okText="Qo'shish"
             cancelText="Bekor qilish"
-            width={350}
+            width={
+                Object.keys(formData).length > 8
+                    ? window.innerWidth > 720
+                        ? 700
+                        : 350
+                    : 350
+            }
             onCancel={() => {
                 onCancel();
             }}
@@ -31,34 +37,35 @@ const CollectionCreateForm = ({
                     });
             }}
         >
-            <Form
-                form={form}
-                layout="vertical"
-                name="form_in_modal"
-                initialValues={{
-                    modifier: "public",
-                }}
-            >
+            <Form form={form} layout="vertical" name="form_in_modal">
                 {formData?.map((data) => {
-                    let valuePropName =
-                        data.name === "debt"
-                            ? { valuePropName: data.name }
-                            : { name: data.name };
                     return (
-                        <Form.Item
+                        <Col
+                            span={
+                                Object.keys(formData).length > 8
+                                    ? window.innerWidth > 720
+                                        ? 12
+                                        : 24
+                                    : 24
+                            }
                             key={data.name}
-                            name={data.name}
-                            label={data.label}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: `${data.label}ni kiriting`,
-                                },
-                            ]}
-                            {...valuePropName}
                         >
-                            {data.input}
-                        </Form.Item>
+                            <Form.Item
+                                key={data.name}
+                                name={data.name}
+                                label={data.label}
+                                rules={[
+                                    {
+                                        required: data.required
+                                            ? data.required
+                                            : true,
+                                        message: `${data.label}ni kiriting`,
+                                    },
+                                ]}
+                            >
+                                {data.input}
+                            </Form.Item>
+                        </Col>
                     );
                 })}
             </Form>

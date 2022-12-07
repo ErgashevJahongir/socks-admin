@@ -169,13 +169,13 @@ const Dashboard = () => {
                     <AppCurrentVisits title="Materiallar hisoboti" />
                 </Grid>
             </Grid>
-            <CustomTable
+            {/* <CustomTable
                 getData={getIncomeDryFruits}
                 columns={columns}
                 tableData={incomeDryFruits}
                 loading={loading}
                 setLoading={setLoading}
-            />
+            /> */}
         </Container>
     );
 };

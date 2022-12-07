@@ -36,6 +36,7 @@ const CustomTable = (props) => {
         onCreate,
         onEdit,
         onDelete,
+        expandable,
     } = props;
     const [selectedRowKeys, setSelectedRowKeys] = useState([[], []]);
     const [searchText, setSearchText] = useState("");
@@ -370,6 +371,7 @@ const CustomTable = (props) => {
                     pageSizeOptions: pageSizeOptions,
                     onChange: onChange,
                 }}
+                expandable={expandable}
             />
         </>
     );

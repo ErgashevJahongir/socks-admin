@@ -119,12 +119,7 @@ function Navbar() {
             >
                 <div className="logo" style={{ marginRight: "5%" }}>
                     <Link to="/" style={{ marginTop: "3px", display: "block" }}>
-                        <img
-                            src={socks2}
-                            alt="img-logo"
-                            width={70}
-                            height={40}
-                        />
+                        ECOSIN ECSPO
                     </Link>
                 </div>
                 {user.roleId === 1 ? (
@@ -249,6 +244,17 @@ function Navbar() {
                                 />
                             ),
                             children: [
+                                {
+                                    label: "Naski uchun ketadigan mahsulotlar",
+                                    key: "/socks-resource",
+                                    icon: (
+                                        <Link to="/socks-resource">
+                                            <TeamOutlined
+                                                style={{ fontSize: "18px" }}
+                                            />
+                                        </Link>
+                                    ),
+                                },
                                 {
                                     label: "Klientlar",
                                     key: "/clients",

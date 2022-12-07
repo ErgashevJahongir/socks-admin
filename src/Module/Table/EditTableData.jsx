@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Button, Form, Modal } from "antd";
+import { Button, Col, Form, Modal } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import moment from "moment";
 
 const EditData = ({
     selectedRowKeys,
@@ -23,24 +22,7 @@ const EditData = ({
         setVisible(false);
     };
 
-    const initialData = selectedRowKeys.incomeTime
-        ? {
-              ...selectedRowKeys,
-              incomeTime: selectedRowKeys.incomeTime.substr(0, 10),
-          }
-        : selectedRowKeys.reportTime
-        ? {
-              ...selectedRowKeys,
-              reportTime: selectedRowKeys.reportTime.substr(0, 10),
-          }
-        : selectedRowKeys.outgoingTime
-        ? {
-              ...selectedRowKeys,
-              outgoingTime: moment(selectedRowKeys.outgoingTime)
-                  .toISOString()
-                  .substr(0, 10),
-          }
-        : { ...selectedRowKeys };
+    const initialData = { ...selectedRowKeys };
 
     return (
         <div>
@@ -56,11 +38,17 @@ const EditData = ({
                 O'zgartirish
             </Button>
             <Modal
-                visible={visible}
+                open={visible}
                 title={editModalTitle}
                 okText="O'zgartirish"
                 cancelText="Bekor qilish"
-                width={350}
+                width={
+                    Object.keys(editData).length > 8
+                        ? window.innerWidth > 720
+                            ? 700
+                            : 350
+                        : 350
+                }
                 onCancel={() => {
                     onCancel();
                 }}
@@ -77,28 +65,37 @@ const EditData = ({
             >
                 <Form form={form} layout="vertical" name="form_in_modal">
                     {editData?.map((data) => {
-                        let valuePropName =
-                            data.name === "debt"
-                                ? { name: data.name, valuePropName: data.name }
-                                : { name: data.name };
                         return (
-                            <Form.Item
+                            <Col
+                                span={
+                                    Object.keys(editData).length > 8
+                                        ? window.innerWidth > 720
+                                            ? 12
+                                            : 24
+                                        : 24
+                                }
                                 key={data.name}
-                                label={data.label}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: `${data.label}ni kiriting`,
-                                    },
-                                ]}
-                                {...valuePropName}
                             >
-                                {data.hasOwnProperty("input")
-                                    ? data.input
-                                    : data.inputSelect(
-                                          selectedRowKeys[data.name]
-                                      )}
-                            </Form.Item>
+                                <Form.Item
+                                    name={data.name}
+                                    key={data.name}
+                                    label={data.label}
+                                    rules={[
+                                        {
+                                            required: data.required
+                                                ? data.required
+                                                : true,
+                                            message: `${data.label}ni kiriting`,
+                                        },
+                                    ]}
+                                >
+                                    {data.hasOwnProperty("input")
+                                        ? data.input
+                                        : data.inputSelect(
+                                              selectedRowKeys[data.name]
+                                          )}
+                                </Form.Item>
+                            </Col>
                         );
                     })}
                 </Form>

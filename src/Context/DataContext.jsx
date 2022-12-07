@@ -428,11 +428,6 @@ export const DataProvider = ({ children }) => {
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
-            name: "retailPrice",
-            label: "Optom narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
-        },
-        {
             name: "measurementId",
             label: "Naski o'lchovi",
             input: (
@@ -442,11 +437,6 @@ export const DataProvider = ({ children }) => {
                     selectData={measurementData}
                 />
             ),
-        },
-        {
-            name: "amount",
-            label: "Naski miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
         },
     ];
 
@@ -459,22 +449,18 @@ export const DataProvider = ({ children }) => {
         {
             name: "categoryId",
             label: "Kategoriyani tanlang",
-            input: (
+            inputSelect: (defaultId = null) => (
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"Kategoriyani tanlang"}
                     selectData={categoryData}
+                    DValue={defaultId}
                 />
             ),
         },
         {
             name: "price",
             label: "Narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
-        },
-        {
-            name: "retailPrice",
-            label: "Optom narxi",
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
@@ -664,11 +650,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "measurementId",
             label: "O'lchovini tanlang",
-            input: (
+            inputSelect: (initial = null) => (
                 <CustomSelect
                     backValue={"id"}
                     placeholder={"O'lchovini tanlang"}
                     selectData={measurementData}
+                    DValue={initial}
                 />
             ),
         },
@@ -708,22 +695,6 @@ export const DataProvider = ({ children }) => {
     ];
 
     const outcomeMaterialData = [
-        {
-            name: "materialId",
-            label: "Material nomi",
-            input: (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Materialni tanlang"}
-                    selectData={createMaterialData}
-                />
-            ),
-        },
-        {
-            name: "materialAmount",
-            label: "Material miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
-        },
         {
             name: "socksId",
             label: "Naski nomi",
@@ -765,23 +736,6 @@ export const DataProvider = ({ children }) => {
 
     const editOutcomeMaterialData = [
         {
-            name: "materialId",
-            label: "Material nomi",
-            inputSelect: (defaultId = null) => (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Naskini tanlang"}
-                    selectData={socksData}
-                    DValue={defaultId}
-                />
-            ),
-        },
-        {
-            name: "materialAmount",
-            label: "Material miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
-        },
-        {
             name: "socksId",
             label: "Naski nomi",
             inputSelect: (defaultId = null) => (
@@ -814,6 +768,103 @@ export const DataProvider = ({ children }) => {
             name: "date",
             label: "Ishlab chiqarilgan vaqt",
             input: <Input />,
+        },
+    ];
+
+    const socksMaterialData = [
+        {
+            name: "materialId",
+            label: "Material nomi",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Materialni tanlang"}
+                    selectData={createMaterialData}
+                />
+            ),
+        },
+        {
+            name: "measurementId",
+            label: "Material o'lchovi",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naski o'lchovi"}
+                    selectData={measurementData}
+                />
+            ),
+        },
+        {
+            name: "amount",
+            label: "Material miqdori",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
+            name: "socksId",
+            label: "Naski nomi",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naskini tanlang"}
+                    selectData={socksData}
+                />
+            ),
+        },
+    ];
+
+    const editSocksMaterialData = [
+        {
+            name: "oldMaterialId",
+            label: "Eski material nomi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Materialni tanlang"}
+                    selectData={createMaterialData}
+                    DValue={defaultId}
+                />
+            ),
+        },
+        {
+            name: "materialId",
+            label: "Yangi material nomi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Materialni tanlang"}
+                    selectData={createMaterialData}
+                    DValue={defaultId}
+                />
+            ),
+        },
+        {
+            name: "measurementId",
+            label: "Material o'lchovi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Material o'lchovi"}
+                    selectData={measurementData}
+                    DValue={defaultId}
+                />
+            ),
+        },
+        {
+            name: "amount",
+            label: "Material miqdori",
+            input: <InputNumber style={{ width: "100%" }} />,
+        },
+        {
+            name: "socksId",
+            label: "Naski nomi",
+            inputSelect: (defaultId = null) => (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Naskini tanlang"}
+                    selectData={socksData}
+                    DValue={defaultId}
+                />
+            ),
         },
     ];
 
@@ -915,9 +966,9 @@ export const DataProvider = ({ children }) => {
                 editFormData: othersData,
                 branchData: false,
                 timeFilterInfo: false,
-                deleteInfo: true,
-                createInfo: true,
-                editInfo: true,
+                deleteInfo: false,
+                createInfo: false,
+                editInfo: false,
                 timelyInfo: false,
                 editModalTitle: "O'zgartirish",
                 modalTitle: "Yangi qo'shish",
@@ -1071,6 +1122,21 @@ export const DataProvider = ({ children }) => {
                 timelyInfo: false,
                 editModalTitle: "Sotilgan naskini o'zgartirish",
                 modalTitle: "Sotilgan naskini qo'shish",
+            };
+            break;
+        }
+        case "/socks-resource": {
+            formData = {
+                formData: socksMaterialData,
+                editFormData: editSocksMaterialData,
+                branchData: false,
+                timeFilterInfo: false,
+                deleteInfo: true,
+                createInfo: true,
+                editInfo: true,
+                timelyInfo: false,
+                editModalTitle: "Naskiga ketadigan materialni o'zgartirish",
+                modalTitle: "Naskiga ketadigan materiallarni qo'shish",
             };
             break;
         }

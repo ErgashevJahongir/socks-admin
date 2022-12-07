@@ -152,11 +152,18 @@ const Users = () => {
             .finally(() => {
                 setLoading(false);
             });
-        (values.block === "true" || values.block === "false") &&
+        ((values.block === "true" && initial.block === false) ||
+            (values.block === "false" && initial.block === true)) &&
             instance
                 .patch(`api/socks/factory/user/${initial.id}`)
                 .then((res) => {
-                    message.success("Foydalanuvchi muvaffaqiyatli blocklandi");
+                    values.block === "true" && initial.block === false
+                        ? message.success(
+                              "Foydalanuvchi muvaffaqiyatli blocklandi"
+                          )
+                        : message.success(
+                              "Foydalanuvchi muvaffaqiyatli blockdan ochildi"
+                          );
                     getUsers(current - 1, pageSize);
                 })
                 .catch(function (error) {

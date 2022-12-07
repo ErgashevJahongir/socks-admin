@@ -38,7 +38,7 @@ const Socks = () => {
             title: "Naski nomi",
             dataIndex: "name",
             key: "name",
-            width: "20%",
+            width: "25%",
             search: true,
             sorter: (a, b) => {
                 if (a.name < b.name) {
@@ -54,7 +54,7 @@ const Socks = () => {
             title: "Naski sorti",
             dataIndex: "categoryId",
             key: "categoryId",
-            width: "20%",
+            width: "25%",
             sorter: (a, b) => {
                 if (a.categoryId < b.categoryId) {
                     return -1;
@@ -81,22 +81,6 @@ const Socks = () => {
                     return -1;
                 }
                 if (a.price > b.price) {
-                    return 1;
-                }
-                return 0;
-            },
-        },
-        {
-            title: "Optom narxi",
-            dataIndex: "retailPrice",
-            key: "retailPrice",
-            width: "15%",
-            search: false,
-            sorter: (a, b) => {
-                if (a.retailPrice < b.retailPrice) {
-                    return -1;
-                }
-                if (a.retailPrice > b.retailPrice) {
                     return 1;
                 }
                 return 0;
@@ -145,7 +129,7 @@ const Socks = () => {
     const onCreate = (values) => {
         setLoading(true);
         instance
-            .post("api/socks/factory/socks/add", { ...values })
+            .post("api/socks/factory/socks/add", { ...values, amaunt: 0 })
             .then(function (response) {
                 message.success("Kelgan naski muvaffaqiyatli qo'shildi");
                 getIncomeDryFruits(current - 1, pageSize);
