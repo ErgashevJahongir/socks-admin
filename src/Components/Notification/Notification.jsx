@@ -16,10 +16,8 @@ import {
     useMediaQuery,
 } from "@mui/material";
 
-// project import
 import Transitions from "../@extended/Transitions";
 
-// assets
 import { BellOutlined, CloseOutlined } from "@ant-design/icons";
 import MainCard from "../MainCard";
 import Iconify from "../Iconify";
@@ -27,7 +25,6 @@ import { Button, Tooltip } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../../Hook/UseData";
 
-// sx styles
 const avatarSX = {
     width: 36,
     height: 36,

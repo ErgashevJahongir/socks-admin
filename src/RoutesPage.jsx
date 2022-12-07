@@ -19,6 +19,7 @@ import BlockPage from "./Module/ErrorPages/BlockPage";
 import OutcomeMaterial from "./OutcomeMaterial/OutcomeMaterial";
 import NotificationList from "./Components/NotificationList/NotificationList";
 import OutcomeNakladnoy from "./OutcomeNakladnoy/OutcomeNakladnoy";
+import SocksResource from "./Others/SocksResource/SocksResource";
 
 const RoutesPage = () => {
     const { user, userLoading } = useData();
@@ -63,6 +64,10 @@ const RoutesPage = () => {
                             <>
                                 <Route path="users" element={<Users />} />
                                 <Route path="debts" element={<OutDebt />} />
+                                <Route
+                                    path="socks-resource"
+                                    element={<SocksResource />}
+                                />
                             </>
                         ) : null}
                         {user.roleId === 1 ? (

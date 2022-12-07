@@ -37,7 +37,7 @@ function DrapdownMenu({ onClose, isVisible }) {
             closable={false}
             size="200px"
             onClose={onClose}
-            visible={isVisible}
+            open={isVisible}
         >
             <Menu
                 style={{
@@ -156,6 +156,17 @@ function DrapdownMenu({ onClose, isVisible }) {
                             <AppstoreAddOutlined style={{ fontSize: "20px" }} />
                         ),
                         children: [
+                            {
+                                label: "Naski uchun ketadigan mahsulotlar",
+                                key: "/socks-resource",
+                                icon: (
+                                    <Link to="/socks-resource">
+                                        <TeamOutlined
+                                            style={{ fontSize: "18px" }}
+                                        />
+                                    </Link>
+                                ),
+                            },
                             {
                                 label: "Klientlar",
                                 key: "/clients",

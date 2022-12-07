@@ -34,66 +34,6 @@ const CategoryVsMeasurement = () => {
             .finally(() => setLoadingCategory(false));
     };
 
-    const onCreateCategory = (values) => {
-        setLoadingCategory(true);
-        instance
-            .post(`api/socks/factory/category/add?name=${values.name}`)
-            .then(function (response) {
-                getCategory();
-
-                message.success("Kategoriya muvaffaqiyatli qo'shildi");
-            })
-            .catch(function (error) {
-                console.error(error);
-                if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kategoriyani qo'shishda muammo bo'ldi");
-            })
-            .finally(() => {
-                setLoadingCategory(false);
-            });
-    };
-
-    const onEditCategory = (values, initial) => {
-        setLoadingCategory(true);
-        instance
-            .put(
-                `api/socks/factory/category/update${initial.id}?name=${values.name}`
-            )
-            .then(function (response) {
-                getCategory();
-
-                message.success("Kategoriya muvaffaqiyatli qo'shildi");
-            })
-            .catch(function (error) {
-                console.error(error);
-                if (error.response?.status === 500) navigate("/server-error");
-                message.error("Kategoriyani qo'shishda muammo bo'ldi");
-            })
-            .finally(() => {
-                setLoadingCategory(false);
-            });
-    };
-
-    const handleDeleteCategory = (arr) => {
-        setLoadingCategory(true);
-        arr.map((item) => {
-            instance
-                .delete(`api/socks/factory/category/delete${item}`)
-                .then((data) => {
-                    getCategory();
-                    message.success("Kategoriya muvaffaqiyatli o'chirildi");
-                })
-                .catch((error) => {
-                    console.error(error);
-                    if (error.response?.status === 500)
-                        navigate("/server-error");
-                    message.error("Kategoriyani o'chirishda muammo bo'ldi");
-                });
-            return null;
-        });
-        setLoadingCategory(false);
-    };
-
     const columnsCategory = [
         {
             title: "Kategoriya nomi",
@@ -129,18 +69,6 @@ const CategoryVsMeasurement = () => {
             .finally(() => setLoading(false));
     };
 
-    const onCreate = (values) => {
-        message.error("O'lchov birligi malumotlarini o'zgartirib bo'lmaydi!");
-    };
-
-    const onEdit = (values, initial) => {
-        message.error("O'lchov birligi malumotlarini o'zgartirib bo'lmaydi!");
-    };
-
-    const handleDelete = (arr) => {
-        message.error("O'lchov birligi malumotlarini o'zgartirib bo'lmaydi!");
-    };
-
     const columns = [
         {
             title: "O'lchov nomi",
@@ -171,10 +99,7 @@ const CategoryVsMeasurement = () => {
                         pageSizeOptions={[10, 20]}
                         setCurrent={setCurrentCategory}
                         setPageSize={setPageSizeCategory}
-                        onEdit={onEditCategory}
-                        onCreate={onCreateCategory}
                         getData={getCategory}
-                        onDelete={handleDeleteCategory}
                         columns={columnsCategory}
                         tableData={category}
                         loading={loadingCategory}
@@ -189,10 +114,7 @@ const CategoryVsMeasurement = () => {
                         pageSizeOptions={[10, 20]}
                         setCurrent={setCurrent}
                         setPageSize={setPageSize}
-                        onEdit={onEdit}
-                        onCreate={onCreate}
                         getData={getMeasurment}
-                        onDelete={handleDelete}
                         columns={columns}
                         tableData={measurement}
                         loading={loading}

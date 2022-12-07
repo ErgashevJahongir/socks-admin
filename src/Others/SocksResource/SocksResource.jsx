@@ -1,34 +1,30 @@
 import { Fragment, useState } from "react";
-import instance from "../Api/Axios";
+import instance from "../../Api/Axios";
 import { Col, message, Row } from "antd";
-import CustomTable from "../Module/Table/Table";
-import { useData } from "../Hook/UseData";
+import CustomTable from "../../Module/Table/Table";
+import { useData } from "../../Hook/UseData";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
 
-const OutcomeMaterial = () => {
-    const [incomeDryFruits, setIncomeDryFruits] = useState([]);
+const SocksResource = () => {
+    const [socksResource, setSocksResource] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { measurementData, getMaterialData, socksData, createMaterialData } =
-        useData();
+    const { measurementData, socksData, createMaterialData } = useData();
     const navigate = useNavigate();
 
-    const getIncomeDryFruits = (current, pageSize) => {
+    const getSocksResource = (current, pageSize) => {
         setLoading(true);
         instance
-            .get(
-                `api/socks/factory/outcomeMaterial/pageable?page=${current}&size=${pageSize}`
-            )
+            .get("api/socks/factory/resources")
             .then((data) => {
-                getMaterialData();
-                setIncomeDryFruits(
-                    data.data?.data?.outcomeMaterials.map((item) => {
+                console.log(data);
+                setSocksResource(
+                    data.data?.data?.map((item) => {
                         return {
                             ...item,
-                            date: moment(item?.date).format("DD-MM-YYYY"),
+                            id: item.socksId,
                         };
                     })
                 );
@@ -38,7 +34,7 @@ const OutcomeMaterial = () => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error(
-                    "Ishlatilgan materiallarni yuklashda muammo bo'ldi"
+                    "Naski tayyorlashda ishlatiladigan materiallarni yuklashda muammo bo'ldi"
                 );
             })
             .finally(() => setLoading(false));
@@ -49,7 +45,7 @@ const OutcomeMaterial = () => {
             title: "Naski nomi",
             dataIndex: "socksId",
             key: "socksId",
-            width: "30%",
+            width: "100%",
             search: false,
             render: (record) => {
                 const data = socksData?.filter((item) => item.id === record);
@@ -65,83 +61,26 @@ const OutcomeMaterial = () => {
                 return 0;
             },
         },
-        {
-            title: "O'lchov birligi",
-            dataIndex: "measurementId",
-            key: "measurementId",
-            width: "25%",
-            sorter: (a, b) => {
-                if (a.measurementId < b.measurementId) {
-                    return -1;
-                }
-                if (a.measurementId > b.measurementId) {
-                    return 1;
-                }
-                return 0;
-            },
-            render: (id) => {
-                const data = measurementData.filter((item) => item.id === id);
-                return data[0]?.name;
-            },
-            search: false,
-        },
-        {
-            title: "Miqdori",
-            dataIndex: "amount",
-            key: "amount",
-            width: "20%",
-            sorter: (a, b) => {
-                if (a.amount < b.amount) {
-                    return -1;
-                }
-                if (a.amount > b.amount) {
-                    return 1;
-                }
-                return 0;
-            },
-            search: false,
-        },
-        {
-            title: "Sana",
-            dataIndex: "date",
-            key: "date",
-            width: "25%",
-            sorter: (a, b) => {
-                if (a.date < b.date) {
-                    return -1;
-                }
-                if (a.date > b.date) {
-                    return 1;
-                }
-                return 0;
-            },
-            search: false,
-        },
     ];
 
     const onCreate = (values) => {
         setLoading(true);
-        const value = {
-            socksId: values.socksId,
-            measurementId: values.measurementId,
-            amount: values.amount,
-            date: values.date,
-        };
+        console.log(values);
         instance
-            .post("api/socks/factory/outcomeMaterial", {
-                ...value,
-            })
+            .post(
+                `api/socks/factory/resources?materialId=${values.materialId}&amount=${values.amount}&measurementId=${values.measurementId}&socksId=${values.socksId}`
+            )
             .then(function (response) {
                 message.success(
-                    "Ishlatilgan material muvaffaqiyatli qo'shildi"
+                    "Naski tayyorlashda ishlatiladigan material muvaffaqiyatli qo'shildi"
                 );
-                getIncomeDryFruits(current - 1, pageSize);
+                getSocksResource(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error(
-                    "Ishlatilgan materialni qo'shishda muammo bo'ldi"
+                    "Naski tayyorlashda ishlatiladigan materialni qo'shishda muammo bo'ldi"
                 );
             })
             .finally(() => {
@@ -151,24 +90,26 @@ const OutcomeMaterial = () => {
 
     const onEdit = (values, initial) => {
         setLoading(true);
-        const date = moment(values?.date, "DD-MM-YYYY").toISOString();
         instance
-            .put("/api/socks/factory/outcomeMaterial", {
-                ...values,
-                date: date,
-                id: initial.id,
-            })
+            .put(
+                `/api/socks/factory/resources?socksId=${values.socksId}&oldMaterialId=${values.oldMaterialId}`,
+                {
+                    materialId: values.materialId,
+                    amount: values.amount,
+                    measurementId: values.measurementId,
+                }
+            )
             .then((res) => {
                 message.success(
-                    "Ishlatilgan material muvaffaqiyatli taxrirlandi"
+                    "Naski tayyorlashda ishlatiladigan material muvaffaqiyatli taxrirlandi"
                 );
-                getIncomeDryFruits(current - 1, pageSize);
+                getSocksResource(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 if (error.response?.status === 500) navigate("/server-error");
                 message.error(
-                    "Ishlatilgan materialni taxrirlashda muammo bo'ldi"
+                    "Naski tayyorlashda ishlatiladigan materialni taxrirlashda muammo bo'ldi"
                 );
             })
             .finally(() => {
@@ -176,14 +117,41 @@ const OutcomeMaterial = () => {
             });
     };
 
+    const handleDelete = (arr) => {
+        setLoading(true);
+        arr.map((item) => {
+            instance
+                .delete(
+                    `api/socks/factory/api/socks/factory/material/delete${item}`
+                )
+                .then((data) => {
+                    getSocksResource(current - 1, pageSize);
+                    message.success(
+                        "Naski tayyorlashda ishlatiladigan material muvaffaqiyatli o'chirildi"
+                    );
+                })
+                .catch((error) => {
+                    console.error(error);
+                    if (error.response?.status === 500)
+                        navigate("/server-error");
+                    message.error(
+                        "Naski tayyorlashda ishlatiladigan materialni o'chirishda muammo bo'ldi"
+                    );
+                })
+                .finally(() => setLoading(false));
+            return null;
+        });
+    };
+
     return (
         <>
             <CustomTable
                 onEdit={onEdit}
                 onCreate={onCreate}
-                getData={getIncomeDryFruits}
+                onDelete={handleDelete}
+                getData={getSocksResource}
                 columns={columns}
-                tableData={incomeDryFruits}
+                tableData={socksResource}
                 current={current}
                 pageSize={pageSize}
                 totalItems={totalItems}
@@ -257,4 +225,4 @@ const OutcomeMaterial = () => {
     );
 };
 
-export default OutcomeMaterial;
+export default SocksResource;

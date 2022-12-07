@@ -17,7 +17,7 @@ const Login = () => {
         setLoading(true);
         axios
             .post(
-                "https://socks-java-app.herokuapp.com/api/socks/factory/auth/login",
+                "https://project1-java.herokuapp.com/api/socks/factory/auth/login",
                 {
                     username: values.phoneNumber,
                     password: values.password,
