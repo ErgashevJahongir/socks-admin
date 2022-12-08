@@ -15,11 +15,10 @@ import {
     CloudSyncOutlined,
     BellOutlined,
 } from "@ant-design/icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useData } from "../../Hook/UseData";
 import useToken from "../../Hook/UseToken";
 import DrapdownMenu from "../DrapdownMenu/DrapdownMenu";
-import socks2 from "./socks2.png";
 import Notification from "../Notification/Notification";
 
 const { Header } = Layout;
@@ -29,6 +28,7 @@ function Navbar() {
     const { user } = useData();
     const { token } = useToken();
     const location = useLocation();
+    const navigate = useNavigate();
 
     const handleLogOut = (e) => {
         e.preventDefault();
@@ -38,6 +38,10 @@ function Navbar() {
             localStorage.removeItem("socks-token", token);
         }
         window.location.href = "/login";
+    };
+
+    const onClickGoPage = (e) => {
+        navigate(e.key);
     };
 
     const showDrawer = () => {
@@ -117,76 +121,73 @@ function Navbar() {
                     alignItems: "center",
                 }}
             >
-                <div className="logo" style={{ marginRight: "5%" }}>
-                    <Link to="/" style={{ marginTop: "3px", display: "block" }}>
-                        ECOSIN ECSPO
-                    </Link>
-                </div>
+                <Link
+                    to="/"
+                    style={{
+                        marginTop: "3px",
+                        color: "#f00",
+                        marginRight: 10,
+                        width: 150,
+                    }}
+                >
+                    <div className="logo">ECOSIN ECSPO</div>
+                </Link>
                 {user.roleId === 1 ? (
                     <div className="notification">
                         <Notification />
                     </div>
                 ) : null}
                 <Menu
-                    style={{ width: "75%" }}
+                    style={{ width: "100%" }}
                     className="inline-navber"
                     theme="dark"
                     defaultSelectedKeys={[location.pathname]}
                     mode="horizontal"
+                    onClick={onClickGoPage}
                     items={[
                         {
                             label: "Bosh Sahifa",
                             key: "/",
                             icon: (
-                                <Link to="/">
-                                    <DashboardOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
-                                </Link>
+                                <DashboardOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
                             ),
                         },
                         {
                             label: "Material",
                             key: "/material",
                             icon: (
-                                <Link to="/material">
-                                    <CloudSyncOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
-                                </Link>
+                                <CloudSyncOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
                             ),
                         },
                         {
                             label: "Kelgan Materiallar",
                             key: "/income-material",
                             icon: (
-                                <Link to="/income-material">
-                                    <CloudDownloadOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
-                                </Link>
+                                <CloudDownloadOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
                             ),
                         },
                         {
                             label: "Ishlatilgan Materiallar",
                             key: "/outcome-material",
                             icon: (
-                                <Link to="/outcome-material">
-                                    <CloudSyncOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
-                                </Link>
+                                <CloudSyncOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
                             ),
                         },
                         {
                             label: "Naskilar",
                             key: "/socks",
                             icon: (
-                                <Link to="/socks">
-                                    <CloudServerOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
-                                </Link>
+                                <CloudServerOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
                             ),
                         },
                         {
@@ -228,11 +229,9 @@ function Navbar() {
                             label: "Qarzlar",
                             key: "/debts",
                             icon: (
-                                <Link to="/debts">
-                                    <DollarCircleOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
-                                </Link>
+                                <DollarCircleOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
                             ),
                         },
                         {
@@ -248,22 +247,18 @@ function Navbar() {
                                     label: "Naski uchun ketadigan mahsulotlar",
                                     key: "/socks-resource",
                                     icon: (
-                                        <Link to="/socks-resource">
-                                            <TeamOutlined
-                                                style={{ fontSize: "18px" }}
-                                            />
-                                        </Link>
+                                        <TeamOutlined
+                                            style={{ fontSize: "18px" }}
+                                        />
                                     ),
                                 },
                                 {
                                     label: "Klientlar",
                                     key: "/clients",
                                     icon: (
-                                        <Link to="/clients">
-                                            <TeamOutlined
-                                                style={{ fontSize: "18px" }}
-                                            />
-                                        </Link>
+                                        <TeamOutlined
+                                            style={{ fontSize: "18px" }}
+                                        />
                                     ),
                                 },
                                 user.roleId === 1
@@ -271,13 +266,11 @@ function Navbar() {
                                           label: "Foydalanuvchilar",
                                           key: "/users",
                                           icon: (
-                                              <Link to="/users">
-                                                  <UserOutlined
-                                                      style={{
-                                                          fontSize: "18px",
-                                                      }}
-                                                  />
-                                              </Link>
+                                              <UserOutlined
+                                                  style={{
+                                                      fontSize: "18px",
+                                                  }}
+                                              />
                                           ),
                                       }
                                     : null,
@@ -285,11 +278,9 @@ function Navbar() {
                                     label: "Boshqalar",
                                     key: "/others",
                                     icon: (
-                                        <Link to="/others">
-                                            <AppstoreOutlined
-                                                style={{ fontSize: "18px" }}
-                                            />
-                                        </Link>
+                                        <AppstoreOutlined
+                                            style={{ fontSize: "18px" }}
+                                        />
                                     ),
                                 },
                             ],

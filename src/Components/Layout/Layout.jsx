@@ -13,7 +13,7 @@ function LayoutMenu() {
                     className="site-layout-background"
                     style={{
                         margin: "12px 8px",
-                        minHeight: "calc(100vh - 90px)",
+                        minHeight: "100vh",
                     }}
                 >
                     <div className="container">

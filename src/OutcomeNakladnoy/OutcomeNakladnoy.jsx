@@ -209,6 +209,10 @@ const OutcomeNakladnoy = () => {
                                   .finally(() => {
                                       setLoading(false);
                                   });
+                          message.success(
+                              "Sotilgan quruq meva muvaffaqiyatli qo'shildi"
+                          );
+                          setOutcomeSocks([]);
                       })
                       .catch(function (error) {
                           console.error(error);
@@ -323,9 +327,7 @@ const OutcomeNakladnoy = () => {
                                 <p>Mahsulot olayotgan klient</p>
                                 <CustomSelect
                                     backValue={"id"}
-                                    placeholder={
-                                        "Naski sotilayotgan klient"
-                                    }
+                                    placeholder={"Naski sotilayotgan klient"}
                                     selectData={clientData?.map((item) => ({
                                         ...item,
                                         name: item.fio,
