@@ -1,5 +1,5 @@
 import { Drawer, Menu } from "antd";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
     DashboardOutlined,
     UserOutlined,
@@ -21,6 +21,7 @@ function DrapdownMenu({ onClose, isVisible }) {
     const { token } = useToken();
     const { user } = useData();
     const location = useLocation();
+    const navigate = useNavigate();
 
     const handleLogOut = (e) => {
         e.preventDefault();
@@ -31,20 +32,26 @@ function DrapdownMenu({ onClose, isVisible }) {
         }
         window.location.href = "/login";
     };
+
+    const onClickGoPage = (e) => {
+        navigate(e.key);
+    };
+
     return (
         <Drawer
             placement="left"
             closable={false}
-            size="200px"
+            width="250px"
             onClose={onClose}
             open={isVisible}
         >
             <Menu
                 style={{
-                    height: "120%",
+                    minHeight: "100vh",
                 }}
                 defaultSelectedKeys={[location.pathname]}
                 defaultOpenKeys={["others"]}
+                onClick={onClickGoPage}
                 mode="inline"
                 theme="dark"
                 items={[
@@ -52,88 +59,62 @@ function DrapdownMenu({ onClose, isVisible }) {
                         label: "Bosh Sahifa",
                         key: "/",
                         icon: (
-                            <Link to="/">
-                                <DashboardOutlined
-                                    style={{ fontSize: "20px" }}
-                                />
-                            </Link>
+                            <DashboardOutlined style={{ fontSize: "20px" }} />
                         ),
                     },
                     {
                         label: "Material",
                         key: "/material",
                         icon: (
-                            <Link to="/material">
-                                <CloudSyncOutlined
-                                    style={{ fontSize: "20px" }}
-                                />
-                            </Link>
+                            <CloudSyncOutlined style={{ fontSize: "20px" }} />
                         ),
                     },
                     {
                         label: "Kelgan Materiallar",
                         key: "/income-material",
                         icon: (
-                            <Link to="/income-material">
-                                <CloudDownloadOutlined
-                                    style={{ fontSize: "18px" }}
-                                />
-                            </Link>
+                            <CloudDownloadOutlined
+                                style={{ fontSize: "18px" }}
+                            />
                         ),
                     },
                     {
                         label: "Ishlatilgan Materiallar",
                         key: "/outcome-material",
                         icon: (
-                            <Link to="/outcome-material">
-                                <CloudSyncOutlined
-                                    style={{ fontSize: "18px" }}
-                                />
-                            </Link>
+                            <CloudSyncOutlined style={{ fontSize: "18px" }} />
                         ),
                     },
                     {
                         label: "Naskilar",
                         key: "/socks",
                         icon: (
-                            <Link to="/socks">
-                                <CloudServerOutlined
-                                    style={{ fontSize: "20px" }}
-                                />
-                            </Link>
+                            <CloudServerOutlined style={{ fontSize: "20px" }} />
                         ),
                     },
                     {
                         label: "Sotilgan Naskilar",
                         key: "/outcome",
                         icon: (
-                            <Link to="/outcome">
-                                <CloudUploadOutlined
-                                    style={{ fontSize: "18px" }}
-                                />
-                            </Link>
+                            <CloudUploadOutlined style={{ fontSize: "18px" }} />
                         ),
                         children: [
                             {
                                 label: "Sotilgan Naskilar",
                                 key: "/outcome-socks",
                                 icon: (
-                                    <Link to="/outcome-socks">
-                                        <DollarCircleOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
+                                    <DollarCircleOutlined
+                                        style={{ fontSize: "18px" }}
+                                    />
                                 ),
                             },
                             {
                                 label: "Ko'proq sotish",
                                 key: "/outcome-nakladnoy",
                                 icon: (
-                                    <Link to="/outcome-nakladnoy">
-                                        <DollarCircleOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
+                                    <DollarCircleOutlined
+                                        style={{ fontSize: "18px" }}
+                                    />
                                 ),
                             },
                         ],
@@ -142,11 +123,9 @@ function DrapdownMenu({ onClose, isVisible }) {
                         label: "Qarzlar",
                         key: "/debts",
                         icon: (
-                            <Link to="/debts">
-                                <DollarCircleOutlined
-                                    style={{ fontSize: "20px" }}
-                                />
-                            </Link>
+                            <DollarCircleOutlined
+                                style={{ fontSize: "20px" }}
+                            />
                         ),
                     },
                     {
@@ -160,22 +139,18 @@ function DrapdownMenu({ onClose, isVisible }) {
                                 label: "Naski uchun ketadigan mahsulotlar",
                                 key: "/socks-resource",
                                 icon: (
-                                    <Link to="/socks-resource">
-                                        <TeamOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
+                                    <TeamOutlined
+                                        style={{ fontSize: "18px" }}
+                                    />
                                 ),
                             },
                             {
                                 label: "Klientlar",
                                 key: "/clients",
                                 icon: (
-                                    <Link to="/clients">
-                                        <TeamOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
+                                    <TeamOutlined
+                                        style={{ fontSize: "18px" }}
+                                    />
                                 ),
                             },
                             user.roleId === 1
@@ -183,13 +158,11 @@ function DrapdownMenu({ onClose, isVisible }) {
                                       label: "Foydalanuvchilar",
                                       key: "/users",
                                       icon: (
-                                          <Link to="/users">
-                                              <UserOutlined
-                                                  style={{
-                                                      fontSize: "18px",
-                                                  }}
-                                              />
-                                          </Link>
+                                          <UserOutlined
+                                              style={{
+                                                  fontSize: "18px",
+                                              }}
+                                          />
                                       ),
                                   }
                                 : null,
@@ -197,11 +170,9 @@ function DrapdownMenu({ onClose, isVisible }) {
                                 label: "Boshqalar",
                                 key: "/others",
                                 icon: (
-                                    <Link to="/others">
-                                        <AppstoreOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
+                                    <AppstoreOutlined
+                                        style={{ fontSize: "18px" }}
+                                    />
                                 ),
                             },
                         ],
@@ -209,11 +180,7 @@ function DrapdownMenu({ onClose, isVisible }) {
                     {
                         label: "Profil",
                         key: "/profil",
-                        icon: (
-                            <Link to="/profil">
-                                <UserOutlined style={{ fontSize: "18px" }} />
-                            </Link>
-                        ),
+                        icon: <UserOutlined style={{ fontSize: "18px" }} />,
                     },
                     user.roleId === 1
                         ? {

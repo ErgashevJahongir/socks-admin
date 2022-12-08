@@ -180,18 +180,29 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Naski miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski miqdorini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "price",
             label: "Naski narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski narxini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "date",
             label: "Sotilish vaqti",
             input: (
                 <DatePicker
+                    placeholder="Sotilish vaqtini kiriting"
                     style={{ width: "100%" }}
                     value={moment().format()}
                 />
@@ -232,6 +243,7 @@ export const DataProvider = ({ children }) => {
                                 >
                                     Qaytarish vaqti
                                     <DatePicker
+                                        placeholder="Qaytarish vaqtini kiriting"
                                         style={{ width: "100%" }}
                                         onChange={onChangeDeadline}
                                     />
@@ -275,7 +287,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "price",
             label: "Naski narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski narxini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "measurementId",
@@ -292,12 +309,17 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Naski miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski miqdorini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "date",
             label: "Sotilish vaqti",
-            input: <Input />,
+            input: <Input placeholder="Sotilish vaqtini kiriting" />,
         },
         {
             name: "debt",
@@ -334,6 +356,7 @@ export const DataProvider = ({ children }) => {
                                 >
                                     Qaytarish vaqti
                                     <DatePicker
+                                        placeholder="Qaytarish vaqtini kiriting"
                                         style={{ width: "100%" }}
                                         onChange={onChangeDeadline}
                                     />
@@ -372,12 +395,22 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Naski miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski miqdorini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "price",
             label: "Naski narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski narxini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
     ];
 
@@ -397,7 +430,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "price",
             label: "Naski narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski narxini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "measurementId",
@@ -414,7 +452,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Naski miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski miqdorini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
     ];
 
@@ -422,7 +465,7 @@ export const DataProvider = ({ children }) => {
         {
             name: "name",
             label: "Nomi",
-            input: <Input />,
+            input: <Input placeholder="Nomini kiriting" />,
         },
     ];
 
@@ -430,7 +473,7 @@ export const DataProvider = ({ children }) => {
         {
             name: "name",
             label: "Nomi",
-            input: <Input />,
+            input: <Input placeholder="Naski nomini kiriting" />,
         },
         {
             name: "categoryId",
@@ -446,7 +489,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "price",
             label: "Narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski narxini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "measurementId",
@@ -465,7 +513,7 @@ export const DataProvider = ({ children }) => {
         {
             name: "name",
             label: "Nomi",
-            input: <Input />,
+            input: <Input placeholder="Naski nomini kiriting" />,
         },
         {
             name: "categoryId",
@@ -482,7 +530,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "price",
             label: "Narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski narxini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "measurementId",
@@ -499,7 +552,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "amount",
             label: "Naski miqdori",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski miqdorini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
     ];
 
@@ -525,17 +583,17 @@ export const DataProvider = ({ children }) => {
         {
             name: "fio",
             label: "Ishchi FIO",
-            input: <Input />,
+            input: <Input placeholder="Ishchi FIOsini kiriting" />,
         },
         {
             name: "phoneNumber",
             label: "Ishchi nomeri",
-            input: <Input />,
+            input: <Input placeholder="Ishchi nomerini kiriting" />,
         },
         {
             name: "password",
-            label: "Ishchi passwordi",
-            input: <Input />,
+            label: "Ishchi paroli",
+            input: <Input placeholder="Ishchi parolini kiriting" />,
         },
         user?.roleId === 1
             ? {
@@ -578,12 +636,12 @@ export const DataProvider = ({ children }) => {
         {
             name: "fio",
             label: "Ishchi FIO",
-            input: <Input />,
+            input: <Input placeholder="Ishchi FIOsini kiriting" />,
         },
         {
             name: "phoneNumber",
             label: "Ishchi nomeri",
-            input: <Input />,
+            input: <Input placeholder="Ishchi nomerini kiriting" />,
         },
         user?.roleId === 1
             ? {
@@ -711,12 +769,17 @@ export const DataProvider = ({ children }) => {
         {
             name: "price",
             label: "Naski narxi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: (
+                <InputNumber
+                    placeholder="Naski narxini kiriting"
+                    style={{ width: "100%" }}
+                />
+            ),
         },
         {
             name: "deadline",
             label: "Topshirish muddati",
-            input: <Input />,
+            input: <Input placeholder="Topshirish muddatini kiriting" />,
         },
     ];
 
@@ -1002,7 +1065,7 @@ export const DataProvider = ({ children }) => {
         getRoleData();
         getClientData();
         getUsersData();
-    }, []);
+    }, [token]);
 
     let formData = {};
 
@@ -1152,8 +1215,8 @@ export const DataProvider = ({ children }) => {
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: false,
-                editModalTitle: "Sotilgan naskini o'zgartirish",
-                modalTitle: "Sotilgan naskini qo'shish",
+                editModalTitle: "Material chiqimini o'zgartirish",
+                modalTitle: "Material chiqimini qo'shish",
             };
             break;
         }

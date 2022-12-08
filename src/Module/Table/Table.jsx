@@ -357,7 +357,7 @@ const CustomTable = (props) => {
                 dataSource={tableData}
                 bordered
                 rowKey={"id"}
-                scroll={{ x: true }}
+                scroll={{ x: 900 }}
                 onRow={(record) => ({
                     onClick: () => {
                         handleSelect(record);
